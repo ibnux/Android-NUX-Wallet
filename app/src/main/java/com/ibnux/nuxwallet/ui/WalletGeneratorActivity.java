@@ -3,10 +3,14 @@ package com.ibnux.nuxwallet.ui;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.Gravity;
 import android.webkit.JavascriptInterface;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,6 +28,7 @@ public class WalletGeneratorActivity extends AppCompatActivity implements Advanc
         super.onCreate(savedInstanceState);
         binding = ActivityWalletGeneratorBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        setTitle("Tambah Dompet baru");
         binding.webview.setListener(this, this);
         binding.webview.setMixedContentAllowed(false);
         binding.webview.loadUrl("file:///android_asset/alamat/index.html");
@@ -92,14 +97,38 @@ public class WalletGeneratorActivity extends AppCompatActivity implements Advanc
             if(pass.length()>10 && wallet.length()>10){
                 Dompet dompet = new Dompet();
                 dompet.alamat = wallet;
-                dompet.nama = wallet;
                 dompet.isMe = true;
                 dompet.secretPhrase = pass;
                 dompet.saldo = 0;
                 dompet.publicKey = publickey;
-                dompet.dompetID = Long.parseLong(accountid);
-                ObjectBox.addDompet(dompet);
-                finish();
+                dompet.dompetID = accountid;
+                //Ask Name
+                AlertDialog.Builder builder = new AlertDialog.Builder(WalletGeneratorActivity.this);
+                builder.setTitle("Nama Dompet?");
+                final EditText input = new EditText(WalletGeneratorActivity.this);
+                input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+                input.setGravity(Gravity.CENTER_HORIZONTAL);
+                input.setHint("Optional");
+                builder.setView(input);
+                builder.setPositiveButton("Simpan", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dompet.nama = input.getText().toString();
+                        ObjectBox.addDompet(dompet);
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("Tidak usah", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dompet.nama = wallet;
+                        ObjectBox.addDompet(dompet);
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                builder.show();
             }
         }
     }

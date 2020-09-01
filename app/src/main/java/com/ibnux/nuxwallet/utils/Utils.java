@@ -1,6 +1,5 @@
 package com.ibnux.nuxwallet.utils;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.ibnux.nuxwallet.kripto.Curve25519;
@@ -8,6 +7,9 @@ import com.ibnux.nuxwallet.kripto.Curve25519;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.security.MessageDigest;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Map;
 
 public class Utils {
@@ -199,7 +201,22 @@ public class Utils {
         Log.d("NUX","-----------------------");
     }
 
-    public static void getProgressDialog(Context cx){
-
+    public static String nuxFormat(long myNumber){
+        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
+        NumberFormat formatter = new DecimalFormat("#,###");
+        String strNumber = String.valueOf(myNumber);
+        String result = "";
+        if(strNumber.length()>8) {
+            String desimal = strNumber.substring(strNumber.length() - 8);
+            strNumber = strNumber.substring(0, strNumber.length() - 8);
+            result = formatter.format(Double.parseDouble(strNumber));
+            log("nuxFormat: " + String.valueOf(myNumber) + " : " + result + "," + desimal);
+            if(!desimal.equals("00000000"))
+                result += dfs.getDecimalSeparator() +desimal;
+        }else{
+            result = formatter.format(myNumber);
+            log("nuxFormat: " + String.valueOf(myNumber) + " : " + result);
+        }
+        return result;
     }
 }

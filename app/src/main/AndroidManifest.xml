@@ -11,24 +11,38 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.SendMoneyActivity">
+        <activity android:name=".ui.ViewWalletActivity"></activity>
+        <activity
+            android:name=".ui.SendMoneyActivity"
+            android:screenOrientation="portrait">
             <intent-filter android:label="Send NUX">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "nux://send”
+                <!--
+                Accepts URIs that begin with "nux://send”
                 nux://send/ADDRESS/AMOUNT
                 nux://send/NUX-1224-2121/20
                 or without ammount
                 nux://send/NUX-1224-2121
                 -->
-                <data android:scheme="nux"
-                    android:host="send" />
+                <data
+                    android:host="send"
+                    android:scheme="nux" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.WalletGeneratorActivity" />
-        <activity android:name=".ui.HomeActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".ui.WalletGeneratorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:label="Wallet"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

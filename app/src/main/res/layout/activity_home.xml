@@ -32,11 +32,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
+                android:paddingStart="@dimen/_2sdp"
                 android:text="coin.ibnux.net"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                 android:textColor="#d7e8ef"
-                android:textSize="18sp" />
+                android:textSize="@dimen/_14ssp" />
 
         </LinearLayout>
 
@@ -47,11 +48,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_4sdp"
         android:clickable="true"
         android:focusable="true"
         app:fabSize="auto"
         app:srcCompat="@drawable/ic_action_add"
-        app:useCompatPadding="true" />
+        app:useCompatPadding="false" />
 
 
 </FrameLayout>

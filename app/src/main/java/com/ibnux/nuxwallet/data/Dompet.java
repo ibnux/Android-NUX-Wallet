@@ -11,7 +11,7 @@ public class Dompet {
     public boolean isMe = false;
     public String catatan;
     public long saldo;
-    public long dompetID;
+    public String dompetID;
     public String alamat;
     public String publicKey;
     public String secretPhrase;

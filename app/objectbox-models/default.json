@@ -49,8 +49,7 @@
         {
           "id": "9:1504589367858600143",
           "name": "dompetID",
-          "type": 6,
-          "flags": 4
+          "type": 9
         },
         {
           "id": "10:308536216868964291",
@@ -62,7 +61,7 @@
     },
     {
       "id": "2:1252963501468285878",
-      "lastPropertyId": "5:523596859372690838",
+      "lastPropertyId": "26:7410830393129083309",
       "name": "Transaksi",
       "properties": [
         {
@@ -72,26 +71,112 @@
           "flags": 1
         },
         {
-          "id": "2:8998673703433693126",
-          "name": "jumlah",
+          "id": "7:5242268826725823397",
+          "name": "transaction",
+          "type": 9
+        },
+        {
+          "id": "8:3612559109600712927",
+          "name": "senderRS",
+          "type": 9
+        },
+        {
+          "id": "9:5260767836521114010",
+          "name": "recipientRS",
+          "type": 9
+        },
+        {
+          "id": "10:5459796627683937724",
+          "name": "senderPublicKey",
+          "type": 9
+        },
+        {
+          "id": "11:8361292358978446295",
+          "name": "blockTimestamp",
           "type": 6,
           "flags": 4
         },
         {
-          "id": "3:1934684913776266511",
-          "name": "tanggal",
+          "id": "12:6704375879335811475",
+          "name": "timestamp",
           "type": 6,
           "flags": 4
         },
         {
-          "id": "4:1665080634293076874",
-          "name": "tanggalText",
+          "id": "13:5142398798267548594",
+          "name": "timestampInsert",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "14:5801695949646190731",
+          "name": "amountNQT",
           "type": 9
         },
         {
-          "id": "5:523596859372690838",
-          "name": "catatan",
+          "id": "15:922300935416206807",
+          "name": "feeNQT",
           "type": 9
+        },
+        {
+          "id": "16:150399664023628673",
+          "name": "message",
+          "type": 9
+        },
+        {
+          "id": "17:7451006269550313324",
+          "name": "sender",
+          "type": 9
+        },
+        {
+          "id": "18:6975746506525399735",
+          "name": "recipient",
+          "type": 9
+        },
+        {
+          "id": "19:8979909126903620414",
+          "name": "signature",
+          "type": 9
+        },
+        {
+          "id": "20:3038342786515119698",
+          "name": "block",
+          "type": 9
+        },
+        {
+          "id": "21:7958070782927914590",
+          "name": "ecBlockId",
+          "type": 9
+        },
+        {
+          "id": "22:1281040924377994133",
+          "name": "confirmations",
+          "type": 5,
+          "flags": 4
+        },
+        {
+          "id": "23:1660001085265673408",
+          "name": "deadline",
+          "type": 5,
+          "flags": 4
+        },
+        {
+          "id": "24:2834988893861933991",
+          "name": "height",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "25:6789695911667649747",
+          "name": "type",
+          "type": 5,
+          "flags": 4
+        },
+        {
+          "id": "26:7410830393129083309",
+          "name": "subtype",
+          "type": 5,
+          "flags": 4
         }
       ],
       "relations": []
@@ -130,7 +215,12 @@
   "retiredEntityUids": [],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
-    4075702584282500215
+    4075702584282500215,
+    8998673703433693126,
+    1934684913776266511,
+    1665080634293076874,
+    523596859372690838,
+    6739110755382154252
   ],
   "retiredRelationUids": [],
   "version": 1

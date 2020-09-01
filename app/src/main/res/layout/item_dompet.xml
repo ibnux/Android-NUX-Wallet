@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -23,22 +24,34 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/spacing_xmlarge"
+                android:layout_height="wrap_content"
                 android:background="#3d90b3"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txtServer"
-                    android:layout_width="0dp"
+                    android:id="@+id/txtWallet"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
                     android:text="NUX-1234-1234-1234"
                     android:textAlignment="center"
+                    android:lines="1"
+                    android:ellipsize="end"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                     android:textColor="#d7e8ef"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/_18ssp" />
+
+                <TextView
+                    android:id="@+id/txtWalletBottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NUX-1234-1234-1234"
+                    android:textAlignment="center"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:textColor="#d7e8ef"
+                    android:textSize="@dimen/_12ssp" />
 
             </LinearLayout>
 
@@ -60,14 +73,14 @@
                 android:paddingRight="@dimen/spacing_large">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/txtBalance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="12345678,12345678"
                     android:textAlignment="viewEnd"
                     android:textColor="@android:color/white"
-                    android:textSize="36sp"
+                    android:textSize="@dimen/_24ssp"
                     android:textStyle="bold" />
             </LinearLayout>
 
