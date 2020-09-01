@@ -1,0 +1,137 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:4706279916335590965",
+      "lastPropertyId": "10:308536216868964291",
+      "name": "Dompet",
+      "properties": [
+        {
+          "id": "1:2866466704675296578",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3187314886210006298",
+          "name": "alamat",
+          "type": 9
+        },
+        {
+          "id": "3:6706452367508416969",
+          "name": "publicKey",
+          "type": 9
+        },
+        {
+          "id": "5:5683540050347647015",
+          "name": "nama",
+          "type": 9
+        },
+        {
+          "id": "6:1102572677000436677",
+          "name": "isMe",
+          "type": 1,
+          "flags": 4
+        },
+        {
+          "id": "7:566148076820054865",
+          "name": "catatan",
+          "type": 9
+        },
+        {
+          "id": "8:2612544571046218895",
+          "name": "saldo",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "9:1504589367858600143",
+          "name": "dompetID",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "10:308536216868964291",
+          "name": "secretPhrase",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:1252963501468285878",
+      "lastPropertyId": "5:523596859372690838",
+      "name": "Transaksi",
+      "properties": [
+        {
+          "id": "1:8404626158097706499",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8998673703433693126",
+          "name": "jumlah",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "3:1934684913776266511",
+          "name": "tanggal",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "4:1665080634293076874",
+          "name": "tanggalText",
+          "type": 9
+        },
+        {
+          "id": "5:523596859372690838",
+          "name": "catatan",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:7832986057374004893",
+      "lastPropertyId": "3:2872131755519220132",
+      "name": "Server",
+      "properties": [
+        {
+          "id": "1:3091790565531745757",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1657467198461038513",
+          "name": "url",
+          "type": 9
+        },
+        {
+          "id": "3:2872131755519220132",
+          "name": "nama",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "3:7832986057374004893",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    4075702584282500215
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
