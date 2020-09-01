@@ -11,7 +11,8 @@ import com.ibnux.nuxwallet.data.ObjectBox;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 
 public class Aplikasi extends MultiDexApplication {
-    public static  SharedPreferences sp;
+    public static SharedPreferences sp;
+    public static long unixtime = 0L;
 
     @Override
     public void onCreate() {
@@ -29,5 +30,6 @@ public class Aplikasi extends MultiDexApplication {
                 .errorDrawable(R.mipmap.ic_launcher)
                 .apply();
         sp = getSharedPreferences("settings",0);
+        unixtime = sp.getLong("unixtime",0L);
     }
 }

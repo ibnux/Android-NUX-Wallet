@@ -7,6 +7,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
+import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.data.Transaksi;
@@ -27,36 +28,15 @@ public class NuxCoin {
     }
      */
 
-    public static void getAccount(String server, String alamat, JsonCallback callback) {
-        getAccount(server,alamat,Priority.MEDIUM,callback);
+    public static void getAccount(String alamat, JsonCallback callback) {
+        getAccount(alamat,Priority.MEDIUM,callback);
     }
 
-    public static void getAccount(String server, String alamat, Priority priority, JsonCallback callback){
+    public static void getAccount(String alamat, Priority priority, JsonCallback callback){
+        String server = ObjectBox.getServer();
         Utils.log("getAccount "+server+" "+alamat);
         AndroidNetworking.get(server+"/nxt?requestType=getAccount&account="+alamat)
-            .setPriority(priority)
-            .build()
-            .getAsJSONObject(new JSONObjectRequestListener() {
-
-                @Override
-                public void onResponse(JSONObject response) {
-                    if(callback!=null){
-                        callback.onJsonCallback(response);
-                    }
-                }
-
-                @Override
-                public void onError(ANError error) {
-                    if(callback!=null){
-                        callback.onErrorCallback(error.getErrorCode(), error.getErrorBody());
-                    }
-                }
-            });
-    }
-
-    public static void getAccountID(String server, String secret, JsonCallback callback){
-        AndroidNetworking.get(server+"/nxt?requestType=getAccountId&secretPhrase="+secret)
-                .setPriority(Priority.MEDIUM)
+                .setPriority(priority)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
 
@@ -76,7 +56,105 @@ public class NuxCoin {
                 });
     }
 
-    public static void sendCoinOnline(String server, Dompet fromDompet, String toDompet, long jumlah, JsonCallback callback){
+    public static void getPublicKey(String alamat, Priority priority, TextCallback callback){
+        String server = ObjectBox.getServer();
+        Utils.log("getAccount "+server+" "+alamat);
+        AndroidNetworking.get(server+"/nxt?requestType=getAccountPublicKey&account="+alamat)
+                .setPriority(priority)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if(callback!=null){
+                            try {
+                                callback.onTextCallback(response.getString("publicKey"));
+                            }catch (Exception e){
+                                callback.onTextCallback(null);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        if(callback!=null){
+                            callback.onErrorCallback(error.getErrorCode(), error.getErrorBody());
+                        }
+                    }
+                });
+    }
+
+    public static void getTime(LongCallback callback){
+        String server = ObjectBox.getServer();
+        Utils.log("getTime");
+        AndroidNetworking.get(server+"/nxt?requestType=getTime")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Utils.log("getTime: "+response.toString());
+                            long waktu = (response.getLong("unixtime")-response.getLong("time"))*1000L;
+                            Utils.log("getTime: "+waktu);
+                            if(waktu>0) {
+                                Aplikasi.sp.edit().putLong("unixtime", waktu).apply();
+                                Aplikasi.unixtime = waktu;
+                                if(callback!=null) callback.onLongCallback(waktu);
+                            }
+                        }catch (Exception e){
+                            if(callback!=null) callback.onErrorCallback(1, e.getMessage());
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        if(callback!=null){
+                            callback.onErrorCallback(error.getErrorCode(), error.getErrorBody());
+                        }
+                    }
+                });
+    }
+
+    public static void getTransactions(String alamat, int from, int limit, JsonCallback callback){
+        String server = ObjectBox.getServer();
+        Utils.log("getTransactions "+server+" "+alamat);
+        AndroidNetworking.get(server+"/nxt")
+                .addQueryParameter("requestType","getBlockchainTransactions")
+                .addQueryParameter("account",alamat)
+                .addQueryParameter("firstIndex",from+"")
+                .addQueryParameter("lastIndex",limit+"")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (callback != null) {
+                                if (!response.has("errorDescription")) {
+                                    callback.onJsonCallback(response);
+                                } else {
+                                    callback.onErrorCallback(response.getInt("errorCode"), response.getString("errorDescription"));
+                                }
+                            }
+                        }catch (Exception e){
+                            callback.onErrorCallback(1, e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        if(callback!=null){
+                            callback.onErrorCallback(error.getErrorCode(), error.getErrorBody());
+                        }
+                    }
+                });
+    }
+
+    public static void sendCoinOnline(Dompet fromDompet, String toDompet, long jumlah, JsonCallback callback){
+        String server = ObjectBox.getServer();
         Map<String, Object> body = new HashMap<>();
         body.put("recipient",toDompet);
         body.put("amountNQT",jumlah);
@@ -106,7 +184,8 @@ public class NuxCoin {
     }
 
     // SENDCOIN STEP 1
-    public static void sendCoin(String server, Dompet fromDompet, String toDompet, long jumlah, String message, AlertDialog progress, JsonCallback callback){
+    public static void sendCoin(Dompet fromDompet, String toDompet, long jumlah, String message, AlertDialog progress, JsonCallback callback){
+        String server = ObjectBox.getServer();
         if(progress!=null) progress.setMessage("Requesting transaction...");
         Map<String, Object> body = new HashMap<>();
         body.put("recipient", toDompet);
@@ -124,7 +203,7 @@ public class NuxCoin {
             public void onResponse(JSONObject response) {
                 try {
                     if (response.has("unsignedTransactionBytes")) {
-                        signingTransaction(server, fromDompet, response.getString("unsignedTransactionBytes"), progress, callback);
+                        signingTransaction(fromDompet, response.getString("unsignedTransactionBytes"), progress, callback);
                     }else{
                         if(callback!=null){
                             callback.onErrorCallback(response.getInt("errorCode"), response.getString("errorDescription"));
@@ -147,7 +226,8 @@ public class NuxCoin {
 
     }
     // SENDCOIN STEP 2
-    public static void signingTransaction(String server, Dompet fromDompet,String unsignedTransactionBytes, AlertDialog progress, JsonCallback callback){
+    public static void signingTransaction(Dompet fromDompet,String unsignedTransactionBytes, AlertDialog progress, JsonCallback callback){
+        String server = ObjectBox.getServer();
         if(progress!=null) progress.setMessage("Signing transaction...");
         AndroidNetworking.get(server+"/nxt")
                 .addQueryParameter("requestType","signTransaction")
@@ -166,7 +246,7 @@ public class NuxCoin {
                                 }
                             }else{
                                 if(response.has("transactionBytes")){
-                                    sendingMoney(server, response.getString("transactionBytes"), progress, callback);
+                                    sendingMoney(response.getString("transactionBytes"), progress, callback);
                                 }
                             }
                         }catch (Exception e){
@@ -185,7 +265,8 @@ public class NuxCoin {
                 });
     }
     // SENDCOIN STEP 3
-    public static void sendingMoney(String server,String transactionBytes, AlertDialog progress, JsonCallback callback){
+    public static void sendingMoney(String transactionBytes, AlertDialog progress, JsonCallback callback){
+        String server = ObjectBox.getServer();
         if(progress!=null) progress.setMessage("Submit transaction...");
         AndroidNetworking.post(server+"/nxt?requestType=broadcastTransaction")
                 .addBodyParameter("transactionBytes",transactionBytes)
@@ -200,7 +281,7 @@ public class NuxCoin {
                                 }
                             }else{
                                 if(response.has("transactionBytes")){
-                                    getTransaction(server, response.getString("transaction"), progress, callback);
+                                    getTransaction(response.getString("transaction"), progress, callback);
                                 }
                             }
                         }catch (Exception e){
@@ -219,7 +300,8 @@ public class NuxCoin {
     }
 
     // SENDCOIN STEP 4
-    public static void getTransaction(String server,String transaction, AlertDialog progress, JsonCallback callback){
+    public static void getTransaction(String transaction, AlertDialog progress, JsonCallback callback){
+        String server = ObjectBox.getServer();
         if(progress!=null) progress.setMessage("Sending Coin Success!!\n" +
                 "Getting transaction detail...");
         AndroidNetworking.get(server+"/nxt?requestType=getTransaction")
@@ -264,7 +346,8 @@ public class NuxCoin {
                 });
     }
 
-    public static void getFee(String server, Dompet fromDompet, String toDompet, long jumlah, String message, LongCallback callback){
+    public static void getFee(Dompet fromDompet, String toDompet, long jumlah, String message, LongCallback callback){
+        String server = ObjectBox.getServer();
         Map<String, Object> body = new HashMap<>();
         body.put("recipient",toDompet);
         body.put("amountNQT",jumlah);

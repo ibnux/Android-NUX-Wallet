@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.adapter.DompetAdapter;
 import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.data.Transaksi_;
 import com.ibnux.nuxwallet.databinding.ActivityHomeBinding;
+import com.ibnux.nuxwallet.utils.NuxCoin;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, DompetAdapter.DompetCallback {
     ActivityHomeBinding binding;
@@ -39,6 +41,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(binding.listDompet);
+        if(Aplikasi.unixtime==0L){
+            NuxCoin.getTime(null);
+        }
     }
 
     @Override

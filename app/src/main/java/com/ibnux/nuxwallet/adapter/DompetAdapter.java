@@ -75,7 +75,7 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
             }
         });
 
-        NuxCoin.getAccount(ObjectBox.getServer(), dompet.alamat, Priority.LOW, new JsonCallback() {
+        NuxCoin.getAccount(dompet.alamat, Priority.LOW, new JsonCallback() {
             @Override
             public void onJsonCallback(JSONObject jsonObject) {
                 try{

@@ -1,6 +1,8 @@
 package com.ibnux.nuxwallet.utils;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ibnux.nuxwallet.kripto.Curve25519;
 
@@ -10,6 +12,8 @@ import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Map;
 
 public class Utils {
@@ -210,13 +214,33 @@ public class Utils {
             String desimal = strNumber.substring(strNumber.length() - 8);
             strNumber = strNumber.substring(0, strNumber.length() - 8);
             result = formatter.format(Double.parseDouble(strNumber));
-            log("nuxFormat: " + String.valueOf(myNumber) + " : " + result + "," + desimal);
             if(!desimal.equals("00000000"))
                 result += dfs.getDecimalSeparator() +desimal;
         }else{
             result = formatter.format(myNumber);
-            log("nuxFormat: " + String.valueOf(myNumber) + " : " + result);
         }
         return result;
     }
+
+    /**
+     * Return date in specified format.
+     * @param milliSeconds Date in milliseconds
+     * @param dateFormat Date format "dd/MM/yyyy HH:mm"
+     * @return String representing date in specified format
+     */
+    public static String getDate(long milliSeconds, String dateFormat)
+    {
+        // Create a DateFormatter object for displaying date in specified format.
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+
+        // Create a calendar object that will convert the date and time value in milliseconds to date.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliSeconds);
+        return formatter.format(calendar.getTime());
+    }
+
+    public static void showToast(String pesan, Context cx){
+        Toast.makeText(cx,pesan,Toast.LENGTH_LONG).show();
+    }
+
 }
