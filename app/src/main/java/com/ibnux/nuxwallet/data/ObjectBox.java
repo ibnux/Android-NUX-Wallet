@@ -3,6 +3,7 @@ package com.ibnux.nuxwallet.data;
 import android.content.Context;
 
 import com.ibnux.nuxwallet.Aplikasi;
+import com.ibnux.nuxwallet.Constants;
 
 import io.objectbox.Box;
 import io.objectbox.BoxStore;
@@ -54,7 +55,7 @@ public class ObjectBox {
     }
 
     public static String getServer(){
-        return Aplikasi.sp.getString("server","https://coin.ibnux.net");
+        return Aplikasi.sp.getString("server", Constants.defaultServer);
     }
 
 
