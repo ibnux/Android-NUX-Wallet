@@ -24,7 +24,7 @@ import com.ibnux.nuxwallet.utils.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class ViewWalletActivity extends AppCompatActivity implements TransaksiAdapter.TransaksiCallback,JsonCallback {
+public class ViewWalletActivity extends AppCompatActivity implements View.OnClickListener, TransaksiAdapter.TransaksiCallback,JsonCallback {
     ActivityViewWalletBinding binding;
     String alamat;
     TransaksiAdapter adapter;
@@ -36,14 +36,14 @@ public class ViewWalletActivity extends AppCompatActivity implements TransaksiAd
         super.onCreate(savedInstanceState);
         binding = ActivityViewWalletBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        setTitle("NUX COIN");
         Intent intent = getIntent();
         if(!intent.hasExtra("alamat")) finish();
         alamat = intent.getStringExtra("alamat");
+        binding.txtWallet.setText(alamat);
         dompet = ObjectBox.getDompet(alamat);
         if(dompet==null) {
-            setTitle(alamat);
             binding.txtBalance.setText("Mengambil saldo...");
-            binding.txtWallet.setVisibility(View.GONE);
             NuxCoin.getAccount(alamat, Priority.HIGH, new JsonCallback() {
                 @Override
                 public void onJsonCallback(JSONObject jsonObject) {
@@ -82,14 +82,20 @@ public class ViewWalletActivity extends AppCompatActivity implements TransaksiAd
                 }
             });
         }else {
-            if (dompet.alamat.equals(dompet.nama)) {
-                setTitle(dompet.nama);
-                binding.txtWallet.setVisibility(View.GONE);
-            } else {
-                setTitle(dompet.nama);
-                binding.txtWallet.setText(dompet.alamat);
-                binding.txtWallet.setVisibility(View.VISIBLE);
+            if(dompet.alamat.equals(dompet.nama)) {
+                binding.txtWalletName.setVisibility(View.GONE);
+            }else{
+                binding.txtWalletName.setVisibility(View.VISIBLE);
+                if(dompet.nama!=null)
+                    binding.txtWalletName.setText(dompet.nama);
+                else
+                    binding.txtWalletName.setText("");
             }
+            if(dompet.catatan!=null)
+                binding.txtWalletNote.setText(dompet.catatan);
+            else
+                binding.txtWalletNote.setText("");
+
             binding.txtBalance.setText(Utils.nuxFormat(dompet.saldo));
         }
 
@@ -97,7 +103,26 @@ public class ViewWalletActivity extends AppCompatActivity implements TransaksiAd
         binding.listTransaksi.setHasFixedSize(true);
         binding.listTransaksi.setLayoutManager(new LinearLayoutManager(this));
         binding.listTransaksi.setAdapter(adapter);
+
+        binding.btnBarcode.setOnClickListener(this);
+        binding.btnSend.setOnClickListener(this);
         getTransaksi();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v==binding.btnBarcode){
+            Intent i = new Intent(this, QRCodeActivity.class);
+            i.putExtra("alamat",alamat);
+            startActivity(i);
+        }else if(v==binding.btnSend){
+            Intent i = new Intent(this, SendMoneyActivity.class);
+            if(dompet.isMe)
+                i.putExtra("from",alamat);
+            else
+                i.putExtra("to",alamat);
+            startActivity(i);
+        }
     }
 
     public void getTransaksi(){

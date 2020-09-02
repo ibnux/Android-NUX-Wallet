@@ -27,13 +27,14 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
     private List<Dompet> datas;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txtWallet,txtBalance,txtWalletBottom;
+        TextView txtWallet,txtBalance,txtWalletName,txtWalletNote;
         LinearLayout layout;
         public MyViewHolder(View v) {
             super(v);
             txtWallet = v.findViewById(R.id.txtWallet);
             txtBalance = v.findViewById(R.id.txtBalance);
-            txtWalletBottom = v.findViewById(R.id.txtWalletBottom);
+            txtWalletName = v.findViewById(R.id.txtWalletName);
+            txtWalletNote = v.findViewById(R.id.txtWalletNote);
             layout = v.findViewById(R.id.layout);
         }
     }
@@ -52,21 +53,27 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new DompetAdapter.MyViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_dompet, parent, false));
+                .inflate(R.layout.item_card, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Dompet dompet = datas.get(position);
         holder.txtBalance.setText(Utils.nuxFormat(dompet.saldo));
+        holder.txtWallet.setText(dompet.alamat);
         if(dompet.alamat.equals(dompet.nama)) {
-            holder.txtWallet.setText(dompet.alamat);
-            holder.txtWalletBottom.setVisibility(View.GONE);
+            holder.txtWalletName.setVisibility(View.GONE);
         }else{
-            holder.txtWallet.setText(dompet.nama);
-            holder.txtWalletBottom.setVisibility(View.VISIBLE);
-            holder.txtWalletBottom.setText(dompet.alamat);
+            holder.txtWalletName.setVisibility(View.VISIBLE);
+            if(dompet.nama!=null)
+                holder.txtWalletName.setText(dompet.nama);
+            else
+                holder.txtWalletName.setText("");
         }
+        if(dompet.catatan!=null)
+            holder.txtWalletNote.setText(dompet.catatan);
+        else
+            holder.txtWalletNote.setText("");
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,4 +122,6 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
     public interface DompetCallback {
         void onDompetClicked(Dompet dompet);
     }
+
+
 }

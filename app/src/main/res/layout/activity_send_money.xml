@@ -1,9 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.SendMoneyActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_1sdp"
+        android:layout_marginRight="@dimen/_1sdp"
+        app:cardCornerRadius="1dp"
+        app:contentPadding="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Spinner
+                android:background="@null"
+                android:id="@+id/spinnerWallet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dropDownWidth="match_parent"
+                android:spinnerMode="dropdown" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/txtAlamat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:capitalize="characters"
+                    android:ems="10"
+                    android:fontFamily="monospace"
+                    android:hint="NUX-ADDRESS-RECEIVER"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName|textCapCharacters"
+                    android:selectAllOnFocus="true"
+                    android:textSize="@dimen/_16ssp" />
+
+                <ImageButton
+                    android:id="@+id/btnScan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_scan"
+                    android:tint="@android:color/black" />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="COIN"
+                android:textSize="@dimen/_24ssp" />
+
+            <EditText
+                android:id="@+id/txtValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:digits="0987654321"
+                android:ems="10"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:selectAllOnFocus="true"
+                android:text="1"
+                android:textAlignment="textEnd"
+                android:textSize="@dimen/_24ssp" />
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="FEE"
+                    android:textSize="@dimen/_18ssp" />
+
+                <EditText
+                    android:id="@+id/txtFee"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:ems="10"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:selectAllOnFocus="true"
+                    android:text="1"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/_18ssp" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/txtNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:ems="10"
+                android:gravity="left|top"
+                android:hint="Message (Optional)"
+                android:inputType="textMultiLine"
+                android:lines="4"
+                android:maxLines="4"
+                android:selectAllOnFocus="true"
+                android:textSize="@dimen/_14ssp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSend"
+                android:layout_marginTop="@dimen/_20sdp"
+                style="@style/Button.Accent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_18ssp"
+                android:text="Send Coin" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</ScrollView>

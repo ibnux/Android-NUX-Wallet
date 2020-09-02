@@ -3,8 +3,11 @@ package com.ibnux.nuxwallet.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -19,6 +22,7 @@ import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.data.Transaksi_;
 import com.ibnux.nuxwallet.databinding.ActivityHomeBinding;
 import com.ibnux.nuxwallet.utils.NuxCoin;
+import com.ibnux.nuxwallet.utils.Utils;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, DompetAdapter.DompetCallback {
     ActivityHomeBinding binding;
@@ -44,6 +48,36 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if(Aplikasi.unixtime==0L){
             NuxCoin.getTime(null);
         }
+
+        //startActivityForResult(new Intent(this,PinActivity.class), 4268);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==4268){
+            if(resultCode==RESULT_OK) {
+                if (data.hasExtra("SUKSES")) {
+                    Aplikasi.isLogin = true;
+                } else {
+                    finish();
+                }
+            }else {
+                finish();
+            }
+        }else if(requestCode==4269){
+            if(resultCode==RESULT_OK) {
+                if (data.hasExtra("SUKSES")) {
+                    Aplikasi.setPin(null);
+                    startActivityForResult(new Intent(this, PinActivity.class), 4268);
+                } else {
+                    Utils.showToast("PIN Not change", this);
+                }
+            } else {
+                Utils.showToast("PIN Not change", this);
+            }
+        }
+
     }
 
     @Override
@@ -124,4 +158,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     .show();
         }
     };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_nav_changepin:
+                startActivityForResult(new Intent(this,PinActivity.class), 4269);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

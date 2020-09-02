@@ -1,9 +1,14 @@
 package com.ibnux.nuxwallet.utils;
 
 import android.content.Context;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
 
+import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.kripto.Curve25519;
 
 import java.io.UnsupportedEncodingException;
@@ -240,7 +245,20 @@ public class Utils {
     }
 
     public static void showToast(String pesan, Context cx){
-        Toast.makeText(cx,pesan,Toast.LENGTH_LONG).show();
+        Toast t =Toast.makeText(cx,pesan,Toast.LENGTH_LONG);
+        t.setGravity(Gravity.CENTER,0,0);
+        t.show();
+    }
+
+    public static void vibrate(){
+        Vibrator v = (Vibrator) Aplikasi.app.getSystemService(Context.VIBRATOR_SERVICE);
+// Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            v.vibrate(500);
+        }
     }
 
 }

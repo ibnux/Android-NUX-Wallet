@@ -12,11 +12,14 @@ import cat.ereza.customactivityoncrash.config.CaocConfig;
 
 public class Aplikasi extends MultiDexApplication {
     public static SharedPreferences sp;
+    public static Aplikasi app;
+    public static Boolean isLogin;
     public static long unixtime = 0L;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        app = this;
         ObjectBox.init(this);
         AndroidNetworking.initialize(getApplicationContext());
         CaocConfig.Builder.create()
@@ -32,4 +35,14 @@ public class Aplikasi extends MultiDexApplication {
         sp = getSharedPreferences("settings",0);
         unixtime = sp.getLong("unixtime",0L);
     }
+
+
+    public static String getPin(){
+        return sp.getString("PIN",null);
+    }
+
+    public static void setPin(String sha265){
+        sp.edit().putString("PIN", sha265).apply();
+    }
+
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout"
+    android:id="@+id/layout1"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:cardBackgroundColor="#51aed3"
+        app:cardBackgroundColor="@color/blue_500"
         app:cardCornerRadius="2dp"
         app:cardElevation="2dp"
         app:cardPreventCornerOverlap="false"
@@ -25,14 +25,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#3d90b3"
+                android:background="@color/blue_900"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txtWallet"
+                    android:id="@+id/txtWallet1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
                     android:text="NUX-1234-1234-1234"
                     android:textAlignment="center"
                     android:lines="1"
@@ -42,8 +43,9 @@
                     android:textSize="@dimen/_18ssp" />
 
                 <TextView
-                    android:id="@+id/txtWalletBottom"
+                    android:id="@+id/txtWalletBottom1"
                     android:layout_width="match_parent"
+                    android:fontFamily="monospace"
                     android:layout_height="wrap_content"
                     android:text="NUX-1234-1234-1234"
                     android:textAlignment="center"
@@ -73,10 +75,11 @@
                 android:paddingRight="@dimen/spacing_large">
 
                 <TextView
-                    android:id="@+id/txtBalance"
+                    android:id="@+id/txtBalance1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="monospace"
                     android:text="12345678,12345678"
                     android:textAlignment="viewEnd"
                     android:textColor="@android:color/white"

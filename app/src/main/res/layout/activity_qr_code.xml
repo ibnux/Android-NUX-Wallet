@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".ui.QRCodeActivity">
+
+
+    <LinearLayout
+        android:id="@+id/layoutQR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imgBarcode"
+            android:layout_width="@dimen/_300sdp"
+            android:layout_height="@dimen/_300sdp"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            app:srcCompat="@drawable/nuxcoin" />
+
+        <TextView
+            android:id="@+id/txtAlamat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NUX-XXXX-XXXX-XXXX-XXXX"
+            android:textAlignment="center"
+            android:textSize="@dimen/_18sdp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnShareImage"
+        style="@style/Button.Accent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share Barcode" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnShareAddress"
+        style="@style/Button.Accent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Copy Wallet Address" />
+</LinearLayout>
