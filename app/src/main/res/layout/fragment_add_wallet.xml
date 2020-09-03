@@ -33,4 +33,21 @@
         android:textSize="@dimen/_12ssp"
         android:text="Buat Baru atau Input PassPhrase"
         android:theme="@style/Button.Primary" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Payment"
+        android:textAlignment="center"
+        android:textSize="@dimen/_24ssp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnScan"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_48sdp"
+        android:gravity="center"
+        android:textSize="@dimen/_12ssp"
+        android:text="Scan Wallet"
+        android:theme="@style/Button.Green" />
+
 </LinearLayout>

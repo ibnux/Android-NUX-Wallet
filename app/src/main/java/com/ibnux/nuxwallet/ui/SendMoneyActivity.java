@@ -49,6 +49,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
             to = i.getStringExtra("to");
             binding.txtAlamat.setText(to);
             binding.spinnerWallet.setSelection(0);
+            chekIsActive();
         }
 
         binding.btnScan.setOnClickListener(this);

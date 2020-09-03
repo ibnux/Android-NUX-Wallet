@@ -17,9 +17,9 @@ import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class Utils {
     private static final char[] hexChars = { '0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f' };
@@ -227,21 +227,29 @@ public class Utils {
         return result;
     }
 
-    /**
-     * Return date in specified format.
-     * @param milliSeconds Date in milliseconds
-     * @param dateFormat Date format "dd/MM/yyyy HH:mm"
-     * @return String representing date in specified format
-     */
-    public static String getDate(long milliSeconds, String dateFormat)
+    // d m y h i s full
+    public static String toDate(long milliSeconds, String format)
     {
-        // Create a DateFormatter object for displaying date in specified format.
-        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-
-        // Create a calendar object that will convert the date and time value in milliseconds to date.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(milliSeconds);
-        return formatter.format(calendar.getTime());
+        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+        Calendar cal = Calendar.getInstance(timeZone);
+        cal.setTimeInMillis(milliSeconds);
+        cal.setTimeZone(TimeZone.getDefault());
+        String hasil = "";
+        switch (format){
+            case "d" : hasil = String.valueOf(cal.get(Calendar.DAY_OF_MONTH)); break;
+            case "m" : hasil = String.valueOf(cal.get(Calendar.MONTH)+1); break;
+            case "y" : hasil = String.valueOf(cal.get(Calendar.YEAR)).substring(2,4); break;
+            case "Y" : hasil = String.valueOf(cal.get(Calendar.YEAR)); break;
+            case "h" : hasil = String.valueOf(cal.get(Calendar.HOUR)); break;
+            case "H" : hasil = String.valueOf(cal.get(Calendar.HOUR_OF_DAY)); break;
+            case "i" : hasil = String.valueOf(cal.get(Calendar.MINUTE)); break;
+            default: hasil = cal.get(Calendar.DAY_OF_MONTH)+"/"+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.YEAR)+" "
+                    +cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE);
+        }
+        if(hasil.length()==1)
+            return "0"+hasil;
+        else
+            return hasil;
     }
 
     public static void showToast(String pesan, Context cx){
