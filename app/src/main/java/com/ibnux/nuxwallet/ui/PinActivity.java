@@ -1,5 +1,14 @@
 package com.ibnux.nuxwallet.ui;
 
+/******************************************************************************\
+ * GNU GENERAL PUBLIC LICENSE                                                 *
+ * Version 3, 29 June 2007                                                    *
+ * Ibnu Maksum https://github.com/ibnux/                                      *
+ ******************************************************************************
+ * This source and program come as is, WITHOUT ANY WARRANTY and/or WITHOUT    *
+ * ANY IMPLIED WARRANTY.                                                      *
+ \******************************************************************************/
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;

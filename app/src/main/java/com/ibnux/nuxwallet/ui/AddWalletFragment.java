@@ -1,5 +1,14 @@
 package com.ibnux.nuxwallet.ui;
 
+/******************************************************************************\
+ * GNU GENERAL PUBLIC LICENSE                                                 *
+ * Version 3, 29 June 2007                                                    *
+ * Ibnu Maksum https://github.com/ibnux/                                      *
+ ******************************************************************************
+ * This source and program come as is, WITHOUT ANY WARRANTY and/or WITHOUT    *
+ * ANY IMPLIED WARRANTY.                                                      *
+ \******************************************************************************/
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,13 +23,6 @@ import com.ibnux.nuxwallet.databinding.FragmentAddWalletBinding;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * <p>A fragment that shows a list of items as a modal bottom sheet.</p>
- * <p>You can show this modal bottom sheet from your activity like this:</p>
- * <pre>
- *     ItemListDialogFragment.newInstance(30).show(getSupportFragmentManager(), "dialog");
- * </pre>
- */
 public class AddWalletFragment extends BottomSheetDialogFragment implements View.OnClickListener {
     FragmentAddWalletBinding binding;
 
