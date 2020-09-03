@@ -1,15 +1,23 @@
 package com.ibnux.nuxwallet.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.androidnetworking.common.Priority;
 import com.google.gson.Gson;
+import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.Constants;
+import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.adapter.TransaksiAdapter;
 import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.data.ObjectBox;
@@ -58,7 +66,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                             dompet.dompetID = jsonObject.getString("account");
                             dompet.saldo = jsonObject.getLong("balanceNQT");
                             dompet.isMe = false;
-                            binding.txtBalance.setText(Utils.nuxFormat(dompet.saldo));
+                            uiProcess();
                             NuxCoin.getPublicKey(alamat, Priority.LOW, new TextCallback() {
                                 @Override
                                 public void onTextCallback(String string) {
@@ -72,7 +80,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                             });
                         }
                     }catch (Exception e){
-                        binding.txtBalance.setText("Mengambil saldo...");
+                        binding.txtBalance.setText("Wallet not registered");
                     }
                 }
 
@@ -82,21 +90,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                 }
             });
         }else {
-            if(dompet.alamat.equals(dompet.nama)) {
-                binding.txtWalletName.setVisibility(View.GONE);
-            }else{
-                binding.txtWalletName.setVisibility(View.VISIBLE);
-                if(dompet.nama!=null)
-                    binding.txtWalletName.setText(dompet.nama);
-                else
-                    binding.txtWalletName.setText("");
-            }
-            if(dompet.catatan!=null)
-                binding.txtWalletNote.setText(dompet.catatan);
-            else
-                binding.txtWalletNote.setText("");
-
-            binding.txtBalance.setText(Utils.nuxFormat(dompet.saldo));
+            uiProcess();
         }
 
         adapter = new TransaksiAdapter(this,alamat);
@@ -106,22 +100,170 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
 
         binding.btnBarcode.setOnClickListener(this);
         binding.btnSend.setOnClickListener(this);
+        binding.txtWalletName.setOnClickListener(this);
+        binding.txtWalletNote.setOnClickListener(this);
         getTransaksi();
+    }
+
+    public void uiProcess(){
+        if(dompet.isMe){
+            binding.btnBarcode.setText("Barcode");
+            binding.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app, R.color.blue_500));
+        }else{
+            if(dompet.id>0){
+                binding.btnBarcode.setVisibility(View.GONE);
+            }else{
+                binding.btnBarcode.setText("Save");
+            }
+            binding.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.red_400));
+        }
+        if(dompet.alamat.equals(dompet.nama)) {
+            binding.txtWalletName.setVisibility(View.GONE);
+        }else{
+            binding.txtWalletName.setVisibility(View.VISIBLE);
+            if(dompet.nama!=null)
+                binding.txtWalletName.setText(dompet.nama);
+            else if(dompet.id>0)
+                binding.txtWalletName.setText("Add name?");
+            else
+                binding.txtWalletName.setText("");
+        }
+        if(dompet.catatan!=null)
+            binding.txtWalletNote.setText(dompet.catatan);
+        else if(dompet.id>0)
+            binding.txtWalletNote.setText("Add note?");
+        else
+            binding.txtWalletNote.setText("");
+
+        binding.txtBalance.setText(Utils.nuxFormat(dompet.saldo));
     }
 
     @Override
     public void onClick(View v) {
         if(v==binding.btnBarcode){
-            Intent i = new Intent(this, QRCodeActivity.class);
-            i.putExtra("alamat",alamat);
-            startActivity(i);
+            if(dompet.isMe()) {
+                Intent i = new Intent(this, QRCodeActivity.class);
+                i.putExtra("alamat", alamat);
+                startActivity(i);
+            }else{
+                if(binding.btnBarcode.getText().equals("Delete")){
+                    //Ask Name
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ViewWalletActivity.this);
+                    builder.setTitle("Delete Wallet?");
+                    builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(ObjectBox.getDompet().remove(dompet)){
+                                Utils.showToast("Wallet Deleted", ViewWalletActivity.this);
+                                finish();
+                            }else{
+                                Utils.showToast("Wallet not deleted", ViewWalletActivity.this);
+                            }
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", null);
+                    builder.show();
+                }else {
+                    //Ask Name
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ViewWalletActivity.this);
+                    builder.setTitle("Wallet Name?");
+                    final EditText input = new EditText(ViewWalletActivity.this);
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+                    input.setGravity(Gravity.CENTER_HORIZONTAL);
+                    input.setHint("Optional");
+                    input.setText(dompet.nama);
+                    input.setSelectAllOnFocus(true);
+                    builder.setView(input);
+                    builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dompet.nama = input.getText().toString();
+                            if (ObjectBox.addDompet(dompet) > 0) {
+                                Utils.showToast("Wallet Saved", ViewWalletActivity.this);
+                                uiProcess();
+                            } else {
+                                Utils.showToast("Wallet not Saved", ViewWalletActivity.this);
+                            }
+                        }
+                    });
+                    builder.setNegativeButton("No Name", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (ObjectBox.addDompet(dompet) > 0) {
+                                Utils.showToast("Wallet Saved", ViewWalletActivity.this);
+                                uiProcess();
+                            } else {
+                                Utils.showToast("Wallet not Saved", ViewWalletActivity.this);
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+            }
         }else if(v==binding.btnSend){
             Intent i = new Intent(this, SendMoneyActivity.class);
-            if(dompet.isMe)
-                i.putExtra("from",alamat);
-            else
+            if(dompet.isMe) {
+                if(dompet.saldo>0)
+                    i.putExtra("from", alamat);
+                else {
+                    Utils.showToast("Insufficient funds", this);
+                    return;
+                }
+            }else
                 i.putExtra("to",alamat);
             startActivity(i);
+        }else if(v==binding.txtWalletNote){
+            if(dompet.id==0) return;
+            //Ask Name
+            AlertDialog.Builder builder = new AlertDialog.Builder(ViewWalletActivity.this);
+            builder.setTitle("Wallet Note?");
+            final EditText input = new EditText(ViewWalletActivity.this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+            input.setGravity(Gravity.CENTER_HORIZONTAL);
+            input.setHint("Your notes");
+            input.setText(dompet.catatan);
+            input.setSelectAllOnFocus(true);
+            builder.setView(input);
+            builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dompet.catatan = input.getText().toString();
+                    if(ObjectBox.addDompet(dompet)>0){
+                        Utils.showToast("Wallet Saved",ViewWalletActivity.this);
+                        uiProcess();
+                    }else{
+                        Utils.showToast("Wallet not Saved",ViewWalletActivity.this);
+                    }
+                }
+            });
+            builder.setNegativeButton("Cancel",null);
+            builder.show();
+        }else if(v==binding.txtWalletName){
+            if(dompet.id==0) return;
+            //Ask Name
+            AlertDialog.Builder builder = new AlertDialog.Builder(ViewWalletActivity.this);
+            builder.setTitle("Wallet Name?");
+            final EditText input = new EditText(ViewWalletActivity.this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+            input.setGravity(Gravity.CENTER_HORIZONTAL);
+            input.setHint("Wallet function");
+            builder.setView(input);
+            input.setText(dompet.nama);
+            input.setSelectAllOnFocus(true);
+            builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dompet.nama = input.getText().toString();
+                    if(ObjectBox.addDompet(dompet)>0){
+                        Utils.showToast("Wallet Saved",ViewWalletActivity.this);
+                        uiProcess();
+                    }else{
+                        Utils.showToast("Wallet not Saved",ViewWalletActivity.this);
+                    }
+                }
+            });
+            builder.setNegativeButton("Cancel",null);
+            builder.show();
         }
     }
 

@@ -104,13 +104,13 @@ public class WalletGeneratorActivity extends AppCompatActivity implements Advanc
                 dompet.dompetID = accountid;
                 //Ask Name
                 AlertDialog.Builder builder = new AlertDialog.Builder(WalletGeneratorActivity.this);
-                builder.setTitle("Nama Dompet?");
+                builder.setTitle("Wallet Name?");
                 final EditText input = new EditText(WalletGeneratorActivity.this);
                 input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_WORDS);
                 input.setGravity(Gravity.CENTER_HORIZONTAL);
                 input.setHint("Optional");
                 builder.setView(input);
-                builder.setPositiveButton("Simpan", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dompet.nama = input.getText().toString();
@@ -119,10 +119,9 @@ public class WalletGeneratorActivity extends AppCompatActivity implements Advanc
                         finish();
                     }
                 });
-                builder.setNegativeButton("Tidak usah", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("No Name", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dompet.nama = wallet;
                         ObjectBox.addDompet(dompet);
                         dialog.dismiss();
                         finish();

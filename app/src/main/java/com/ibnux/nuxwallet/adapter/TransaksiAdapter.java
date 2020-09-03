@@ -3,11 +3,12 @@ package com.ibnux.nuxwallet.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ibnux.nuxwallet.Aplikasi;
@@ -25,17 +26,20 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.MyVi
     private List<Transaksi> datas;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txtWallet,txtBalance,txtTanggal,txtCatatan;
-        ImageView imageStatus;
-        LinearLayout layout;
+        TextView txtWallet,txtBalance,txtTgl,txtCatatan,txtThn,txtJam;
+        LinearLayout layout, layoutStatus;
+        CardView cardTgl;
         public MyViewHolder(View v) {
             super(v);
             txtWallet = v.findViewById(R.id.txtWallet);
             txtBalance = v.findViewById(R.id.txtBalance);
-            txtTanggal = v.findViewById(R.id.txtTanggal);
-            imageStatus = v.findViewById(R.id.imageStatus);
+            txtTgl = v.findViewById(R.id.txtTgl);
+            txtThn = v.findViewById(R.id.txtThn);
+            txtJam = v.findViewById(R.id.txtJam);
+            cardTgl = v.findViewById(R.id.cardTgl);
             txtCatatan = v.findViewById(R.id.txtCatatan);
             layout = v.findViewById(R.id.layout);
+            layoutStatus = v.findViewById(R.id.layoutStatus);
         }
     }
 
@@ -64,12 +68,16 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Transaksi tx = datas.get(position);
-        holder.txtBalance.setText(Utils.nuxFormat(Long.parseLong(tx.amountNQT)));
+
         if(tx.recipientRS.equals(alamat)){
-            holder.imageStatus.setImageResource(R.drawable.ic_coin_received);
+            holder.layoutStatus.setBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.green_A400));
+            holder.txtBalance.setText("+ "+Utils.nuxFormat(Long.parseLong(tx.amountNQT)));
+            holder.txtBalance.setTextColor(ContextCompat.getColor(Aplikasi.app,R.color.green_A700));
             holder.txtWallet.setText(tx.senderRS);
         }else {
-            holder.imageStatus.setImageResource(R.drawable.ic_coin_send);
+            holder.txtBalance.setText("- "+Utils.nuxFormat(Long.parseLong(tx.amountNQT)));
+            holder.txtBalance.setTextColor(ContextCompat.getColor(Aplikasi.app,R.color.red_400));
+            holder.layoutStatus.setBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.red_500));
             holder.txtWallet.setText(tx.recipientRS);
         }
         holder.txtWallet.setOnClickListener(new View.OnClickListener() {
@@ -80,10 +88,13 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.MyVi
             }
         });
         if(Aplikasi.unixtime!=0L) {
-            holder.txtTanggal.setVisibility(View.VISIBLE);
-            holder.txtTanggal.setText(Utils.getDate(Aplikasi.unixtime + tx.blockTimestamp, "dd/MM/yyyy HH:mm"));
+            holder.cardTgl.setVisibility(View.VISIBLE);
+            long time = Aplikasi.unixtime + tx.blockTimestamp;
+            holder.txtTgl.setText(Utils.getDate(time, "dd"));
+            holder.txtThn.setText(Utils.getDate(time, "MM/yy"));
+            holder.txtJam.setText(Utils.getDate(time, "HH:mm"));
         }else{
-            holder.txtTanggal.setVisibility(View.GONE);
+            holder.cardTgl.setVisibility(View.GONE);
         }
         if(tx.message!=null){
             holder.txtCatatan.setVisibility(View.VISIBLE);

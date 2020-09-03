@@ -86,15 +86,23 @@ public class DompetSpinnerAdapter extends ArrayAdapter {
         return view;
     }
 
+    public int getPosition(@Nullable String alamat) {
+        int jml = getCount();
+        for(int n=0;n<jml;n++){
+            Dompet d = datas.get(n);
+            if(d.alamat.equals(alamat)){
+                return n;
+            }
+        }
+        return 0;
+    }
 
     @Override
     public int getCount() {
         return datas.size();
     }
 
-    @Nullable
-    @Override
-    public Object getItem(int position) {
+    public Dompet getItem(int position) {
         return datas.get(position);
     }
 }

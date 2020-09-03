@@ -26,7 +26,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_170sdp"
-                android:scaleType="fitCenter"
+                android:scaleType="fitXY"
                 android:src="@drawable/world_map"
                 app:srcCompat="@drawable/world_map" />
 

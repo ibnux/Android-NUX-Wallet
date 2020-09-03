@@ -7,9 +7,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidnetworking.common.Priority;
+import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.data.Dompet_;
@@ -25,10 +28,10 @@ import java.util.List;
 public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHolder> {
     DompetCallback callback;
     private List<Dompet> datas;
-
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txtWallet,txtBalance,txtWalletName,txtWalletNote;
         LinearLayout layout;
+        CardView card;
         public MyViewHolder(View v) {
             super(v);
             txtWallet = v.findViewById(R.id.txtWallet);
@@ -36,16 +39,17 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
             txtWalletName = v.findViewById(R.id.txtWalletName);
             txtWalletNote = v.findViewById(R.id.txtWalletNote);
             layout = v.findViewById(R.id.layout);
+            card = v.findViewById(R.id.card);
         }
     }
 
-    public DompetAdapter(DompetCallback callback){
+    public DompetAdapter(DompetCallback callback, boolean isMe){
         this.callback = callback;
-        reload();
+        reload(isMe);
     }
 
-    public void reload(){
-        datas = ObjectBox.getDompet().query().equal(Dompet_.isMe,true).orderDesc(Dompet_.saldo).build().find();
+    public void reload(boolean isMe){
+        datas = ObjectBox.getDompet().query().equal(Dompet_.isMe,isMe).orderDesc(Dompet_.saldo).build().find();
         notifyDataSetChanged();
     }
 
@@ -82,6 +86,12 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
             }
         });
 
+        if(dompet.isMe){
+            holder.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.blue_500));
+        }else{
+            holder.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.red_400));
+        }
+
         NuxCoin.getAccount(dompet.alamat, Priority.LOW, new JsonCallback() {
             @Override
             public void onJsonCallback(JSONObject jsonObject) {
@@ -94,7 +104,7 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
                             ObjectBox.addDompet(dompet);
                         }
                     }else if(jsonObject.has("errorCode") && jsonObject.getInt("errorCode")==5){
-                        holder.txtBalance.setText("Akun belum terdaftar");
+                        holder.txtBalance.setText("Wallet not registered");
                     }else  if(jsonObject.has("errorDescription")){
                         holder.txtBalance.setText(jsonObject.getString("errorDescription"));
                     }

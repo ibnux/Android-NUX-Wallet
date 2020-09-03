@@ -17,7 +17,7 @@
         <div class="field">
             <label class="label">Password dengan 12 kata</label>
             <div class="control">
-                    <textarea class="textarea" onkeyup="generateWallet()" id="passphrase" placeholder="passphrase"
+                    <textarea class="textarea" onkeyup="generateWallet()" onclick="this.select()" id="passphrase" placeholder="passphrase"
                               rows="3"></textarea>
             </div>
         </div>
@@ -93,6 +93,7 @@
         acakWallet();
 
         function pilihIni() {
+            generateWallet();
             var pass = jQuery("#passphrase").val().trim();
             var alamat = jQuery("#alamat").val().trim();
             var accountid = jQuery("#accountid").val().trim();

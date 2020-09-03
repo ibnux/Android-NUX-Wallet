@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.tabs.TabLayout;
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.adapter.DompetAdapter;
@@ -24,7 +25,7 @@ import com.ibnux.nuxwallet.databinding.ActivityHomeBinding;
 import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
 
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener, DompetAdapter.DompetCallback {
+public class HomeActivity extends AppCompatActivity implements View.OnClickListener, DompetAdapter.DompetCallback,TabLayout.OnTabSelectedListener {
     ActivityHomeBinding binding;
     DompetAdapter adapter;
 
@@ -35,7 +36,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(binding.getRoot());
         binding.fabAddDompet.setOnClickListener(this);
 
-        adapter = new DompetAdapter(this);
+        adapter = new DompetAdapter(this, true);
 
         binding.listDompet.setHasFixedSize(true);
         binding.listDompet.setLayoutManager(new LinearLayoutManager(this));
@@ -48,6 +49,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if(Aplikasi.unixtime==0L){
             NuxCoin.getTime(null);
         }
+
+        binding.tabLayout.addOnTabSelectedListener(this);
 
         //startActivityForResult(new Intent(this,PinActivity.class), 4268);
     }
@@ -81,6 +84,25 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        if(tab.getPosition() == 0){
+            adapter.reload(true);
+        }else{
+            adapter.reload(false);
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
     public void onClick(View v) {
         if(binding.fabAddDompet==v){
             AddWalletFragment.newInstance().show(getSupportFragmentManager(),"AddWallet");
@@ -91,7 +113,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         if(adapter!=null){
-            adapter.reload();
+            adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
         }
     }
 
@@ -122,7 +144,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     .setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
-                            adapter.reload();
+                            adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
                         }
                     })
                     .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
@@ -137,13 +159,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                                             ObjectBox.getTransaksi().query().equal(Transaksi_.senderRS,dompet.alamat).build().remove();
                                             ObjectBox.getTransaksi().query().equal(Transaksi_.recipientRS,dompet.alamat).build().remove();
                                             ObjectBox.getDompet().remove(dompet);
-                                            adapter.reload();
+                                            adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
                                         }
                                     })
                                     .setNegativeButton("Nope", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            adapter.reload();
+                                            adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
                                         }
                                     })
                                     .show();
@@ -152,7 +174,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            adapter.reload();
+                            adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
                         }
                     })
                     .show();
