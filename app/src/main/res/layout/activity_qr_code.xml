@@ -10,6 +10,67 @@
 
 
     <LinearLayout
+        android:id="@+id/layoutTombol"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnAlamat"
+                style="@style/Button.Accent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:padding="0dp"
+                android:text="Address"
+                android:textSize="@dimen/_10ssp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnPrivateKey"
+                style="@style/Button.Accent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:padding="0dp"
+                android:text="PassPhrase"
+                android:textSize="@dimen/_10ssp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnPublicKey"
+                style="@style/Button.Accent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:padding="0dp"
+                android:text="PublicKey"
+                android:textSize="@dimen/_10ssp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnPrivateKeyEncrypted"
+                style="@style/Button.Accent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:padding="0dp"
+                android:text="PassPhrase encrypted"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/layoutQR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

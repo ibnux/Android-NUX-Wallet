@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
@@ -36,8 +37,11 @@ import com.github.sumimakito.awesomeqr.AwesomeQrRenderer;
 import com.github.sumimakito.awesomeqr.option.RenderOption;
 import com.github.sumimakito.awesomeqr.option.color.Color;
 import com.github.sumimakito.awesomeqr.option.logo.Logo;
+import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.Constants;
 import com.ibnux.nuxwallet.R;
+import com.ibnux.nuxwallet.data.Dompet;
+import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.databinding.ActivityQrCodeBinding;
 import com.ibnux.nuxwallet.utils.Utils;
 import com.karumi.dexter.Dexter;
@@ -45,16 +49,19 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.scottyab.aescrypt.AESCrypt;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 public class QRCodeActivity extends AppCompatActivity implements View.OnClickListener{
     ActivityQrCodeBinding binding;
     String folderName = Constants.folderName;
+    Dompet dompet;
     String alamat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +74,19 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
             finish();
         }
         alamat = i.getStringExtra("alamat");
+        dompet = ObjectBox.getDompet(alamat);
         binding.txtAlamat.setText(alamat);
         createQR(alamat);
 
         binding.btnShareAddress.setOnClickListener(this);
         binding.btnShareImage.setOnClickListener(this);
+        binding.btnAlamat.setOnClickListener(this);
+        binding.btnPrivateKey.setOnClickListener(this);
+        binding.btnPrivateKeyEncrypted.setOnClickListener(this);
+        binding.btnPublicKey.setOnClickListener(this);
+        if(dompet==null || dompet.secretPhrase.isEmpty()){
+            binding.layoutTombol.setVisibility(View.GONE);
+        }
 
         Dexter.withContext(this)
                 .withPermissions(
@@ -92,6 +107,51 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
             Utils.showToast(alamat+" copied!",this);
         }else if(v==binding.btnShareImage){
             shareFile(saveBitMap());
+        }else if(v==binding.btnPublicKey){
+            if(dompet!=null) {
+                createQR(dompet.publicKey);
+                binding.txtAlamat.setText("Public Key\n" + alamat);
+            }
+        }else if(v==binding.btnPrivateKey){
+            startActivityForResult(new Intent(this,PinActivity.class), 4268);
+        }else if(v==binding.btnPrivateKeyEncrypted){
+            startActivityForResult(new Intent(this,PinActivity.class), 4269);
+        }else if(v==binding.btnAlamat){
+            createQR(alamat);
+            binding.txtAlamat.setText(alamat);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==4268){
+            if(resultCode==RESULT_OK) {
+                //btnPrivateKey
+                if (data.hasExtra("SUKSES")) {
+                    if(dompet!=null) {
+                        createQR(dompet.secretPhrase);
+                        binding.txtAlamat.setText("Secret Passphrase\n" + alamat);
+                    }
+                }
+            }
+        }else if(requestCode==4269){
+            //btnPrivateKeyEncrypted
+            if(resultCode==RESULT_OK) {
+                if (data.hasExtra("SUKSES")) {
+                    if(dompet!=null) {
+                        try {
+                            String result = AESCrypt.encrypt(Aplikasi.getPin(), dompet.secretPhrase);
+                            createQR(result);
+                            binding.txtAlamat.setText("Encrypted Secret Passphrase\n" + alamat);
+                        }catch (GeneralSecurityException e){
+                            Toast.makeText(this, "Failed to encrypt passphrase\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }
+            }
+
         }
     }
 

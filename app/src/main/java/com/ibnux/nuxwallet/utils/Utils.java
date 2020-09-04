@@ -12,6 +12,7 @@ package com.ibnux.nuxwallet.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
+import android.os.Environment;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
@@ -19,11 +20,24 @@ import android.view.Gravity;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.ibnux.nuxwallet.Aplikasi;
+import com.ibnux.nuxwallet.Constants;
+import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.kripto.Curve25519;
+import com.scottyab.aescrypt.AESCrypt;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -292,4 +306,56 @@ public class Utils {
         return builder;
     }
 
+    public static String getStringFromFile(File fl) throws Exception {
+        FileInputStream fin = new FileInputStream(fl);
+        String ret = convertStreamToString(fin);
+        fin.close();
+        return ret;
+    }
+
+    public static String convertStreamToString(InputStream is) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        reader.close();
+        return sb.toString();
+    }
+
+    public static boolean saveToFile(Dompet dompet, String pin,Context cx){
+        String filename = dompet.alamat.replace("-","_") + ".nux";
+        Gson gson = new Gson();
+        OutputStream fos;
+        String json = gson.toJson(dompet);
+        try {
+            json = AESCrypt.encrypt(pin, json);
+        }catch (GeneralSecurityException e){
+            Toast.makeText(cx, "Failed to save file\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        try{
+            String foldernux = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOCUMENTS).toString() + File.separator + Constants.folderName;
+            File file = new File(foldernux);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            file = new File(foldernux, filename);
+            fos = new FileOutputStream(file);
+            //}
+            PrintWriter pw = new PrintWriter(fos);
+            pw.println(json);
+            pw.flush();
+            pw.close();
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(cx, "Failed to save file\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
 }
