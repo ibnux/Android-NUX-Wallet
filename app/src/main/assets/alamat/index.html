@@ -15,14 +15,14 @@
             NUX Wallet Generator
         </h1>
         <div class="field">
-            <label class="label">Password dengan 12 kata</label>
+            <label class="label">Passphrase 16 Words</label>
             <div class="control">
                     <textarea class="textarea" onkeyup="generateWallet()" onclick="this.select()" id="passphrase" placeholder="passphrase"
                               rows="3"></textarea>
             </div>
         </div>
         <div class="field">
-            <label class="label">Alamat Dompet</label>
+            <label class="label">Wallet Address</label>
             <div class="control">
                 <input class="input is-success" id="alamat" type="text" placeholder="Alamat" value="NUX-">
             </div>
@@ -41,10 +41,10 @@
         </div>
         <div class="field is-grouped">
             <div class="control">
-                <button class="button is-link is-light" onclick="acakWallet()">ACAK</button>
+                <button class="button is-link is-light" onclick="acakWallet()">Randomize</button>
             </div>
             <div class="control">
-                <button class="button is-link" onclick="pilihIni()">Pilih &amp; Simpan</button>
+                <button class="button is-link" onclick="pilihIni()">Choose &amp; Save</button>
             </div>
         </div>
     </div>
@@ -65,7 +65,7 @@
         function acakWallet() {
             var jml = words.length;
             var hasil = "";
-            for (n = 0; n < 12; n++) {
+            for (n = 0; n < 16; n++) {
                 hasil += words[acak(0, jml)] + " ";
             }
             jQuery("#passphrase").val(hasil.trim())

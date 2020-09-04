@@ -45,6 +45,7 @@
                         android:hint="NUX-ADDRESS-RECIPIENTS"
                         android:imeOptions="actionNext"
                         android:inputType="textPersonName|textCapCharacters"
+                        android:maxLength="24"
                         android:selectAllOnFocus="true"
                         android:textSize="@dimen/_16ssp" />
 

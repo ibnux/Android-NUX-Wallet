@@ -337,8 +337,10 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onTransaksiWalletClicked(String alamat) {
-        Intent intent = new Intent(this, ViewWalletActivity.class);
-        intent.putExtra("alamat",alamat);
-        startActivity(intent);
+        if(!alamat.equals(this.alamat)) {
+            Intent intent = new Intent(this, ViewWalletActivity.class);
+            intent.putExtra("alamat", alamat);
+            startActivity(intent);
+        }
     }
 }

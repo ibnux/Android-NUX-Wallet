@@ -92,7 +92,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(binding.txtAlamat.getText().length()==23)
+                if(binding.txtAlamat.getText().length()==24)
                     chekIsActive();
             }
         });
@@ -110,7 +110,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(binding.txtAlamat.getText().length()==23)
+                if(binding.txtAlamat.getText().length()==24)
                     cekFee();
             }
         });
@@ -179,7 +179,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
         }else if(v==binding.btnScanPK){
             startActivityForResult(new Intent(this, ScanActivity.class), 2346);
         }else if(v==binding.btnSend){
-            if(binding.txtAlamat.getText().length()==23){
+            if(binding.txtAlamat.getText().length()!=24){
                 binding.txtAlamat.setError("Invalid");
                 binding.txtAlamat.requestFocus();
                 return;
@@ -220,8 +220,8 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                     binding.layoutStatus.setVisibility(View.VISIBLE);
                     binding.txtStatus.setText("Sending Money...");
                     isSending = true;
-                    NuxCoin.sendCoin(dompet, binding.txtAlamat.getText().toString(), binding.txtValue.getText().toString(),
-                            binding.txtNote.getText().toString(), binding.txtStatus, new JsonCallback() {
+                    NuxCoin.sendCoinOnline(dompet, binding.txtAlamat.getText().toString(), binding.txtValue.getText().toString(),
+                            binding.txtFee.getText().toString(), binding.txtNote.getText().toString(), binding.txtStatus, new JsonCallback() {
                                 @Override
                                 public void onJsonCallback(JSONObject jsonObject) {
                                     isSending = false;

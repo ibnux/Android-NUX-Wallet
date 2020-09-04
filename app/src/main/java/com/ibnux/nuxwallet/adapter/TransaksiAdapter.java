@@ -98,7 +98,9 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.MyVi
         });
         if(Aplikasi.unixtime!=0L) {
             holder.cardTgl.setVisibility(View.VISIBLE);
-            long time = Aplikasi.unixtime + tx.blockTimestamp;
+            Utils.log("UnixTime "+Aplikasi.unixtime);
+            long time = Aplikasi.unixtime + (tx.blockTimestamp*1000);
+            Utils.log("BlockTime "+time);
             holder.txtTgl.setText(Utils.toDate(time, "d"));
             holder.txtThn.setText(Utils.toDate(time, "m")+"/"+Utils.toDate(time, "y"));
             holder.txtJam.setText(Utils.toDate(time, "H")+":"+Utils.toDate(time, "m"));

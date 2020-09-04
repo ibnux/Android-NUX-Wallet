@@ -58,5 +58,24 @@ public class ObjectBox {
         return Aplikasi.sp.getString("server", Constants.defaultServer);
     }
 
+    public static void setServer(String server){
+        Aplikasi.sp.edit().putString("server", server).apply();
+    }
+
+    public static long addServer(String server){
+        if(server.isEmpty()) return 0L;
+        if(server.endsWith("/")){
+            server = server.substring(0,server.length()-1);
+        }
+        Server srv = getBoxServer().query().equal(Server_.url,server).build().findFirst();
+        if(srv!=null){
+            return srv.id;
+        }
+        return getBoxServer().put(new Server(server));
+    }
+
+    public static boolean removeServer(Server server){
+        return getBoxServer().remove(server);
+    }
 
 }

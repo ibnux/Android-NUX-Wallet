@@ -44,7 +44,7 @@ public class NuxCoin {
     public static void getAccount(String alamat, Priority priority, JsonCallback callback){
         Utils.log("getAccount: "+alamat);
         String server = ObjectBox.getServer();
-        Utils.log("getAccount "+server+" "+alamat);
+        Utils.log("getAccount "+server+"/nxt?requestType=getAccount&account="+alamat);
         AndroidNetworking.get(server+"/nxt?requestType=getAccount&account="+alamat)
                 .setPriority(priority)
                 .build()
@@ -52,6 +52,7 @@ public class NuxCoin {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        Utils.log(response.toString());
                         if(callback!=null){
                             callback.onJsonCallback(response);
                         }
@@ -68,7 +69,7 @@ public class NuxCoin {
 
     public static void getPublicKey(String alamat, Priority priority, TextCallback callback){
         String server = ObjectBox.getServer();
-        Utils.log("getAccount "+server+" "+alamat);
+        Utils.log("getPublicKey "+server+"/nxt?requestType=getAccountPublicKey&account="+alamat);
         AndroidNetworking.get(server+"/nxt?requestType=getAccountPublicKey&account="+alamat)
                 .setPriority(priority)
                 .build()
@@ -76,6 +77,7 @@ public class NuxCoin {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        Utils.log(response.toString());
                         if(callback!=null){
                             try {
                                 callback.onTextCallback(response.getString("publicKey"));
@@ -103,6 +105,7 @@ public class NuxCoin {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Utils.log(response.toString());
                         try {
                             Utils.log("getTime: "+response.toString());
                             long waktu = (response.getLong("unixtime")-response.getLong("time"))*1000L;
@@ -141,6 +144,7 @@ public class NuxCoin {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        Utils.log(response.toString());
                         try {
                             if (callback != null) {
                                 if (!response.has("errorDescription")) {
@@ -163,13 +167,18 @@ public class NuxCoin {
                 });
     }
 
-    public static void sendCoinOnline(Dompet fromDompet, String toDompet, long jumlah, JsonCallback callback){
+    public static void sendCoinOnline(Dompet fromDompet, String toDompet, String jumlah, String fee, String message, TextView progress, JsonCallback callback){
         String server = ObjectBox.getServer();
+        if(jumlah.length()<8) jumlah += "00000000";
+        if(fee.length()<8) fee += "00000000";
+        if(progress!=null) progress.setText("Sending coin...");
         Map<String, Object> body = new HashMap<>();
         body.put("recipient",toDompet);
         body.put("amountNQT",jumlah);
-        body.put("feeNQT","2");
+        body.put("feeNQT",fee);
         body.put("deadline","60");
+        if(message!=null && !message.isEmpty())
+            body.put("message",message);
         body.put("secretPhrase",fromDompet.secretPhrase);
         AndroidNetworking.post(server+"/nxt?requestType=sendMoney")
                 .addBodyParameter(body)
@@ -178,8 +187,24 @@ public class NuxCoin {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        if(callback!=null)
-                            callback.onJsonCallback(response);
+                        Utils.log("sendingMoney Success "+response.toString());
+                        try{
+                            Utils.log("sendingMoney "+response.toString());
+                            if(response.has("errorCode")){
+                                Utils.log("sendingMoney "+response.toString());
+                                if(callback!=null){
+                                    callback.onErrorCallback(response.getInt("errorCode"), response.getString("errorDescription"));
+                                }
+                            }else{
+                                if(response.has("transaction")){
+                                    getTransaction(response.getString("transaction"), progress, callback);
+                                }
+                            }
+                        }catch (Exception e){
+                            if(callback!=null){
+                                callback.onErrorCallback(10001, e.getMessage());
+                            }
+                        }
                     }
 
                     @Override
@@ -194,17 +219,18 @@ public class NuxCoin {
     }
 
     // SENDCOIN STEP 1
-    public static void sendCoin(Dompet fromDompet, String toDompet, String jumlah, String message, TextView progress, JsonCallback callback){
+    public static void sendCoin(Dompet fromDompet, String toDompet, String jumlah, String fee, String message, TextView progress, JsonCallback callback){
         Utils.log("SendCoin to "+toDompet+" "+jumlah+" "+message);
         if(jumlah.length()<8) jumlah += "00000000";
+        if(fee.length()<8) fee += "00000000";
         String server = ObjectBox.getServer();
         if(progress!=null) progress.setText("Requesting transaction...");
         Map<String, Object> body = new HashMap<>();
         body.put("recipient", toDompet);
         body.put("amountNQT", jumlah);
-        body.put("feeNQT", "0");
+        body.put("feeNQT", fee);
         body.put("deadline","60");
-        if(message!=null && message.length()>0)
+        if(message!=null && !message.isEmpty())
             body.put("message",message);
         body.put("publicKey",fromDompet.publicKey);
         AndroidNetworking.post(server+"/nxt?requestType=sendMoney")
@@ -402,5 +428,34 @@ public class NuxCoin {
                 });
 
 
+    }
+
+    public static void getPeers(String url, JsonCallback callback){
+        Utils.log("getPeers: "+url+"/nxt?requestType=explorePeers&isConnected=true&includeStats=false&includePeers=true&includePeerInfo=true");
+        AndroidNetworking.get(url+"/nxt?requestType=explorePeers&isConnected=true&includeStats=false&includePeers=true&includePeerInfo=true")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if(response.has("errorDescription")){
+
+                            }else {
+                                if(callback!=null) callback.onJsonCallback(response);
+                            }
+                        }catch (Exception e){
+                            if(callback!=null) callback.onErrorCallback(1, e.getMessage());
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        if(callback!=null){
+                            callback.onErrorCallback(error.getErrorCode(), error.getErrorBody());
+                        }
+                    }
+                });
     }
 }

@@ -17,5 +17,8 @@ public class Server {
     @Id
     public long id;
     public String url;
-    public String nama;
+
+    public Server(String server){
+        this.url = server;
+    }
 }
