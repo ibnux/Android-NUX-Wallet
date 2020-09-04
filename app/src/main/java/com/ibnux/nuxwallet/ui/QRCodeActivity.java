@@ -142,7 +142,7 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                     if(dompet!=null) {
                         try {
                             String result = AESCrypt.encrypt(Aplikasi.getPin(), dompet.secretPhrase);
-                            createQR(result);
+                            createQR("SECRET:"+result);
                             binding.txtAlamat.setText("Encrypted Secret Passphrase\n" + alamat);
                         }catch (GeneralSecurityException e){
                             Toast.makeText(this, "Failed to encrypt passphrase\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
