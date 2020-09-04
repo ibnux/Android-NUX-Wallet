@@ -90,7 +90,19 @@
             return Math.floor(Math.random() * (max - min)) + min;
         }
 
-        acakWallet();
+        var url = window.location.href;
+        if(url.lastIndexOf("pass=")>-1){
+            url = url.substr(url.lastIndexOf("pass=")+5);
+
+            if(typeof url === "undefined" || url.length==0){
+                acakWallet();
+            }else{
+                jQuery("#passphrase").val(unescape(url).trim())
+                generateWallet()
+            }
+        }else{
+            acakWallet();
+        }
 
         function pilihIni() {
             generateWallet();
