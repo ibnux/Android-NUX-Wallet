@@ -198,7 +198,10 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
     // https://stackoverflow.com/questions/10374547/how-to-convert-a-linearlayout-to-image
     private Uri saveBitMap() {
 
-        String filename = alamat.replace("-","_") + ".jpg";
+        String filename = binding.txtAlamat.getText().toString()
+                .replace("\n","_")
+                .replace(" ","_")
+                .replace("-","_") + ".jpg";
         OutputStream fos;
         Uri imageUri = null;
         try {
