@@ -42,6 +42,7 @@ public class AddWalletFragment extends BottomSheetDialogFragment implements View
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         binding.btnScanBarcode.setOnClickListener(this);
+        binding.btnScanBarcode.setVisibility(View.GONE);
         binding.btnGenerate.setOnClickListener(this);
         binding.btnScan.setOnClickListener(this);
     }

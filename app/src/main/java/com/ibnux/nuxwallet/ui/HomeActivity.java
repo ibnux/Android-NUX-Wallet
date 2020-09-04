@@ -52,6 +52,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         binding.listDompet.setAdapter(adapter);
 
         binding.txtServer.setText(ObjectBox.getServer());
+        binding.txtServer.setOnClickListener(this);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(binding.listDompet);
@@ -88,6 +89,27 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 Utils.showToast("PIN Not change", this);
             }
+
+        }else if(requestCode==4270){
+            if(resultCode==RESULT_OK) {
+                if (data.hasExtra("SUKSES")) {
+                    backupAll();
+                } else {
+                    Utils.showToast("PIN Not change", this);
+                }
+            } else {
+                Utils.showToast("PIN Not change", this);
+            }
+        }else if(requestCode==4271){
+            if(resultCode==RESULT_OK) {
+                if (data.hasExtra("SUKSES")) {
+                    backupAll();
+                } else {
+                    Utils.showToast("PIN Not change", this);
+                }
+            } else {
+                Utils.showToast("PIN Not change", this);
+            }
         }
 
     }
@@ -115,6 +137,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if(binding.fabAddDompet==v){
             AddWalletFragment.newInstance().show(getSupportFragmentManager(),"AddWallet");
+        }else if(binding.txtServer==v){
+            startActivity(new Intent(this,PeersActivity.class));
         }
     }
 
@@ -201,9 +225,26 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_nav_changepin:
                 startActivityForResult(new Intent(this,PinActivity.class), 4269);
                 return true;
+            case R.id.menu_nav_backup:
+                startActivityForResult(new Intent(this,PinActivity.class), 4270);
+                return true;
+            case R.id.menu_nav_restore:
+                startActivityForResult(new Intent(this,PinActivity.class), 4271);
+                return true;
+            case R.id.menu_nav_peers:
+                startActivity(new Intent(this,PeersActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void backupAll(){
+
+    }
+
+    public void restoreAll(){
+
     }
 
 }

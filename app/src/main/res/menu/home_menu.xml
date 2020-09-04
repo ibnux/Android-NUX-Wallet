@@ -3,11 +3,16 @@
 
     <item
         android:id="@+id/menu_nav_backup"
-        android:title="Backup All" />
+        android:title="Backup" />
+
+    <item
+        android:id="@+id/menu_nav_restore"
+        android:title="Restore" />
+
     <item
         android:id="@+id/menu_nav_changepin"
         android:title="Change Pin" />
     <item
-        android:id="@+id/menu_nav_settings"
-        android:title="Settings" />
+        android:id="@+id/menu_nav_peers"
+        android:title="Peers" />
 </menu>

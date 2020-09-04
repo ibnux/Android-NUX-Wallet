@@ -220,8 +220,8 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                     binding.layoutStatus.setVisibility(View.VISIBLE);
                     binding.txtStatus.setText("Sending Money...");
                     isSending = true;
-                    NuxCoin.sendCoin(dompet, binding.txtAlamat.getText().toString(), binding.txtValue.getText().toString(),
-                            binding.txtNote.getText().toString(), binding.txtStatus, new JsonCallback() {
+                    NuxCoin.sendCoinOnline(dompet, binding.txtAlamat.getText().toString(), binding.txtValue.getText().toString(),
+                            binding.txtFee.getText().toString(), binding.txtNote.getText().toString(), binding.txtStatus, new JsonCallback() {
                                 @Override
                                 public void onJsonCallback(JSONObject jsonObject) {
                                     isSending = false;
