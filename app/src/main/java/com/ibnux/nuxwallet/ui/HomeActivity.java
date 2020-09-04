@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.ibnux.nuxwallet.Aplikasi;
+import com.ibnux.nuxwallet.BuildConfig;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.adapter.DompetAdapter;
 import com.ibnux.nuxwallet.data.Dompet;
@@ -64,13 +65,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(binding.listDompet);
-        if(Aplikasi.unixtime==0L){
-            NuxCoin.getTime(null);
-        }
 
         binding.tabLayout.addOnTabSelectedListener(this);
 
-        //startActivityForResult(new Intent(this,PinActivity.class), 4268);
+        if(!BuildConfig.DEBUG)
+            startActivityForResult(new Intent(this,PinActivity.class), 4268);
     }
 
     @Override
@@ -156,6 +155,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if(binding.txtServer!=null) binding.txtServer.setText(ObjectBox.getServer());
         if(adapter!=null){
             adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
+        }
+        if(Aplikasi.unixtime==0L){
+            NuxCoin.getTime(null);
         }
     }
 

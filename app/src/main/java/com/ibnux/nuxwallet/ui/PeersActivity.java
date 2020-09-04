@@ -20,6 +20,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.adapter.ServerAdapter;
 import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.data.Server;
@@ -155,6 +156,7 @@ public class PeersActivity extends AppCompatActivity implements ServerAdapter.Se
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ObjectBox.setServer(server.url);
+                Aplikasi.unixtime=0L;
                 finish();
             }
         });
