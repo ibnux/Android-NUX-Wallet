@@ -9,12 +9,14 @@ package com.ibnux.nuxwallet.utils;
  * ANY IMPLIED WARRANTY.                                                      *
  \******************************************************************************/
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.Gravity;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ibnux.nuxwallet.Aplikasi;
@@ -239,6 +241,7 @@ public class Utils {
     // d m y h i s full
     public static String toDate(long milliSeconds, String format)
     {
+        log("toDate "+milliSeconds+" "+format);
         TimeZone timeZone = TimeZone.getTimeZone("UTC");
         Calendar cal = Calendar.getInstance(timeZone);
         cal.setTimeInMillis(milliSeconds);
@@ -276,6 +279,17 @@ public class Utils {
             //deprecated in API 26
             v.vibrate(500);
         }
+    }
+
+    public static AlertDialog.Builder progressDialog(String title, Context cx ){
+        AlertDialog.Builder builder = new AlertDialog.Builder(cx);
+        builder.setTitle(title);
+        final ProgressBar progressBar = new ProgressBar(cx);
+        progressBar.setIndeterminate(true);
+        builder.setView(progressBar);
+        builder.setNegativeButton("Cancel",null);
+        builder.setCancelable(false);
+        return builder;
     }
 
 }

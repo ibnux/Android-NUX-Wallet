@@ -15,14 +15,12 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.databinding.ActivityScanBinding;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import me.dm7.barcodescanner.zbar.Result;
@@ -49,14 +47,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                         finish();
                     }
                     @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                        PermissionListener dialogPermissionListener =
-                                DialogOnDeniedPermissionListener.Builder
-                                        .withContext(ScanActivity.this)
-                                        .withTitle("Camera permission")
-                                        .withMessage("Camera permission is needed to scan barcode")
-                                        .withButtonText(android.R.string.ok)
-                                        .withIcon(R.mipmap.ic_launcher)
-                                        .build();
+
                     }
                 }).check();
     }

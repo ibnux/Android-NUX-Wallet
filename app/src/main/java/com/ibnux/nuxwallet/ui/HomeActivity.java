@@ -9,6 +9,7 @@ package com.ibnux.nuxwallet.ui;
  * ANY IMPLIED WARRANTY.                                                      *
  \******************************************************************************/
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,11 +29,19 @@ import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.adapter.DompetAdapter;
 import com.ibnux.nuxwallet.data.Dompet;
+import com.ibnux.nuxwallet.data.Dompet_;
 import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.data.Transaksi_;
 import com.ibnux.nuxwallet.databinding.ActivityHomeBinding;
 import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, DompetAdapter.DompetCallback,TabLayout.OnTabSelectedListener {
     ActivityHomeBinding binding;
@@ -51,7 +60,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         binding.listDompet.setLayoutManager(new LinearLayoutManager(this));
         binding.listDompet.setAdapter(adapter);
 
-        binding.txtServer.setText(ObjectBox.getServer());
         binding.txtServer.setOnClickListener(this);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
@@ -103,7 +111,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }else if(requestCode==4271){
             if(resultCode==RESULT_OK) {
                 if (data.hasExtra("SUKSES")) {
-                    backupAll();
+                    restoreAll();
                 } else {
                     Utils.showToast("PIN Not change", this);
                 }
@@ -145,6 +153,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        if(binding.txtServer!=null) binding.txtServer.setText(ObjectBox.getServer());
         if(adapter!=null){
             adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
         }
@@ -226,10 +235,28 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(new Intent(this,PinActivity.class), 4269);
                 return true;
             case R.id.menu_nav_backup:
-                startActivityForResult(new Intent(this,PinActivity.class), 4270);
+                Dexter.withContext(this)
+                        .withPermissions(
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ).withListener(new MultiplePermissionsListener() {
+                    @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        startActivityForResult(new Intent(HomeActivity.this,PinActivity.class), 4270);
+                    }
+                    @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
+                }).check();
                 return true;
             case R.id.menu_nav_restore:
-                startActivityForResult(new Intent(this,PinActivity.class), 4271);
+                Dexter.withContext(this)
+                        .withPermissions(
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ).withListener(new MultiplePermissionsListener() {
+                    @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        startActivityForResult(new Intent(HomeActivity.this,PinActivity.class), 4271);
+                    }
+                    @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
+                }).check();
                 return true;
             case R.id.menu_nav_peers:
                 startActivity(new Intent(this,PeersActivity.class));
@@ -240,6 +267,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void backupAll(){
+        List<Dompet> dpts = ObjectBox.getDompet().query().equal(Dompet_.isMe,true).build().find();
 
     }
 
