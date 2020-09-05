@@ -16,6 +16,7 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ibnux.nuxwallet.ui.HomeActivity;
+import com.ibnux.nuxwallet.ui.IntroActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,8 +27,13 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                finish();
+                if(Aplikasi.sp.getBoolean("isFirst",false)) {
+                    startActivity(new Intent(MainActivity.this, IntroActivity.class));
+                    finish();
+                }else{
+                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    finish();
+                }
             }
         },1500);
 

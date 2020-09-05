@@ -14,12 +14,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.databinding.FragmentAddWalletBinding;
+import com.scottyab.aescrypt.AESCrypt;
+
+import java.security.GeneralSecurityException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -42,7 +47,6 @@ public class AddWalletFragment extends BottomSheetDialogFragment implements View
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         binding.btnScanBarcode.setOnClickListener(this);
-        binding.btnScanBarcode.setVisibility(View.GONE);
         binding.btnGenerate.setOnClickListener(this);
         binding.btnScan.setOnClickListener(this);
     }
@@ -65,7 +69,23 @@ public class AddWalletFragment extends BottomSheetDialogFragment implements View
         if(resultCode==RESULT_OK){
             if(requestCode==2345){
                 if(data.hasExtra("result")) {
-                    // Validasi dan simpan kartu
+                    String qr = data.getStringExtra("result");
+                    if(qr.startsWith("SECRET:")){
+                        try {
+                            String result = AESCrypt.decrypt(Aplikasi.getPin(), qr.substring("SECRET:".length()));
+                            Intent i = new Intent(getContext(),WalletGeneratorActivity.class);
+                            i.putExtra("data",result);
+                            startActivity(i);
+                            dismiss();
+                        }catch (GeneralSecurityException e){
+                            Toast.makeText(getContext(), "Failed to decrypt passphrase\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Intent i = new Intent(getContext(),WalletGeneratorActivity.class);
+                        i.putExtra("data",qr);
+                        startActivity(i);
+                        dismiss();
+                    }
                 }
             }else if(requestCode==2346){
                 if(data.hasExtra("result")) {

@@ -95,10 +95,12 @@ public class NuxCoin {
                     }
                 });
     }
-
     public static void getTime(LongCallback callback){
-        String server = ObjectBox.getServer();
-        Utils.log("getTime");
+        getTime(ObjectBox.getServer(),callback);
+    }
+
+    public static void getTime(String server, LongCallback callback){
+        Utils.log("getTime "+server+"/nxt?requestType=getTime");
         AndroidNetworking.get(server+"/nxt?requestType=getTime")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -110,19 +112,22 @@ public class NuxCoin {
                             Utils.log("getTime: "+response.toString());
                             long waktu = (response.getLong("unixtime")-response.getLong("time"))*1000L;
                             Utils.log("getTime: "+waktu);
-                            if(waktu>0) {
+                            if(waktu>0L) {
                                 Aplikasi.sp.edit().putLong("unixtime", waktu).apply();
                                 Aplikasi.unixtime = waktu;
                                 if(callback!=null) callback.onLongCallback(waktu);
+                            }else{
+                                if(callback!=null) callback.onErrorCallback(100, "Time not found");
                             }
                         }catch (Exception e){
-                            if(callback!=null) callback.onErrorCallback(1, e.getMessage());
+                            if(callback!=null) callback.onErrorCallback(100, e.getMessage());
                         }
 
                     }
 
                     @Override
                     public void onError(ANError error) {
+                        Utils.log(error.getErrorBody());
                         if(callback!=null){
                             callback.onErrorCallback(error.getErrorCode(), error.getErrorBody());
                         }

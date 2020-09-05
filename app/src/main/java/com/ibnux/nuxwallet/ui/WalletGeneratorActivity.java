@@ -31,16 +31,20 @@ import im.delight.android.webview.AdvancedWebView;
 
 public class WalletGeneratorActivity extends AppCompatActivity implements AdvancedWebView.Listener {
     ActivityWalletGeneratorBinding binding;
-    AlertDialog progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityWalletGeneratorBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setTitle("Tambah Dompet baru");
+        String secret = "";
+        Intent i = getIntent();
+        if(i.hasExtra("data")){
+            secret = "?pass="+i.getStringExtra("data");
+        }
         binding.webview.setListener(this, this);
         binding.webview.setMixedContentAllowed(false);
-        binding.webview.loadUrl("file:///android_asset/alamat/index.html");
+        binding.webview.loadUrl("file:///android_asset/alamat/index.html"+secret);
         binding.webview.addJavascriptInterface(new WebAppInterface(this), "Wallet");
 
     }

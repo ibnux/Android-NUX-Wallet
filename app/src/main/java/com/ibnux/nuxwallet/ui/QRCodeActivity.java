@@ -12,8 +12,6 @@ package com.ibnux.nuxwallet.ui;
 import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,14 +22,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import com.github.sumimakito.awesomeqr.AwesomeQrRenderer;
 import com.github.sumimakito.awesomeqr.option.RenderOption;
@@ -185,42 +181,38 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         try {
             Intent intentShareFile = new Intent(Intent.ACTION_SEND);
             intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intentShareFile.putExtra(Intent.EXTRA_TEXT, alamat);
+            intentShareFile.setDataAndType(file,"image/*");
             intentShareFile.putExtra(Intent.EXTRA_STREAM,file);
-            intentShareFile.setData(file);
-            startActivity(Intent.createChooser(intentShareFile, "Share Hoaks"));
+            startActivity(Intent.createChooser(intentShareFile, "Share Wallet"));
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Gagal share hoaks", Toast.LENGTH_SHORT).show();
-            Log.i("TAG", "There was an issue share the image.");
+            Toast.makeText(this, "Failed to share file\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     // https://stackoverflow.com/questions/10374547/how-to-convert-a-linearlayout-to-image
     private Uri saveBitMap() {
 
-        String filename = alamat.replace("-","_") + ".jpg";
+        String filename = binding.txtAlamat.getText().toString()
+                .replace("\n","_")
+                .replace(" ","_")
+                .replace("-","_") + ".jpg";
         OutputStream fos;
         Uri imageUri = null;
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                ContentResolver resolver = getContentResolver();
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, filename);
-                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
-                contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH,  Environment.DIRECTORY_PICTURES+"/" + folderName);
-                imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-                fos = resolver.openOutputStream(imageUri);
-            } else {
-                String imagesDir = Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_DCIM).toString() + File.separator + folderName;
-                File file = new File(imagesDir);
-                if (!file.exists()) {
-                    file.mkdir();
-                }
-                File img = new File(imagesDir, filename);
-                fos = new FileOutputStream(img);
-                imageUri = FileProvider.getUriForFile(this, getPackageName(), img);
+            String imagesDir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DCIM).toString() + File.separator + folderName;
+            File file = new File(imagesDir);
+            if (!file.exists()) {
+                file.mkdir();
             }
+            File img = new File(imagesDir, filename);
+            imageUri = Uri.fromFile(img);
+            if(img.exists()){
+                img.delete();
+            }
+            fos = new FileOutputStream(img);
             Log.i("TAG", imageUri.getPath());
             Bitmap bitmap = getBitmapFromView(binding.layoutQR);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
@@ -228,6 +220,8 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
             fos.close();
             scanGallery(imageUri.getPath());
         } catch (IOException e) {
+            e.printStackTrace();
+            imageUri = null;
             e.printStackTrace();
             Toast.makeText(this, "Gagal menyimpan Gambar", Toast.LENGTH_SHORT).show();
             Log.i("TAG", "There was an issue saving the image.");

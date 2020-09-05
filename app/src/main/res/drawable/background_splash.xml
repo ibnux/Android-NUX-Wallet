@@ -5,14 +5,17 @@
 
     <item>
         <bitmap
-            android:gravity="center"
+            android:gravity="top"
             android:src="@drawable/networking"/>
     </item>
     <item>
         <bitmap
             android:gravity="center"
-            android:tint="@android:color/white"
-            android:alpha="0.7"
             android:src="@drawable/nuxcoin"/>
+    </item>
+    <item>
+        <bitmap
+            android:gravity="bottom"
+            android:src="@drawable/world_map"/>
     </item>
 </layer-list>

@@ -11,6 +11,7 @@ package com.ibnux.nuxwallet;
 
 
 import android.content.SharedPreferences;
+import android.os.StrictMode;
 
 import androidx.multidex.MultiDexApplication;
 
@@ -43,6 +44,8 @@ public class Aplikasi extends MultiDexApplication {
                 .apply();
         sp = getSharedPreferences("settings",0);
         unixtime = sp.getLong("unixtime",0L);
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
     }
 
 

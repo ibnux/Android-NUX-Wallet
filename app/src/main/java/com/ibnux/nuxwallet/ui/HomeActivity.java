@@ -293,6 +293,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_nav_peers:
                 startActivity(new Intent(this,PeersActivity.class));
                 return true;
+            case R.id.menu_nav_faq:
+                startActivity(new Intent(this,IntroActivity.class));
+                finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -326,13 +330,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }else{
             for (String fil: file.list()){
                 try {
-                    String hasil = Utils.getStringFromFile(new File(file, fil));
-                    try {
-                        hasil = AESCrypt.decrypt(pin, hasil);
-                        Dompet dompet = new Gson().fromJson(hasil,Dompet.class);
-                        ObjectBox.addDompet(dompet);
-                    }catch (GeneralSecurityException e){
-                        Toast.makeText(this, "Failed to save file\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    if(fil.endsWith(".nux")) {
+                        String hasil = Utils.getStringFromFile(new File(foldernux, fil));
+                        try {
+                            Utils.log(hasil);
+                            hasil = AESCrypt.decrypt(pin, hasil);
+                            Utils.log(hasil);
+                            Dompet dompet = new Gson().fromJson(hasil, Dompet.class);
+                            dompet.id = 0L;
+                            Utils.log(dompet.alamat);
+                            Utils.log(ObjectBox.addDompet(dompet)+"");;
+                        } catch (GeneralSecurityException e) {
+                            Toast.makeText(this, "Failed import file\n\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }catch (Exception e){
                     Utils.showToast("Failed to import!\n\n"+foldernux,this);

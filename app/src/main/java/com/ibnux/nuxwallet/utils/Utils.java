@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ibnux.nuxwallet.Aplikasi;
+import com.ibnux.nuxwallet.BuildConfig;
 import com.ibnux.nuxwallet.Constants;
 import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.kripto.Curve25519;
@@ -230,6 +231,7 @@ public class Utils {
     }
 
     public static void log(Object txt){
+        if(!BuildConfig.DEBUG) return;
         Log.d("NUX","-----------------------");
         Log.d("NUX",txt+"");
         Log.d("NUX","-----------------------");
