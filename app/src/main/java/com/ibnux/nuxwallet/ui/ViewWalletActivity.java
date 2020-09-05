@@ -95,7 +95,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
 
                 @Override
                 public void onErrorCallback(int errorCode, String errorMessage) {
-
+                    Utils.showToast("Failed to connect to server\n"+errorMessage,ViewWalletActivity.this);
                 }
             });
         }else {
@@ -319,7 +319,8 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                 binding.progressBar.setVisibility(View.GONE);
             }
         }catch (Exception e){
-            Utils.showToast("Gagal parsing data",this);
+            e.printStackTrace();
+            Utils.showToast("Failed to parsing data\n"+e.getMessage(),ViewWalletActivity.this);
             binding.progressBar.setVisibility(View.GONE);
         }
     }

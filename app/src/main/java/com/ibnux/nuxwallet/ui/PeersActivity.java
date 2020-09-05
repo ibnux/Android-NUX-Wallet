@@ -25,7 +25,7 @@ import com.ibnux.nuxwallet.adapter.ServerAdapter;
 import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.data.Server;
 import com.ibnux.nuxwallet.databinding.ActivityPeersBinding;
-import com.ibnux.nuxwallet.utils.JsonCallback;
+import com.ibnux.nuxwallet.utils.LongCallback;
 import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
 
@@ -60,7 +60,8 @@ public class PeersActivity extends AppCompatActivity implements ServerAdapter.Se
             builder.setTitle("Add peer URL?");
             final EditText input = new EditText(this);
             input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT);
-            input.setHint("http://coin.ibnux.net:1234");
+            input.setHint("http://coin.ibnux.net:42689");
+            input.setText(Aplikasi.sp.getString("cachepeer",""));
             input.setSelectAllOnFocus(true);
             builder.setView(input);
             builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
@@ -71,57 +72,77 @@ public class PeersActivity extends AppCompatActivity implements ServerAdapter.Se
                         if (url.endsWith("/")) {
                             url = url.substring(0, url.length() - 1);
                         }
-                        ObjectBox.addServer(url);
-                        adapter.reload();
+                        if(!url.startsWith("http")){
+                            Utils.showToast("Must start with http:// or https://, not added",PeersActivity.this);
+                            return;
+                        }
+                        Aplikasi.sp.edit().putString("cachepeer",url).apply();
+                        final String urlf = url;
+                        NuxCoin.getTime(url, new LongCallback() {
+                            @Override
+                            public void onLongCallback(long time) {
+                                if(time>0L){
+                                    ObjectBox.addServer(urlf);
+                                    adapter.reload();
+                                }else{
+                                    Utils.showToast("Failed to connect to Peer, not added",PeersActivity.this);
+                                }
+                            }
+
+                            @Override
+                            public void onErrorCallback(int errorCode, String errorMessage) {
+                                Utils.showToast("Failed to connect to Peer, not added\n"+errorMessage,PeersActivity.this);
+                            }
+                        });
                     }
                 }
             });
             builder.setNegativeButton("Cancel",null);
-            builder.setNeutralButton("Load Peers", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String url = input.getText().toString();
-                    if(!url.isEmpty()) {
-                        if (url.endsWith("/")) {
-                            url = url.substring(0, url.length() - 1);
-                        }
-                        if(url.startsWith("http")){
-                            AlertDialog.Builder ab = Utils.progressDialog("Download Peers data",PeersActivity.this);
-                            ab.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialog) {
-                                    progress = null;
-                                }
-                            });
-                            progress = ab.show();
-                            NuxCoin.getPeers(url, new JsonCallback() {
-                                @Override
-                                public void onJsonCallback(JSONObject jsonObject) {
-                                    if(progress.isShowing()){
-                                        new ProcessJsonPeer().execute(jsonObject.toString());
-                                    }
-                                }
-
-                                @Override
-                                public void onErrorCallback(int errorCode, String errorMessage) {
-                                    if(progress==null) return;
-                                    progress.setTitle("Failed to download peers");
-                                    progress.setMessage(errorMessage);
-                                    progress.setButton(AlertDialog.BUTTON_NEGATIVE, "Close", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            progress.dismiss();
-                                        }
-                                    });
-                                    Utils.vibrate();
-                                }
-                            });
-                        }else{
-                            Utils.showToast("URL invalid",PeersActivity.this);
-                        }
-                    }
-                }
-            });
+//            builder.setNeutralButton("Load Peers", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    String url = input.getText().toString();
+//                    if(!url.isEmpty()) {
+//                        if (url.endsWith("/")) {
+//                            url = url.substring(0, url.length() - 1);
+//                        }
+//                        if(url.startsWith("http")){
+//                            AlertDialog.Builder ab = Utils.progressDialog("Download Peers data",PeersActivity.this);
+//                            ab.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                                @Override
+//                                public void onDismiss(DialogInterface dialog) {
+//                                    progress = null;
+//                                }
+//                            });
+//                            progress = ab.show();
+//                            NuxCoin.getPeers(url, new JsonCallback() {
+//                                @Override
+//                                public void onJsonCallback(JSONObject jsonObject) {
+//                                    if(progress.isShowing()){
+//                                        new ProcessJsonPeer().execute(jsonObject.toString());
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onErrorCallback(int errorCode, String errorMessage) {
+//                                    if(progress==null) return;
+//                                    progress.setTitle("Failed to download peers");
+//                                    progress.setMessage(errorMessage);
+//                                    progress.setButton(AlertDialog.BUTTON_NEGATIVE, "Close", new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            progress.dismiss();
+//                                        }
+//                                    });
+//                                    Utils.vibrate();
+//                                }
+//                            });
+//                        }else{
+//                            Utils.showToast("URL invalid",PeersActivity.this);
+//                        }
+//                    }
+//                }
+//            });
             builder.show();
         }
     }

@@ -293,6 +293,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_nav_peers:
                 startActivity(new Intent(this,PeersActivity.class));
                 return true;
+            case R.id.menu_nav_faq:
+                startActivity(new Intent(this,IntroActivity.class));
+                finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
