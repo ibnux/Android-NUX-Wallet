@@ -241,15 +241,7 @@ public class Utils {
         NumberFormat formatter = new DecimalFormat("#,###");
         String strNumber = String.valueOf(myNumber);
         String result = "";
-        if(strNumber.length()>8) {
-            String desimal = strNumber.substring(strNumber.length() - 8);
-            strNumber = strNumber.substring(0, strNumber.length() - 8);
-            result = formatter.format(Double.parseDouble(strNumber));
-            if(!desimal.equals("00000000"))
-                result += dfs.getDecimalSeparator() +desimal;
-        }else{
-            result = formatter.format(myNumber);
-        }
+        result = formatter.format(myNumber);
         return result;
     }
 

@@ -174,12 +174,11 @@ public class NuxCoin {
 
     public static void sendCoinOnline(Dompet fromDompet, String toDompet, String jumlah, String fee, String message, String recipientPublicKey, TextView progress, JsonCallback callback){
         String server = ObjectBox.getServer();
-        if(jumlah.length()<8) jumlah += "00000000";
-        if(fee.length()<8) fee += "00000000";
         if(progress!=null) progress.setText("Sending coin...");
         Map<String, Object> body = new HashMap<>();
         body.put("recipient",toDompet);
         body.put("amountNQT",jumlah);
+        body.put("calculateFee", "true");
         body.put("feeNQT",fee);
         body.put("deadline","60");
         if(recipientPublicKey!=null && !recipientPublicKey.isEmpty())
@@ -228,13 +227,12 @@ public class NuxCoin {
     // SENDCOIN STEP 1
     public static void sendCoin(Dompet fromDompet, String toDompet, String jumlah, String fee, String message, String recipientPublicKey, TextView progress, JsonCallback callback){
         Utils.log("SendCoin to "+toDompet+" "+jumlah+" "+message);
-        if(jumlah.length()<8) jumlah += "00000000";
-        if(fee.length()<8) fee += "00000000";
         String server = ObjectBox.getServer();
         if(progress!=null) progress.setText("Requesting transaction...");
         Map<String, Object> body = new HashMap<>();
         body.put("recipient", toDompet);
         body.put("amountNQT", jumlah);
+        body.put("calculateFee", "true");
         body.put("feeNQT", fee);
         body.put("deadline","60");
         if(message!=null && !message.isEmpty())
@@ -403,11 +401,13 @@ public class NuxCoin {
     }
 
     public static void getFee(String publicKey, String toDompet, String jumlah, String message, LongCallback callback){
-        if(jumlah.length()<8) jumlah += "00000000";
         String server = ObjectBox.getServer();
         Map<String, Object> body = new HashMap<>();
         body.put("recipient",toDompet);
         body.put("amountNQT",jumlah);
+        body.put("calculateFee","true");
+        body.put("broadcast","false");
+        body.put("phased","false");
         body.put("feeNQT","0");
         if(message!=null && message.length()>0)
             body.put("message",message);
@@ -425,7 +425,7 @@ public class NuxCoin {
                                 Utils.log(response.toString());
                                     callback.onLongCallback(response.getJSONObject("transactionJSON").getLong("feeNQT"));
                             }catch (Exception e){
-                                callback.onLongCallback(0L);
+                                callback.onLongCallback(500);
                             }
                         }
                     }
