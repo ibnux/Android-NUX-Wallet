@@ -116,7 +116,8 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                isDoneChekFee = false;
+                binding.btnSend.setText("Calculate Fee");
             }
 
             @Override
@@ -130,11 +131,13 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 isDoneChekFee = false;
+                binding.btnSend.setText("Calculate Fee");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 isDoneChekFee = false;
+                binding.btnSend.setText("Calculate Fee");
             }
 
             @Override
@@ -150,7 +153,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onLongCallback(long string) {
                 Utils.log("cekFee: "+string);
-                binding.txtFee.setText(String.valueOf(((int)string/100000000)));
+                binding.txtFee.setText(String.valueOf(string));
                 isDoneChekFee = true;
                 binding.btnSend.setText("Send Now");
                 binding.layoutStatus.setVisibility(View.GONE);
@@ -244,15 +247,17 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                                 binding.txtFee.getText().toString(), binding.txtNote.getText().toString(), binding.txtPK.getText().toString(), binding.txtStatus, new JsonCallback() {
                                     @Override
                                     public void onJsonCallback(JSONObject jsonObject) {
-                                        isSending = false;
-                                        binding.layoutStatus.setVisibility(View.GONE);
                                         try {
                                             if (jsonObject.has("unsignedTransactionBytes")) {
                                                 signingTX(jsonObject.getString("unsignedTransactionBytes"), dompet.secretPhrase);
                                             } else {
+                                                isSending = false;
+                                                binding.layoutStatus.setVisibility(View.GONE);
                                                 Utils.showToast("Sending Coin Failed!!", SendMoneyActivity.this);
                                             }
                                         } catch (Exception e) {
+                                            isSending = false;
+                                            binding.layoutStatus.setVisibility(View.GONE);
                                             Utils.showToast(e.getMessage(), SendMoneyActivity.this);
                                         }
                                     }
