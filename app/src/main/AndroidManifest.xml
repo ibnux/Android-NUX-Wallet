@@ -16,7 +16,9 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.IntroActivity"
+        <activity android:name=".ui.OfflineSigningActivity"></activity>
+        <activity
+            android:name=".ui.IntroActivity"
             android:theme="@style/noTitleTheme" />
         <activity android:name=".ui.PeersActivity" />
         <activity android:name=".ui.ScanActivity" />

@@ -10,44 +10,41 @@ package com.ibnux.nuxwallet.ui;
  \******************************************************************************/
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.Gravity;
 import android.webkit.JavascriptInterface;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ibnux.nuxwallet.data.Dompet;
-import com.ibnux.nuxwallet.data.ObjectBox;
-import com.ibnux.nuxwallet.databinding.ActivityWalletGeneratorBinding;
+import com.ibnux.nuxwallet.Aplikasi;
+import com.ibnux.nuxwallet.databinding.ActivityOfflineSigningBinding;
 
 import im.delight.android.webview.AdvancedWebView;
 
-public class WalletGeneratorActivity extends AppCompatActivity implements AdvancedWebView.Listener {
-    ActivityWalletGeneratorBinding binding;
+public class OfflineSigningActivity extends AppCompatActivity implements AdvancedWebView.Listener {
+    ActivityOfflineSigningBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityWalletGeneratorBinding.inflate(getLayoutInflater());
+        binding = ActivityOfflineSigningBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setTitle("Tambah Dompet baru");
+        setTitle("Offline Signing process");
         String secret = "";
         Intent i = getIntent();
-        if(i.hasExtra("data")){
-            secret = "?pass="+i.getStringExtra("data");
+        try{
+            secret = "?utb="+i.getStringExtra("utb")+"TXTXTX"+i.getStringExtra("secret")+"TXTXTX"+ Aplikasi.unixtime;
+        }catch (Exception e){
+            setResult(RESULT_CANCELED);
+            finish();
         }
         binding.webview.setListener(this, this);
         binding.webview.setMixedContentAllowed(false);
-        binding.webview.loadUrl("file:///android_asset/index.html"+secret);
-        binding.webview.addJavascriptInterface(new WebAppInterface(this), "Wallet");
-
+        binding.webview.loadUrl("file:///android_asset/sign.html"+secret);
+        binding.webview.addJavascriptInterface(new OfflineSigningActivity.WebAppInterface(this), "Android");
     }
+
 
     @SuppressLint("NewApi")
     @Override
@@ -106,44 +103,15 @@ public class WalletGeneratorActivity extends AppCompatActivity implements Advanc
 
         /** Show a toast from the web page */
         @JavascriptInterface
-        public void pilihDompet(String pass,String wallet,String accountid,String publickey) {
-            if(pass.length()>10 && wallet.length()>10){
-                Dompet dompet = new Dompet();
-                dompet.alamat = wallet;
-                dompet.isMe = true;
-                dompet.secretPhrase = pass;
-                dompet.saldo = 0;
-                dompet.publicKey = publickey;
-                dompet.dompetID = accountid;
-                //Ask Name
-                AlertDialog.Builder builder = new AlertDialog.Builder(WalletGeneratorActivity.this);
-                builder.setTitle("Wallet Name?");
-                final EditText input = new EditText(WalletGeneratorActivity.this);
-                input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-                input.setGravity(Gravity.CENTER_HORIZONTAL);
-                input.setHint("Optional");
-                builder.setView(input);
-                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dompet.nama = input.getText().toString();
-                        ObjectBox.addDompet(dompet);
-                        dialog.dismiss();
-                        finish();
-                    }
-                });
-                builder.setNegativeButton("No Name", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ObjectBox.addDompet(dompet);
-                        dialog.dismiss();
-                        finish();
-                    }
-                });
-                builder.show();
+        public void finish(String status,String result) {
+            Intent i = getIntent();
+            if(status.equals("success")){
+                i.putExtra("success",result);
+            }else{
+                i.putExtra("failed",result);
             }
+            setResult(RESULT_OK,i);
+            OfflineSigningActivity.this.finish();
         }
     }
-
-
 }

@@ -271,42 +271,16 @@ public class NuxCoin {
     // SENDCOIN STEP 2
     public static void signingTransaction(Dompet fromDompet,String unsignedTransactionBytes, TextView progress, JsonCallback callback){
         Utils.log("signingTransaction to "+unsignedTransactionBytes);
-        String server = ObjectBox.getServer();
-        if(progress!=null) progress.setText("Signing transaction...");
-        AndroidNetworking.get(server+"/nxt")
-                .addQueryParameter("requestType","signTransaction")
-                .addQueryParameter("unsignedTransactionBytes",unsignedTransactionBytes)
-                .addQueryParameter("secretPhrase",fromDompet.secretPhrase)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try{
-                            if(response.has("errorCode")){
-                                if(callback!=null){
-                                    callback.onErrorCallback(response.getInt("errorCode"), response.getString("errorDescription"));
-                                }
-                            }else{
-                                if(response.has("transactionBytes")){
-                                    sendingMoney(response.getString("transactionBytes"), progress, callback);
-                                }
-                            }
-                        }catch (Exception e){
-                            if(callback!=null){
-                                callback.onErrorCallback(1, e.getMessage());
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError error) {
-                        if(callback!=null){
-                            callback.onErrorCallback(error.getErrorCode(), error.getErrorBody());
-                        }
-                    }
-                });
+        try{
+            Utils.log("unsignedTransactionBytes "+unsignedTransactionBytes);
+            JSONObject json = new JSONObject();
+            json.put("unsignedTransactionBytes",unsignedTransactionBytes);
+            callback.onJsonCallback(json);
+        }catch (Exception e){
+            if(callback!=null){
+                callback.onErrorCallback(10001, e.getMessage());
+            }
+        }
     }
     // SENDCOIN STEP 3
     public static void sendingMoney(String transactionBytes, TextView progress, JsonCallback callback){
