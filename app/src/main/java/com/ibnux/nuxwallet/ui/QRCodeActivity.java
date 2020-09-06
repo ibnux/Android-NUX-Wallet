@@ -83,6 +83,7 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         binding.btnPrivateKeyEncrypted.setOnClickListener(this);
         binding.btnPublicKey.setOnClickListener(this);
         binding.btnAlamatPublickey.setOnClickListener(this);
+        binding.btnSaveImage.setOnClickListener(this);
         if(dompet==null || dompet.secretPhrase.isEmpty()){
             binding.layoutTombol.setVisibility(View.GONE);
         }
@@ -104,9 +105,12 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
             ClipData clip = ClipData.newPlainText(Constants.folderName, alamat);
             clipboard.setPrimaryClip(clip);
             Utils.showToast(alamat+" copied!",this);
+        }else if(v==binding.btnSaveImage){
+            Utils.showToast("Saved at \n"+saveBitMap().getPath(),this);
         }else if(v==binding.btnShareImage){
             shareFile(saveBitMap());
         }else if(v==binding.btnAlamatPublickey){
+            binding.txtAlamat.setText("Public Key with Address\n"+alamat);
             try{
                 JSONObject json = new JSONObject();
                 json.put("address",dompet.alamat);

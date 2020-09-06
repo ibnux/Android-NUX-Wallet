@@ -298,13 +298,47 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
         if(resultCode==RESULT_OK){
             if(requestCode==2345){
                 if(data.hasExtra("result")) {
-                    binding.txtAlamat.setText(data.getStringExtra("result").toUpperCase());
-                    binding.txtValue.requestFocus();
+                    String dt = data.getStringExtra("result");
+                    if(dt.startsWith("{")){
+                        try{
+                            JSONObject json = new JSONObject(dt);
+                            binding.txtAlamat.setText(json.getString("address"));
+                            binding.txtPK.setText(json.getString("public_key"));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            Utils.showToast("Unknown QRCode",this);
+                        }
+                    }else if(dt.startsWith("APK:")){
+                        dt = dt.substring(4);
+                        String[] dts = dt.split("APKAPKAPK");
+                        binding.txtAlamat.setText(dts[0]);
+                        binding.txtPK.setText(dts[1]);
+                    }else {
+                        binding.txtAlamat.setText(dt.toUpperCase());
+                        binding.txtValue.requestFocus();
+                    }
                 }
             }else if(requestCode==2346){
                 if(data.hasExtra("result")) {
-                    binding.txtPK.setText(data.getStringExtra("result").toLowerCase());
-                    binding.txtValue.requestFocus();
+                    String dt = data.getStringExtra("result");
+                    if(dt.startsWith("{")){
+                        try{
+                            JSONObject json = new JSONObject(dt);
+                            binding.txtAlamat.setText(json.getString("address"));
+                            binding.txtPK.setText(json.getString("public_key"));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            Utils.showToast("Unknown QRCode",this);
+                        }
+                    }else if(dt.startsWith("APK:")){
+                        dt = dt.substring(4);
+                        String[] dts = dt.split("APKAPKAPK");
+                        binding.txtAlamat.setText(dts[0]);
+                        binding.txtPK.setText(dts[1]);
+                    }else {
+                        binding.txtPK.setText(dt.toLowerCase());
+                        binding.txtValue.requestFocus();
+                    }
                 }
             }else if(requestCode==6868){
                 if(data.hasExtra("success"))

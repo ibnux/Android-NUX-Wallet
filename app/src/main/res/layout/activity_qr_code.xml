@@ -119,7 +119,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Share Barcode" />
+                android:text="Share" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSaveImage"
+                style="@style/Button.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnShareAddress"
@@ -127,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Copy Wallet Address" />
+                android:text="Copy Address" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
