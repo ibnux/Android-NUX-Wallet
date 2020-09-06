@@ -172,7 +172,7 @@ public class NuxCoin {
                 });
     }
 
-    public static void sendCoinOnline(Dompet fromDompet, String toDompet, String jumlah, String fee, String message, TextView progress, JsonCallback callback){
+    public static void sendCoinOnline(Dompet fromDompet, String toDompet, String jumlah, String fee, String message, String recipientPublicKey, TextView progress, JsonCallback callback){
         String server = ObjectBox.getServer();
         if(jumlah.length()<8) jumlah += "00000000";
         if(fee.length()<8) fee += "00000000";
@@ -182,6 +182,8 @@ public class NuxCoin {
         body.put("amountNQT",jumlah);
         body.put("feeNQT",fee);
         body.put("deadline","60");
+        if(recipientPublicKey!=null && !recipientPublicKey.isEmpty())
+            body.put("recipientPublicKey",recipientPublicKey);
         if(message!=null && !message.isEmpty())
             body.put("message",message);
         body.put("secretPhrase",fromDompet.secretPhrase);
@@ -224,7 +226,7 @@ public class NuxCoin {
     }
 
     // SENDCOIN STEP 1
-    public static void sendCoin(Dompet fromDompet, String toDompet, String jumlah, String fee, String message, TextView progress, JsonCallback callback){
+    public static void sendCoin(Dompet fromDompet, String toDompet, String jumlah, String fee, String message, String recipientPublicKey, TextView progress, JsonCallback callback){
         Utils.log("SendCoin to "+toDompet+" "+jumlah+" "+message);
         if(jumlah.length()<8) jumlah += "00000000";
         if(fee.length()<8) fee += "00000000";
@@ -237,6 +239,8 @@ public class NuxCoin {
         body.put("deadline","60");
         if(message!=null && !message.isEmpty())
             body.put("message",message);
+        if(recipientPublicKey!=null && !recipientPublicKey.isEmpty())
+            body.put("recipientPublicKey",recipientPublicKey);
         body.put("publicKey",fromDompet.publicKey);
         AndroidNetworking.post(server+"/nxt?requestType=sendMoney")
                 .addBodyParameter(body)

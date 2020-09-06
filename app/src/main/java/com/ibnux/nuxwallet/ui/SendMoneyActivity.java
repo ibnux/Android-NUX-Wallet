@@ -61,6 +61,9 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
             binding.spinnerWallet.setSelection(0);
             chekIsActive();
         }
+        if(i.hasExtra("public_key")){
+            binding.txtPK.setText(i.getStringExtra("public_key"));
+        }
 
         binding.btnScan.setOnClickListener(this);
         binding.btnScanPK.setOnClickListener(this);
@@ -231,7 +234,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                     isSending = true;
                     if(binding.offlineSigning.isChecked()) {
                         NuxCoin.sendCoin(dompet, binding.txtAlamat.getText().toString(), binding.txtValue.getText().toString(),
-                                binding.txtFee.getText().toString(), binding.txtNote.getText().toString(), binding.txtStatus, new JsonCallback() {
+                                binding.txtFee.getText().toString(), binding.txtNote.getText().toString(), binding.txtPK.getText().toString(), binding.txtStatus, new JsonCallback() {
                                     @Override
                                     public void onJsonCallback(JSONObject jsonObject) {
                                         isSending = false;
@@ -260,7 +263,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                                 });
                     }else {
                         NuxCoin.sendCoinOnline(dompet, binding.txtAlamat.getText().toString(), binding.txtValue.getText().toString(),
-                            binding.txtFee.getText().toString(), binding.txtNote.getText().toString(), binding.txtStatus, new JsonCallback() {
+                            binding.txtFee.getText().toString(), binding.txtNote.getText().toString(), binding.txtPK.getText().toString(), binding.txtStatus, new JsonCallback() {
                                 @Override
                                 public void onJsonCallback(JSONObject jsonObject) {
                                     isSending = false;
