@@ -185,14 +185,21 @@
 
             </androidx.cardview.widget.CardView>
 
+            <CheckBox
+                android:id="@+id/offlineSigning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Offline transaction signing" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSend"
-                android:layout_marginTop="@dimen/_20sdp"
                 style="@style/Button.Accent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_18ssp"
-                android:text="Calculate Fee" />
+                android:layout_marginTop="@dimen/_20sdp"
+                android:text="Calculate Fee"
+                android:textSize="@dimen/_18ssp" />
         </LinearLayout>
 
         <LinearLayout

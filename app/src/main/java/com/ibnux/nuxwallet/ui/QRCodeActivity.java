@@ -47,6 +47,8 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.scottyab.aescrypt.AESCrypt;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -80,6 +82,8 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         binding.btnPrivateKey.setOnClickListener(this);
         binding.btnPrivateKeyEncrypted.setOnClickListener(this);
         binding.btnPublicKey.setOnClickListener(this);
+        binding.btnAlamatPublickey.setOnClickListener(this);
+        binding.btnSaveImage.setOnClickListener(this);
         if(dompet==null || dompet.secretPhrase.isEmpty()){
             binding.layoutTombol.setVisibility(View.GONE);
         }
@@ -101,8 +105,21 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
             ClipData clip = ClipData.newPlainText(Constants.folderName, alamat);
             clipboard.setPrimaryClip(clip);
             Utils.showToast(alamat+" copied!",this);
+        }else if(v==binding.btnSaveImage){
+            Utils.showToast("Saved at \n"+saveBitMap().getPath(),this);
         }else if(v==binding.btnShareImage){
             shareFile(saveBitMap());
+        }else if(v==binding.btnAlamatPublickey){
+            binding.txtAlamat.setText("Public Key with Address\n"+alamat);
+            try{
+                JSONObject json = new JSONObject();
+                json.put("address",dompet.alamat);
+                json.put("public_key",dompet.publicKey);
+                createQR(json.toString());
+            }catch (Exception e){
+                e.printStackTrace();
+                createQR("APK:"+dompet.alamat+"APKAPKAPK"+dompet.publicKey);
+            }
         }else if(v==binding.btnPublicKey){
             if(dompet!=null) {
                 createQR(dompet.publicKey);

@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.adapter.DompetSpinnerAdapter;
 import com.ibnux.nuxwallet.data.Dompet;
@@ -59,6 +60,9 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
             binding.txtAlamat.setText(to);
             binding.spinnerWallet.setSelection(0);
             chekIsActive();
+        }
+        if(i.hasExtra("public_key")){
+            binding.txtPK.setText(i.getStringExtra("public_key"));
         }
 
         binding.btnScan.setOnClickListener(this);
@@ -211,6 +215,14 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
             super.onBackPressed();
     }
 
+    public void signingTX(String unsignedTransactionBytes, String secretPhrase){
+        binding.txtStatus.setText("Offline Signing transaction");
+        Intent intent = new Intent(Aplikasi.app, OfflineSigningActivity.class);
+        intent.putExtra("utb",unsignedTransactionBytes);
+        intent.putExtra("secret",secretPhrase);
+        startActivityForResult(intent,6868);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -220,8 +232,38 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                     binding.layoutStatus.setVisibility(View.VISIBLE);
                     binding.txtStatus.setText("Sending Money...");
                     isSending = true;
-                    NuxCoin.sendCoinOnline(dompet, binding.txtAlamat.getText().toString(), binding.txtValue.getText().toString(),
-                            binding.txtFee.getText().toString(), binding.txtNote.getText().toString(), binding.txtStatus, new JsonCallback() {
+                    if(binding.offlineSigning.isChecked()) {
+                        NuxCoin.sendCoin(dompet, binding.txtAlamat.getText().toString(), binding.txtValue.getText().toString(),
+                                binding.txtFee.getText().toString(), binding.txtNote.getText().toString(), binding.txtPK.getText().toString(), binding.txtStatus, new JsonCallback() {
+                                    @Override
+                                    public void onJsonCallback(JSONObject jsonObject) {
+                                        isSending = false;
+                                        binding.layoutStatus.setVisibility(View.GONE);
+                                        try {
+                                            if (jsonObject.has("unsignedTransactionBytes")) {
+                                                signingTX(jsonObject.getString("unsignedTransactionBytes"), dompet.secretPhrase);
+                                            } else {
+                                                Utils.showToast("Sending Coin Failed!!", SendMoneyActivity.this);
+                                            }
+                                        } catch (Exception e) {
+                                            Utils.showToast(e.getMessage(), SendMoneyActivity.this);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onErrorCallback(int errorCode, String errorMessage) {
+                                        isSending = false;
+                                        //success but not get Transaction
+                                        if (errorCode == 10001) {
+                                            binding.layoutStatus.setVisibility(View.GONE);
+                                        } else {
+                                            Utils.showToast(errorMessage, SendMoneyActivity.this);
+                                        }
+                                    }
+                                });
+                    }else {
+                        NuxCoin.sendCoinOnline(dompet, binding.txtAlamat.getText().toString(), binding.txtValue.getText().toString(),
+                            binding.txtFee.getText().toString(), binding.txtNote.getText().toString(), binding.txtPK.getText().toString(), binding.txtStatus, new JsonCallback() {
                                 @Override
                                 public void onJsonCallback(JSONObject jsonObject) {
                                     isSending = false;
@@ -249,20 +291,87 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                                     }
                                 }
                             });
+                    }
                 }
             }
         }
         if(resultCode==RESULT_OK){
             if(requestCode==2345){
                 if(data.hasExtra("result")) {
-                    binding.txtAlamat.setText(data.getStringExtra("result").toUpperCase());
-                    binding.txtValue.requestFocus();
+                    String dt = data.getStringExtra("result");
+                    if(dt.startsWith("{")){
+                        try{
+                            JSONObject json = new JSONObject(dt);
+                            binding.txtAlamat.setText(json.getString("address"));
+                            binding.txtPK.setText(json.getString("public_key"));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            Utils.showToast("Unknown QRCode",this);
+                        }
+                    }else if(dt.startsWith("APK:")){
+                        dt = dt.substring(4);
+                        String[] dts = dt.split("APKAPKAPK");
+                        binding.txtAlamat.setText(dts[0]);
+                        binding.txtPK.setText(dts[1]);
+                    }else {
+                        binding.txtAlamat.setText(dt.toUpperCase());
+                        binding.txtValue.requestFocus();
+                    }
                 }
             }else if(requestCode==2346){
                 if(data.hasExtra("result")) {
-                    binding.txtPK.setText(data.getStringExtra("result").toLowerCase());
-                    binding.txtValue.requestFocus();
+                    String dt = data.getStringExtra("result");
+                    if(dt.startsWith("{")){
+                        try{
+                            JSONObject json = new JSONObject(dt);
+                            binding.txtAlamat.setText(json.getString("address"));
+                            binding.txtPK.setText(json.getString("public_key"));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            Utils.showToast("Unknown QRCode",this);
+                        }
+                    }else if(dt.startsWith("APK:")){
+                        dt = dt.substring(4);
+                        String[] dts = dt.split("APKAPKAPK");
+                        binding.txtAlamat.setText(dts[0]);
+                        binding.txtPK.setText(dts[1]);
+                    }else {
+                        binding.txtPK.setText(dt.toLowerCase());
+                        binding.txtValue.requestFocus();
+                    }
                 }
+            }else if(requestCode==6868){
+                if(data.hasExtra("success"))
+                    NuxCoin.sendingMoney(data.getStringExtra("success"),binding.txtStatus,new JsonCallback() {
+                        @Override
+                        public void onJsonCallback(JSONObject jsonObject) {
+                            isSending = false;
+                            binding.layoutStatus.setVisibility(View.GONE);
+                            try{
+                                if(jsonObject.has("SENDCOIN") && jsonObject.getString("SENDCOIN").equals("SUCCESS")){
+                                    Utils.showToast("Sending Coin Success!!\nIt will Show after network finished forging", SendMoneyActivity.this);
+                                    finish();
+                                }else{
+                                    Utils.showToast("Sending Coin Failed!!", SendMoneyActivity.this);
+                                }
+                            }catch (Exception e){
+                                Utils.showToast(e.getMessage(), SendMoneyActivity.this);
+                            }
+                        }
+
+                        @Override
+                        public void onErrorCallback(int errorCode, String errorMessage) {
+                            isSending = false;
+                            //success but not get Transaction
+                            if(errorCode==10001){
+                                binding.layoutStatus.setVisibility(View.GONE);
+                            }else{
+                                Utils.showToast(errorMessage, SendMoneyActivity.this);
+                            }
+                        }
+                    });
+                else
+                    Utils.showToast("Failed to sign transaction\ntry use online signing",this);
             }
 
         }

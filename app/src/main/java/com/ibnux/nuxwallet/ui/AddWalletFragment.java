@@ -22,7 +22,10 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.databinding.FragmentAddWalletBinding;
+import com.ibnux.nuxwallet.utils.Utils;
 import com.scottyab.aescrypt.AESCrypt;
+
+import org.json.JSONObject;
 
 import java.security.GeneralSecurityException;
 
@@ -89,10 +92,33 @@ public class AddWalletFragment extends BottomSheetDialogFragment implements View
                 }
             }else if(requestCode==2346){
                 if(data.hasExtra("result")) {
-                    Intent i = new Intent(getContext(), SendMoneyActivity.class);
-                    i.putExtra("to",data.getStringExtra("result").toUpperCase());
-                    startActivity(i);
-                    dismiss();
+                    String dt = data.getStringExtra("result");
+                    if(dt.startsWith("{")){
+                        try{
+                            JSONObject json = new JSONObject(dt);
+                            Intent i = new Intent(getContext(), SendMoneyActivity.class);
+                            i.putExtra("to",json.getString("address"));
+                            i.putExtra("public_key",json.getString("public_key"));
+                            startActivity(i);
+                            dismiss();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            Utils.showToast("Unknown QRCode",getActivity());
+                        }
+                    }else if(dt.startsWith("APK:")){
+                        dt = dt.substring(4);
+                        String[] dts = dt.split("APKAPKAPK");
+                        Intent i = new Intent(getContext(), SendMoneyActivity.class);
+                        i.putExtra("to",dts[0]);
+                        i.putExtra("public_key",dts[1]);
+                        startActivity(i);
+                        dismiss();
+                    }else {
+                        Intent i = new Intent(getContext(), SendMoneyActivity.class);
+                        i.putExtra("to",dt.toUpperCase());
+                        startActivity(i);
+                        dismiss();
+                    }
                 }
             }
 
