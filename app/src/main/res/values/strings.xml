@@ -20,4 +20,6 @@
     <string name="app_intro_description_8">Nux Coin merupakan Cryptocurrency yang dibuat oleh iBNuX dari source code Cryptocurrency NXT</string>
     <string name="app_intro_title_9">Apakah Nux Coin bernilai?</string>
     <string name="app_intro_description_9">Nux Coin bisa bernilai, bisa tidak, tergantung kepercayaan penggunanya, dan apakah sering digunakan sehari hari, saat ini Nux Coin hanya untuk belajar Cryptocurrency</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

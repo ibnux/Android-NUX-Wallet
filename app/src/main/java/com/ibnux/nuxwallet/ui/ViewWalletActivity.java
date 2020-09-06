@@ -111,7 +111,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
         binding.btnSend.setOnClickListener(this);
         binding.txtWalletName.setOnClickListener(this);
         binding.txtWalletNote.setOnClickListener(this);
-        getTransaksi();
+
     }
 
     public void uiProcess(){
@@ -329,6 +329,12 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        getTransaksi();
+    }
+
+    @Override
     public void onErrorCallback(int errorCode, String errorMessage) {
         binding.progressBar.setVisibility(View.GONE);
         Utils.showToast(errorMessage,this);
@@ -336,7 +342,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onTransaksiClicked(Transaksi transaksi) {
-
+        ViewTransactionFragment.newInstance(transaksi.transaction).show(getSupportFragmentManager(),"viewtx");
     }
 
     @Override

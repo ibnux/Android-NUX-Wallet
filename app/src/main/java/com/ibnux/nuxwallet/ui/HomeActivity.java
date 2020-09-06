@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.ibnux.nuxwallet.Aplikasi;
-import com.ibnux.nuxwallet.BuildConfig;
 import com.ibnux.nuxwallet.Constants;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.adapter.DompetAdapter;
@@ -48,7 +47,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.scottyab.aescrypt.AESCrypt;
 
 import java.io.File;
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, DompetAdapter.DompetCallback,TabLayout.OnTabSelectedListener {
@@ -75,8 +73,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         binding.tabLayout.addOnTabSelectedListener(this);
 
-        if(!BuildConfig.DEBUG)
-            startActivityForResult(new Intent(this,PinActivity.class), 4268);
+        startActivityForResult(new Intent(this,PinActivity.class), 4268);
     }
 
     @Override
@@ -340,7 +337,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                             dompet.id = 0L;
                             Utils.log(dompet.alamat);
                             Utils.log(ObjectBox.addDompet(dompet)+"");;
-                        } catch (GeneralSecurityException e) {
+                        } catch (Exception e) {
                             Toast.makeText(this, "Failed import file\n\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }

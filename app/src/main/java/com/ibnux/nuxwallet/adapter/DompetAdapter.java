@@ -64,14 +64,18 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
                 notifyDataSetChanged();
                 return;
             }
-            Dompet dompet = new Dompet();
-            dompet.nama = "iBNuX";
-            dompet.publicKey = "0f04b0abc5f2d2518cc7f56ef5225968901bbddadf0531a9c13645457d477860";
-            dompet.alamat = "NUX-TNHJ-LAC5-7DGL-HR7Y5";
-            dompet.isMe = false;
-            dompet.catatan = "Creator of this wallet :)";
-            ObjectBox.addDompet(dompet);
-            reload(isMe);
+            String alamat = "NUX-TNHJ-LAC5-7DGL-HR7Y5";
+            if(ObjectBox.getDompet(alamat)==null) {
+                Dompet dompet = new Dompet();
+                dompet.nama = "iBNuX";
+                dompet.publicKey = "0f04b0abc5f2d2518cc7f56ef5225968901bbddadf0531a9c13645457d477860";
+                dompet.alamat = alamat;
+                dompet.isMe = false;
+                dompet.catatan = "Creator of this wallet :)";
+                ObjectBox.addDompet(dompet);
+                reload(isMe);
+            }else
+                notifyDataSetChanged();
         }else
             notifyDataSetChanged();
     }
