@@ -218,8 +218,11 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                     Utils.showToast("Insufficient funds", this);
                     return;
                 }
-            }else
-                i.putExtra("to",alamat);
+            }else {
+                i.putExtra("to", alamat);
+                if(dompet!=null && dompet.publicKey!=null)
+                    i.putExtra("public_key", dompet.publicKey);
+            }
             startActivity(i);
         }else if(v==binding.txtWalletNote){
             if(dompet.id==0) return;

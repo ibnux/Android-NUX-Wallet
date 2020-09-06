@@ -63,13 +63,15 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
         }
         if(i.hasExtra("public_key")){
             binding.txtPK.setText(i.getStringExtra("public_key"));
+            binding.cardPK.setVisibility(View.VISIBLE);
+        }else {
+            binding.cardPK.setVisibility(View.GONE);
         }
 
         binding.btnScan.setOnClickListener(this);
         binding.btnScanPK.setOnClickListener(this);
         binding.btnSend.setOnClickListener(this);
 
-        binding.cardPK.setVisibility(View.GONE);
 
         binding.spinnerWallet.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
