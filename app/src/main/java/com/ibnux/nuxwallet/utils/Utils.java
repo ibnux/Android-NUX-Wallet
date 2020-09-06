@@ -38,7 +38,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
-import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -333,7 +332,7 @@ public class Utils {
         String json = gson.toJson(dompet);
         try {
             json = AESCrypt.encrypt(pin, json);
-        }catch (GeneralSecurityException e){
+        }catch (Exception e){
             Toast.makeText(cx, "Failed to save file\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
             return false;
         }

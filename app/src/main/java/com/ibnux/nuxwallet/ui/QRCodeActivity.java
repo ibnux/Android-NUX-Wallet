@@ -53,7 +53,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 public class QRCodeActivity extends AppCompatActivity implements View.OnClickListener{
@@ -157,7 +156,7 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                             String result = AESCrypt.encrypt(Aplikasi.getPin(), dompet.secretPhrase);
                             createQR("SECRET:"+result);
                             binding.txtAlamat.setText("Encrypted Secret Passphrase\n" + alamat);
-                        }catch (GeneralSecurityException e){
+                        }catch (Exception e){
                             Toast.makeText(this, "Failed to encrypt passphrase\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
 

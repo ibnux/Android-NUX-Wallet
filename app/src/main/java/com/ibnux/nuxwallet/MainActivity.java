@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(Aplikasi.sp.getBoolean("isFirst",false)) {
+                if(Aplikasi.sp.getBoolean("isFirst",true)) {
                     startActivity(new Intent(MainActivity.this, IntroActivity.class));
                     finish();
                 }else{

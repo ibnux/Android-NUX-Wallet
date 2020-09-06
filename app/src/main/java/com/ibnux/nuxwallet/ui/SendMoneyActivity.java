@@ -49,6 +49,11 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
         adapter = new DompetSpinnerAdapter(this, R.layout.item_dompet);
         binding.spinnerWallet.setAdapter(adapter);
 
+        if(adapter.getCount()==0){
+            Utils.showToast("You don't have any Wallet", this);
+            finish();
+        }
+
         Intent i = getIntent();
         if(i.getData()!=null) {
             //dari url
@@ -63,13 +68,15 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
         }
         if(i.hasExtra("public_key")){
             binding.txtPK.setText(i.getStringExtra("public_key"));
+            binding.cardPK.setVisibility(View.VISIBLE);
+        }else {
+            binding.cardPK.setVisibility(View.GONE);
         }
 
         binding.btnScan.setOnClickListener(this);
         binding.btnScanPK.setOnClickListener(this);
         binding.btnSend.setOnClickListener(this);
 
-        binding.cardPK.setVisibility(View.GONE);
 
         binding.spinnerWallet.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

@@ -204,7 +204,7 @@ public class NuxCoin {
                                 }
                             }else{
                                 if(response.has("transaction")){
-                                    getTransaction(response.getString("transaction"), progress, callback);
+                                    getResultTransaction(response.getString("transaction"), progress, callback);
                                 }
                             }
                         }catch (Exception e){
@@ -307,7 +307,7 @@ public class NuxCoin {
                                 }
                             }else{
                                 if(response.has("transaction")){
-                                    getTransaction(response.getString("transaction"), progress, callback);
+                                    getResultTransaction(response.getString("transaction"), progress, callback);
                                 }
                             }
                         }catch (Exception e){
@@ -327,7 +327,7 @@ public class NuxCoin {
     }
 
     // SENDCOIN STEP 4
-    public static void getTransaction(String transaction, TextView progress, JsonCallback callback){
+    public static void getResultTransaction(String transaction, TextView progress, JsonCallback callback){
         Utils.log("getTransaction  "+transaction);
         String server = ObjectBox.getServer();
         if(progress!=null) progress.setText("Sending Coin Success!!\n" +
@@ -370,6 +370,34 @@ public class NuxCoin {
                         }catch (Exception e){
                             callback.onErrorCallback(0, "Sending COIN SUCCESS, but get Transaction failed");
                         }
+                    }
+                });
+    }
+
+    public static void getTransaction(String transaction, JsonCallback callback){
+        Utils.log("getTransaction  "+transaction);
+        String server = ObjectBox.getServer();
+        AndroidNetworking.get(server+"/nxt?requestType=getTransaction")
+                .addQueryParameter("transaction",transaction)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try{
+                            if(response.has("errorCode")){
+                                callback.onErrorCallback(response.getInt("errorCode"), response.getString("errorDescription"));
+                            }else{
+                                callback.onJsonCallback(response);
+                            }
+                        }catch (Exception e){
+                            if(callback!=null){
+                                callback.onErrorCallback(0, "Failed to get transacation");
+                            }
+                        }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        callback.onErrorCallback(error.getErrorCode(), error.getMessage());
                     }
                 });
     }

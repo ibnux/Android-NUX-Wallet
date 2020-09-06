@@ -59,7 +59,25 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
 
     public void reload(boolean isMe){
         datas = ObjectBox.getDompet().query().equal(Dompet_.isMe,isMe).orderDesc(Dompet_.saldo).build().find();
-        notifyDataSetChanged();
+        if(datas==null || datas.isEmpty()){
+            if(isMe){
+                notifyDataSetChanged();
+                return;
+            }
+            String alamat = "NUX-TNHJ-LAC5-7DGL-HR7Y5";
+            if(ObjectBox.getDompet(alamat)==null) {
+                Dompet dompet = new Dompet();
+                dompet.nama = "iBNuX";
+                dompet.publicKey = "0f04b0abc5f2d2518cc7f56ef5225968901bbddadf0531a9c13645457d477860";
+                dompet.alamat = alamat;
+                dompet.isMe = false;
+                dompet.catatan = "Creator of this wallet :)";
+                ObjectBox.addDompet(dompet);
+                reload(isMe);
+            }else
+                notifyDataSetChanged();
+        }else
+            notifyDataSetChanged();
     }
 
     @NonNull

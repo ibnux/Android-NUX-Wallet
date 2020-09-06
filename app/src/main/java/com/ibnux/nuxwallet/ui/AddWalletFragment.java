@@ -27,8 +27,6 @@ import com.scottyab.aescrypt.AESCrypt;
 
 import org.json.JSONObject;
 
-import java.security.GeneralSecurityException;
-
 import static android.app.Activity.RESULT_OK;
 
 public class AddWalletFragment extends BottomSheetDialogFragment implements View.OnClickListener {
@@ -80,8 +78,8 @@ public class AddWalletFragment extends BottomSheetDialogFragment implements View
                             i.putExtra("data",result);
                             startActivity(i);
                             dismiss();
-                        }catch (GeneralSecurityException e){
-                            Toast.makeText(getContext(), "Failed to decrypt passphrase\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }catch (Exception e){
+                            Toast.makeText(getContext(), "Failed to decrypt passphrase\nIs PIN valid?\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         Intent i = new Intent(getContext(),WalletGeneratorActivity.class);
