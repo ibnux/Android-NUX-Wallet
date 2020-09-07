@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".Aplikasi"
@@ -14,26 +15,43 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".ui.OfflineSigningActivity"
-            android:screenOrientation="portrait"/>
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <receiver
+            android:name=".layanan.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".layanan.BackgroundService" />
+
+        <activity
+            android:name=".ui.OfflineSigningActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.IntroActivity"
-            android:theme="@style/noTitleTheme"
+            android:screenOrientation="portrait"
+            android:theme="@style/noTitleTheme" />
+        <activity
+            android:name=".ui.PeersActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.PeersActivity"
+        <activity
+            android:name=".ui.ScanActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.ScanActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".ui.QRCodeActivity"
+        <activity
+            android:name=".ui.QRCodeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.PinActivity"
-            android:theme="@style/noTitleTheme"
-            android:screenOrientation="portrait" />
-        <activity android:name=".ui.ViewWalletActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/noTitleTheme" />
+        <activity
+            android:name=".ui.ViewWalletActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.SendMoneyActivity"

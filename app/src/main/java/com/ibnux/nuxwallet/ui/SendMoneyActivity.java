@@ -21,8 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.R;
+import com.ibnux.nuxwallet.adapter.AlamatAdapter;
 import com.ibnux.nuxwallet.adapter.DompetSpinnerAdapter;
 import com.ibnux.nuxwallet.data.Dompet;
+import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.databinding.ActivitySendMoneyBinding;
 import com.ibnux.nuxwallet.utils.JsonCallback;
 import com.ibnux.nuxwallet.utils.LongCallback;
@@ -39,6 +41,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
     boolean isDoneChekFee = false;
     boolean isSending = false;
     String transaction;
+    AlamatAdapter alamatAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,10 +76,17 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
             binding.cardPK.setVisibility(View.GONE);
         }
 
+        if(i.hasExtra("askpin")){
+            startActivityForResult(new Intent(this,PinActivity.class), 4269);
+        }
+
         binding.btnScan.setOnClickListener(this);
         binding.btnScanPK.setOnClickListener(this);
         binding.btnSend.setOnClickListener(this);
 
+        alamatAdapter = new AlamatAdapter(this);
+        binding.txtAlamat.setThreshold(1);
+        binding.txtAlamat.setAdapter(alamatAdapter);
 
         binding.spinnerWallet.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -103,8 +113,25 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(binding.txtAlamat.getText().length()==24)
+                Utils.log("afterTextChanged "+binding.txtAlamat.getText().toString());
+                if(binding.txtAlamat.getText().toString().length()==24) {
+                    Dompet dompet = ObjectBox.getDompet(binding.txtAlamat.getText().toString());
+                    if(dompet!=null){
+                        if(dompet.publicKey!=null && !dompet.publicKey.isEmpty()){
+                            Utils.log("afterTextChanged dompet has pk");
+                            binding.txtPK.setText(dompet.publicKey);
+                            binding.cardPK.setVisibility(View.VISIBLE);
+                            return;
+                        }else{
+                            Utils.log("afterTextChanged dompet no pk");
+                        }
+                    }else{
+                        Utils.log("afterTextChanged dompet null");
+                    }
                     chekIsActive();
+                }else{
+                    Utils.log("afterTextChanged "+binding.txtAlamat.getText().toString().length());
+                }
             }
         });
 
@@ -167,11 +194,15 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void chekIsActive(){
+        Utils.log("chekIsActive");
         NuxCoin.getAccount(binding.txtAlamat.getText().toString(), new JsonCallback() {
             @Override
             public void onJsonCallback(JSONObject jsonObject) {
                 try{
                     if(jsonObject.has("errorCode") && jsonObject.getInt("errorCode")==5){
+                        binding.cardPK.setVisibility(View.VISIBLE);
+                    }else{
+                        binding.txtPK.setText(jsonObject.getString("publicKey"));
                         binding.cardPK.setVisibility(View.VISIBLE);
                     }
                 }catch (Exception e){
@@ -305,6 +336,14 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                             });
                     }
                 }
+            }
+        }else if(requestCode==4269){
+            if(resultCode==RESULT_OK) {
+                if (!data.hasExtra("SUKSES")) {
+                    finish();
+                }
+            }else{
+                finish();
             }
         }
         if(resultCode==RESULT_OK){

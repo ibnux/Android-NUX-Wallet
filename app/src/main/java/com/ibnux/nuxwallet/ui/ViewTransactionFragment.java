@@ -88,6 +88,7 @@ public class ViewTransactionFragment extends BottomSheetDialogFragment {
                 try {
                     Transaksi tx = new Gson().fromJson(response.toString(), Transaksi.class);
                     tx.timestampInsert = System.currentTimeMillis();
+                    tx.isRead = true;
                     if (response.has("attachment")) {
                         if (response.getJSONObject("attachment").has("message")) {
                             tx.message = response.getJSONObject("attachment").getString("message");

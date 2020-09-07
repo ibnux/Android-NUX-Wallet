@@ -16,6 +16,7 @@ import io.objectbox.annotation.Id;
 public class Transaksi {
     @Id
     public long id;
+    public boolean isRead = false;
     public String transaction;
     public String senderRS;
     public String recipientRS;

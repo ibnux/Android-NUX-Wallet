@@ -28,4 +28,9 @@ public class Dompet {
     public boolean isMe(){
         return (secretPhrase!=null && !secretPhrase.isEmpty());
     }
+
+    @Override
+    public String toString() {
+        return alamat;
+    }
 }

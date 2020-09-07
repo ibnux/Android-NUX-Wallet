@@ -12,6 +12,7 @@ package com.ibnux.nuxwallet.ui;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -37,13 +38,17 @@ import com.ibnux.nuxwallet.data.Dompet_;
 import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.data.Transaksi_;
 import com.ibnux.nuxwallet.databinding.ActivityHomeBinding;
+import com.ibnux.nuxwallet.layanan.BackgroundService;
 import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.scottyab.aescrypt.AESCrypt;
 
 import java.io.File;
@@ -74,6 +79,31 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         binding.tabLayout.addOnTabSelectedListener(this);
 
         startActivityForResult(new Intent(this,PinActivity.class), 4268);
+        if(!BackgroundService.isRunning()){
+            Intent intent = new Intent(this,BackgroundService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Dexter.withContext(this)
+                .withPermission(Manifest.permission.FOREGROUND_SERVICE)
+                .withListener(new PermissionListener() {
+                    @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                        Utils.log("startForegroundService Background services");
+                        startForegroundService(intent);
+                    }
+                    @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                        finish();
+                    }
+                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                    }
+                }).check();
+
+            } else {
+                startService(intent);
+                Utils.log("startService Background services");
+            }
+        }else{
+            Utils.log("Background is running");
+        }
     }
 
     @Override

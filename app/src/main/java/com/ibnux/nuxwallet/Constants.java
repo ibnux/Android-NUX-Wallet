@@ -14,4 +14,7 @@ public class Constants {
 
     public static final String defaultServer = "https://coin.ibnux.net";
     public static final String folderName = "CoinNux";
+
+    //Minutes
+    public static final int defaultTxTimeListener = 15;
 }

@@ -7,10 +7,12 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardTransaction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_4sdp"
         android:layout_marginRight="@dimen/_4sdp"
+        android:descendantFocusability="blocksDescendants"
         android:visibility="visible"
         app:cardBackgroundColor="@color/grey_5"
         app:cardCornerRadius="1dp"

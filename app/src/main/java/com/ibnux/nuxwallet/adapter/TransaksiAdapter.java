@@ -37,7 +37,7 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.MyVi
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txtWallet,txtBalance,txtTgl,txtCatatan,txtThn,txtJam;
         LinearLayout layout, layoutStatus;
-        CardView cardTgl;
+        CardView cardTgl,cardTransaction;
         public MyViewHolder(View v) {
             super(v);
             txtWallet = v.findViewById(R.id.txtWallet);
@@ -47,6 +47,7 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.MyVi
             txtJam = v.findViewById(R.id.txtJam);
             cardTgl = v.findViewById(R.id.cardTgl);
             txtCatatan = v.findViewById(R.id.txtCatatan);
+            cardTransaction = v.findViewById(R.id.cardTransaction);
             layout = v.findViewById(R.id.layout);
             layoutStatus = v.findViewById(R.id.layoutStatus);
         }
@@ -77,6 +78,12 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Transaksi tx = datas.get(position);
+
+        if(tx.isRead){
+            holder.cardTransaction.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.grey_5));
+        }else{
+            holder.cardTransaction.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.amber_100));
+        }
 
         if(tx.recipientRS.equals(alamat)){
             holder.layoutStatus.setBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.green_A400));
