@@ -10,7 +10,12 @@ package com.ibnux.nuxwallet.utils;
  \******************************************************************************/
 
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Environment;
 import android.os.VibrationEffect;
@@ -20,10 +25,14 @@ import android.view.Gravity;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import com.google.gson.Gson;
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.BuildConfig;
 import com.ibnux.nuxwallet.Constants;
+import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.kripto.Curve25519;
 import com.scottyab.aescrypt.AESCrypt;
@@ -271,6 +280,13 @@ public class Utils {
             return hasil;
     }
 
+    public static String toTime(long milliSeconds)
+    {
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+        cal.setTimeInMillis(milliSeconds);
+        return cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE);
+    }
+
     public static void showToast(String pesan, Context cx){
         Toast t =Toast.makeText(cx,pesan,Toast.LENGTH_LONG);
         t.setGravity(Gravity.CENTER,0,0);
@@ -351,4 +367,31 @@ public class Utils {
         }
         return true;
     }
+
+    public static void sendNotification(String title, String deskripsi, Intent intent, String channel_id, String channel_name){
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(Aplikasi.app);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channel_id, channel_name, importance);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(Aplikasi.app, channel_id)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setLargeIcon(BitmapFactory.decodeResource(Aplikasi.app.getResources(),R.mipmap.ic_launcher))
+                .setContentTitle(title)
+                .setContentText(deskripsi)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        if(intent!=null){
+            PendingIntent pi = PendingIntent.getActivity(Aplikasi.app,0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+            builder.setContentIntent(pi);
+        }
+
+        notificationManager.notify((int)(System.currentTimeMillis()/1000L), builder.build());
+
+    }
+
 }

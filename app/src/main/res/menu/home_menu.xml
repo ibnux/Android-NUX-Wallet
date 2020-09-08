@@ -16,6 +16,9 @@
         android:id="@+id/menu_nav_peers"
         android:title="Peers" />
     <item
+        android:id="@+id/menu_nav_txListener"
+        android:title="Transaction Listener" />
+    <item
         android:id="@+id/menu_nav_faq"
         android:title="FAQ" />
 </menu>

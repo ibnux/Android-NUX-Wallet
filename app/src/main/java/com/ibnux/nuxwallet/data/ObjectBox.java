@@ -47,9 +47,13 @@ public class ObjectBox {
     }
 
     public static long addTransaksi(Transaksi transaksi){
-        Transaksi ada = getTransaksi().query().equal(Transaksi_.transaction,transaksi.transaction).build().findFirst();
-        if(ada!=null){
-            getTransaksi().remove(ada);
+        if(transaksi.id>0L){
+            return getTransaksi().put(transaksi);
+        }else {
+            Transaksi ada = getTransaksi().query().equal(Transaksi_.transaction, transaksi.transaction).build().findFirst();
+            if (ada != null) {
+                getTransaksi().remove(ada);
+            }
         }
         return getTransaksi().put(transaksi);
     }

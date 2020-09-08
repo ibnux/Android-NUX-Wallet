@@ -20,7 +20,9 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidnetworking.common.Priority;
 import com.google.gson.Gson;
@@ -102,6 +104,10 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
             uiProcess();
         }
 
+        if(intent.hasExtra("transaction")){
+            ViewTransactionFragment.newInstance(intent.getStringExtra("transaction")).show(getSupportFragmentManager(),"viewtx");
+        }
+
         adapter = new TransaksiAdapter(this,alamat);
         binding.listTransaksi.setHasFixedSize(true);
         binding.listTransaksi.setLayoutManager(new LinearLayoutManager(this));
@@ -111,6 +117,9 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
         binding.btnSend.setOnClickListener(this);
         binding.txtWalletName.setOnClickListener(this);
         binding.txtWalletNote.setOnClickListener(this);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(binding.listTransaksi);
 
     }
 
@@ -146,6 +155,57 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
 
         binding.txtBalance.setText(Utils.nuxFormat(dompet.saldo));
     }
+
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP) {
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            int position = viewHolder.getAdapterPosition();
+            Transaksi tx = adapter.getData(position);
+            new androidx.appcompat.app.AlertDialog.Builder(ViewWalletActivity.this)
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setMessage("Delete it?")
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            adapter.reload();
+                        }
+                    })
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            new androidx.appcompat.app.AlertDialog.Builder(ViewWalletActivity.this)
+                                    .setIcon(R.mipmap.ic_launcher)
+                                    .setTitle("Are You sure?")
+                                    .setPositiveButton("Sure", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            ObjectBox.getTransaksi().query().equal(Transaksi_.transaction,tx.transaction).build().remove();
+                                            adapter.reload();
+                                        }
+                                    })
+                                    .setNegativeButton("Nope", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            adapter.reload();
+                                        }
+                                    })
+                                    .show();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            adapter.reload();
+                        }
+                    })
+                    .show();
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -303,6 +363,28 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                                     tx.message = json.getJSONObject("attachment").getString("message");
                                 }
                             }
+                            Intent intent = new Intent(ViewWalletActivity.this, ViewWalletActivity.class);
+                            intent.putExtra("alamat",alamat);
+                            intent.putExtra("transaction",tx.transaction);
+                            if((tx.recipientRS.equals(alamat))) {
+                                Utils.sendNotification(
+                                         tx.senderRS + " send you coin",
+                                        "Received " + tx.amountNQT + " NUX for " + tx.recipientRS,
+                                        intent,
+                                        "transaction",
+                                        "Transaction"
+
+                                );
+                            }else{
+                                Utils.sendNotification(
+                                        "You sent a coin from "+tx.senderRS,
+                                        tx.amountNQT + " NUX for " + tx.recipientRS+ " has been sent",
+                                        intent,
+                                        "transaction",
+                                        "Transaction"
+
+                                );
+                            }
                             ObjectBox.addTransaksi(tx);
                         }else{
                             ada++;
@@ -342,6 +424,9 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onTransaksiClicked(Transaksi transaksi) {
+        transaksi.isRead = true;
+        ObjectBox.addTransaksi(transaksi);
+        adapter.notifyDataSetChanged();
         ViewTransactionFragment.newInstance(transaksi.transaction).show(getSupportFragmentManager(),"viewtx");
     }
 
