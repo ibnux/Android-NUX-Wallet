@@ -89,12 +89,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         startBackgroundServices();
 
         new AppUpdater(this)
-                .setDisplay(Display.DIALOG)
+                .setDisplay(Display.NOTIFICATION)
                 .setUpdateFrom(UpdateFrom.GITHUB)
                 .setTitleOnUpdateAvailable("Update available")
                 .setContentOnUpdateAvailable("Update to the latest version available of Nux Wallet!")
                 .setGitHubUserAndRepo("ibnux", "Android-NUX-Wallet")
-                .showAppUpdated(true)
                 .init();
     }
 
@@ -383,6 +382,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         })
                         .setNegativeButton("Cancel", null)
                         .show();
+                return true;
+            case R.id.menu_nav_update:
+                new AppUpdater(this)
+                        .setDisplay(Display.DIALOG)
+                        .setUpdateFrom(UpdateFrom.GITHUB)
+                        .setTitleOnUpdateAvailable("Update available")
+                        .setContentOnUpdateAvailable("Update to the latest version available of Nux Wallet!")
+                        .setGitHubUserAndRepo("ibnux", "Android-NUX-Wallet")
+                        .showAppUpdated(true)
+                        .init();
                 return true;
             case R.id.menu_nav_peers:
                 startActivity(new Intent(this,PeersActivity.class));

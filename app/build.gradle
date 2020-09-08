@@ -9,8 +9,8 @@ android {
         applicationId "com.ibnux.nuxwallet"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 8
-        versionName "1.7"
+        versionCode 7
+        versionName "1.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
