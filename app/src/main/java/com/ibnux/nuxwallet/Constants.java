@@ -16,5 +16,5 @@ public class Constants {
     public static final String folderName = "CoinNux";
 
     //Minutes
-    public static final int defaultTxTimeListener = 15;
+    public static final int defaultTxTimeListener = 60;
 }

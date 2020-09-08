@@ -9,19 +9,32 @@ package com.ibnux.nuxwallet.ui;
  * ANY IMPLIED WARRANTY.                                                      *
  \******************************************************************************/
 
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.androidnetworking.common.Priority;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.ibnux.nuxwallet.Aplikasi;
+import com.ibnux.nuxwallet.data.Dompet;
+import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.databinding.FragmentAddWalletBinding;
+import com.ibnux.nuxwallet.utils.JsonCallback;
+import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
 import com.scottyab.aescrypt.AESCrypt;
 
@@ -50,6 +63,7 @@ public class AddWalletFragment extends BottomSheetDialogFragment implements View
         binding.btnScanBarcode.setOnClickListener(this);
         binding.btnGenerate.setOnClickListener(this);
         binding.btnScan.setOnClickListener(this);
+        binding.btnAddAddress.setOnClickListener(this);
     }
 
     @Override
@@ -59,6 +73,8 @@ public class AddWalletFragment extends BottomSheetDialogFragment implements View
         }else  if(binding.btnGenerate==v){
             startActivity(new Intent(getContext(),WalletGeneratorActivity.class));
             dismiss();
+        }else  if(binding.btnAddAddress==v){
+            askAddress();
         }else  if(binding.btnScan==v){
             startActivityForResult(new Intent(getContext(), ScanActivity.class), 2346);
         }
@@ -121,5 +137,97 @@ public class AddWalletFragment extends BottomSheetDialogFragment implements View
             }
 
         }
+    }
+
+    public void askAddress(){
+        String paste = "";
+        try{
+            ClipData.Item item = ((ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE)).getPrimaryClip().getItemAt(0);
+            paste = item.getText().toString();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Wallet Address?");
+        final EditText input = new EditText(getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+        input.setGravity(Gravity.CENTER_HORIZONTAL);
+        input.setHint("NUX-XXXX-XXXX-XXXX-XXXXX");
+        builder.setView(input);
+        input.setText(paste);
+        input.setSelectAllOnFocus(true);
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String alamat = input.getText().toString();
+                if(alamat.length()==24){
+                    askName(alamat);
+                }else{
+                    Utils.showToast("Address not valied",getActivity());
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel",null);
+        builder.show();
+    }
+
+    public void askName(String alamat){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Wallet Name?");
+        final EditText input = new EditText(getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        input.setGravity(Gravity.CENTER_HORIZONTAL);
+        input.setHint("Wallet function");
+        builder.setView(input);
+        input.setSelectAllOnFocus(true);
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String nm = input.getText().toString();
+                if(nm.isEmpty())
+                    nm = alamat;
+                final String nama = nm;
+                NuxCoin.getAccount(alamat, Priority.HIGH, new JsonCallback() {
+                    @Override
+                    public void onJsonCallback(JSONObject jsonObject) {
+                        Dompet dompet = new Dompet();
+                        try{
+                            if(jsonObject.has("balanceNQT")){
+                                dompet.alamat = alamat;
+                                dompet.nama = nama;
+                                dompet.dompetID = jsonObject.getString("account");
+                                dompet.saldo = jsonObject.getLong("balanceNQT");
+                                dompet.isMe = false;
+                                dompet.publicKey = jsonObject.getString("publicKey");
+                            }else{
+                                dompet.alamat = alamat;
+                                dompet.nama = nama;
+                                dompet.isMe = false;
+                            }
+                        }catch (Exception e){
+                            dompet.alamat = alamat;
+                            dompet.nama = nama;
+                            dompet.isMe = false;
+                        }
+                        ObjectBox.addDompet(dompet);
+                        Utils.showToast("Wallet Added", getActivity());
+                        AddWalletFragment.this.dismiss();
+                    }
+
+                    @Override
+                    public void onErrorCallback(int errorCode, String errorMessage) {
+                        Dompet dompet = new Dompet();
+                        dompet.alamat = alamat;
+                        dompet.nama = nama;
+                        dompet.isMe = false;
+                        ObjectBox.addDompet(dompet);
+                        Utils.showToast("Wallet Added", getActivity());
+                        AddWalletFragment.this.dismiss();
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("Cancel",null);
+        builder.show();
     }
 }

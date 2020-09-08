@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.Menu;
@@ -30,6 +31,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.javiersantos.appupdater.AppUpdater;
+import com.github.javiersantos.appupdater.enums.Display;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.ibnux.nuxwallet.Aplikasi;
@@ -83,6 +87,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         startActivityForResult(new Intent(this,PinActivity.class), 4268);
         startBackgroundServices();
+
+        new AppUpdater(this)
+                .setDisplay(Display.DIALOG)
+                .setUpdateFrom(UpdateFrom.GITHUB)
+                .setTitleOnUpdateAvailable("Update available")
+                .setContentOnUpdateAvailable("Update to the latest version available of Nux Wallet!")
+                .setGitHubUserAndRepo("ibnux", "Android-NUX-Wallet")
+                .showAppUpdated(true)
+                .init();
     }
 
     public void startBackgroundServices(){
@@ -106,6 +119,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
             } else {
                 startService(intent);
+                Utils.log("startService Background services");
+            }
+        }else{
+            Utils.log("Background is running");
+        }
+    }
+    public void stopBackgroundServices(){
+        if(BackgroundService.isRunning()){
+            Intent intent = new Intent(this,BackgroundService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                intent.setAction("STOP");
+                startService(intent);
+            } else {
+                stopService(intent);
                 Utils.log("startService Background services");
             }
         }else{
@@ -297,7 +324,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         int interval = Integer.parseInt(hasil);
                         Aplikasi.sp.edit().putInt("defaultTxTimeListener",interval).apply();
                         if(interval>0){
-                            startBackgroundServices();
+                            stopBackgroundServices();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startBackgroundServices();
+                                }
+                            },2000);
                         }
                     }
                 });

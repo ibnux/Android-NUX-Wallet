@@ -37,7 +37,6 @@ import com.ibnux.nuxwallet.data.Transaksi_;
 import com.ibnux.nuxwallet.databinding.ActivityViewWalletBinding;
 import com.ibnux.nuxwallet.utils.JsonCallback;
 import com.ibnux.nuxwallet.utils.NuxCoin;
-import com.ibnux.nuxwallet.utils.TextCallback;
 import com.ibnux.nuxwallet.utils.Utils;
 
 import org.json.JSONArray;
@@ -77,17 +76,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                             dompet.dompetID = jsonObject.getString("account");
                             dompet.saldo = jsonObject.getLong("balanceNQT");
                             dompet.isMe = false;
-                            NuxCoin.getPublicKey(alamat, Priority.LOW, new TextCallback() {
-                                @Override
-                                public void onTextCallback(String string) {
-                                    dompet.publicKey = string;
-                                }
-
-                                @Override
-                                public void onErrorCallback(int errorCode, String errorMessage) {
-
-                                }
-                            });
+                            dompet.publicKey = jsonObject.getString("publicKey");
                         }
                         uiProcess();
                     }catch (Exception e){

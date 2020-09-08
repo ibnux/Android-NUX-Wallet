@@ -89,18 +89,20 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.MyVi
             holder.layoutStatus.setBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.green_A400));
             holder.txtBalance.setText("+ "+Utils.nuxFormat(Long.parseLong(tx.amountNQT)));
             holder.txtBalance.setTextColor(ContextCompat.getColor(Aplikasi.app,R.color.green_A700));
-            holder.txtWallet.setText(tx.senderRS);
+            holder.txtWallet.setText(ObjectBox.getNamaDompet(tx.senderRS).toUpperCase());
+            holder.txtWallet.setTag(tx.senderRS);
         }else {
             holder.txtBalance.setText("- "+Utils.nuxFormat(Long.parseLong(tx.amountNQT)));
             holder.txtBalance.setTextColor(ContextCompat.getColor(Aplikasi.app,R.color.red_400));
             holder.layoutStatus.setBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.red_500));
-            holder.txtWallet.setText(tx.recipientRS);
+            holder.txtWallet.setText(ObjectBox.getNamaDompet(tx.recipientRS).toUpperCase());
+            holder.txtWallet.setTag(tx.recipientRS);
         }
         holder.txtWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(callback!=null)
-                    callback.onTransaksiWalletClicked(holder.txtWallet.getText().toString());
+                    callback.onTransaksiWalletClicked(holder.txtWallet.getTag().toString());
             }
         });
         holder.layout.setOnClickListener(new View.OnClickListener() {

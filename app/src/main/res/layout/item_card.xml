@@ -89,10 +89,6 @@
 
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="@dimen/spacing_xlarge"
-                        android:layout_height="0dp" />
-
 
 
                 </LinearLayout>
@@ -118,9 +114,6 @@
                     android:ellipsize="end"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                     android:textColor="@color/grey_10" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/spacing_medium" />
             </LinearLayout>
 
         </RelativeLayout>

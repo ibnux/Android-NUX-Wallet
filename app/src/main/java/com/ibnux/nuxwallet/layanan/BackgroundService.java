@@ -198,19 +198,25 @@ public class BackgroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Utils.log("onStartCommand");
-        if(Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)!=0) {
-            isRunning = true;
-            handleStart(intent, startId);
-            return START_STICKY;
-        }else{
+        if (intent.getAction()!=null && intent.getAction().equals("STOP")) {
+            stopNotification();
             stopSelf();
             return START_NOT_STICKY;
+        }else {
+            if (Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener) != 0) {
+                isRunning = true;
+                handleStart(intent, startId);
+                return START_NOT_STICKY;
+            } else {
+                stopSelf();
+                return START_NOT_STICKY;
+            }
         }
     }
 
     public void stopNotification(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            stopNotification();
+            stopForeground(true);
         }else
             notificationManager.cancel(42689);
     }

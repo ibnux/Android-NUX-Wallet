@@ -9,8 +9,8 @@ android {
         applicationId "com.ibnux.nuxwallet"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 7
-        versionName "1.6"
+        versionCode 8
+        versionName "1.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,7 +44,8 @@ dependencies {
     implementation 'com.github.delight-im:Android-AdvancedWebView:v3.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.github.javiersantos:AppUpdater:2.7'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
