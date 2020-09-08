@@ -15,9 +15,12 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -79,23 +82,27 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         binding.tabLayout.addOnTabSelectedListener(this);
 
         startActivityForResult(new Intent(this,PinActivity.class), 4268);
+        startBackgroundServices();
+    }
+
+    public void startBackgroundServices(){
         if(!BackgroundService.isRunning()){
             Intent intent = new Intent(this,BackgroundService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Dexter.withContext(this)
-                .withPermission(Manifest.permission.FOREGROUND_SERVICE)
-                .withListener(new PermissionListener() {
-                    @Override public void onPermissionGranted(PermissionGrantedResponse response) {
-                        Utils.log("startForegroundService Background services");
-                        startForegroundService(intent);
-                    }
-                    @Override public void onPermissionDenied(PermissionDeniedResponse response) {
-                        finish();
-                    }
-                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        .withPermission(Manifest.permission.FOREGROUND_SERVICE)
+                        .withListener(new PermissionListener() {
+                            @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                                Utils.log("startForegroundService Background services");
+                                startForegroundService(intent);
+                            }
+                            @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                                finish();
+                            }
+                            @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
 
-                    }
-                }).check();
+                            }
+                        }).check();
 
             } else {
                 startService(intent);
@@ -269,6 +276,33 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             case R.id.menu_nav_changepin:
                 startActivityForResult(new Intent(this,PinActivity.class), 4269);
+                return true;
+            case R.id.menu_nav_txListener:
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle("Interval Check Transaction (Minutes)");
+                final EditText input = new EditText(this);
+                input.setInputType(InputType.TYPE_CLASS_PHONE|InputType.TYPE_CLASS_NUMBER);
+                input.setGravity(Gravity.CENTER_HORIZONTAL);
+                input.setHint("value in minutes");
+                builder.setView(input);
+                input.setText(Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)+"");
+                input.setSelectAllOnFocus(true);
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String hasil = input.getText().toString();;
+                        if(hasil.isEmpty()){
+                            hasil = "0";
+                        }
+                        int interval = Integer.parseInt(hasil);
+                        Aplikasi.sp.edit().putInt("defaultTxTimeListener",interval).apply();
+                        if(interval>0){
+                            startBackgroundServices();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Cancel",null);
+                builder.show();
                 return true;
             case R.id.menu_nav_backup:
                 new AlertDialog.Builder(HomeActivity.this)

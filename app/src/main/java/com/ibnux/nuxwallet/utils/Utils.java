@@ -280,6 +280,13 @@ public class Utils {
             return hasil;
     }
 
+    public static String toTime(long milliSeconds)
+    {
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+        cal.setTimeInMillis(milliSeconds);
+        return cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE);
+    }
+
     public static void showToast(String pesan, Context cx){
         Toast t =Toast.makeText(cx,pesan,Toast.LENGTH_LONG);
         t.setGravity(Gravity.CENTER,0,0);

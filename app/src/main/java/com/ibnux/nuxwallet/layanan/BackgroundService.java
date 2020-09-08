@@ -53,8 +53,14 @@ public class BackgroundService extends Service {
         if (notificationManager == null)
             notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        sendNotification(null,null);
+        sendNotification("Next update at "+nextUpdate(),
+                "Waiting transaction every "+Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)+" minute(s)");
         startCheck();
+    }
+
+    public String nextUpdate(){
+        long waktu = System.currentTimeMillis() + (Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)*60*1000);
+        return Utils.toTime(waktu);
     }
 
     public void startCheck(){
@@ -79,7 +85,8 @@ public class BackgroundService extends Service {
             pos = 0;
             checkTransactions(data.alamat);
         }
-        sendNotification(null, null);
+        sendNotification("Next update at "+nextUpdate(),
+                "Waiting transaction every "+Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)+" minute(s)");
     }
 
     public void checkTransactions(String alamat){
