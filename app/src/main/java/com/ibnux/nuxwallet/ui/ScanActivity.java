@@ -37,8 +37,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         binding = ActivityScanBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        mScannerView = new ZXingScannerView(this);    // Programmatically initialize the scanner view
-
+        mScannerView = new ZXingScannerView(this);
         Dexter.withContext(this)
                 .withPermission(Manifest.permission.CAMERA)
                 .withListener(new PermissionListener() {

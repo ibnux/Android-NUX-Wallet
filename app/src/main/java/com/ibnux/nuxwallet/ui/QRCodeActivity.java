@@ -105,7 +105,12 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
             clipboard.setPrimaryClip(clip);
             Utils.showToast(alamat+" copied!",this);
         }else if(v==binding.btnSaveImage){
-            Utils.showToast("Saved at \n"+saveBitMap().getPath(),this);
+            try {
+                Utils.showToast("Saved at \n" + saveBitMap().getPath(), this);
+            }catch (Exception e){
+                e.printStackTrace();
+                Utils.showToast("Failed to save QRCode", this);
+            }
         }else if(v==binding.btnShareImage){
             shareFile(saveBitMap());
         }else if(v==binding.btnAlamatPublickey){

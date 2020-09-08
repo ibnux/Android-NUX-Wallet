@@ -46,6 +46,14 @@ public class ObjectBox {
         return getDompet().query().equal(Dompet_.alamat,alamat).build().findFirst();
     }
 
+    public static String getNamaDompet(String alamat){
+        Dompet dpt = getDompet().query().equal(Dompet_.alamat,alamat).build().findFirst();
+        if(dpt==null)
+            return alamat;
+        else
+            return dpt.nama;
+    }
+
     public static long addTransaksi(Transaksi transaksi){
         if(transaksi.id>0L){
             return getTransaksi().put(transaksi);

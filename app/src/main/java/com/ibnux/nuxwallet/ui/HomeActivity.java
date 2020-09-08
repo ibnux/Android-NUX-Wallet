@@ -283,7 +283,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 final EditText input = new EditText(this);
                 input.setInputType(InputType.TYPE_CLASS_PHONE|InputType.TYPE_CLASS_NUMBER);
                 input.setGravity(Gravity.CENTER_HORIZONTAL);
-                input.setHint("value in minutes");
+                input.setHint("value in minutes, 0 to disable interval");
                 builder.setView(input);
                 input.setText(Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)+"");
                 input.setSelectAllOnFocus(true);

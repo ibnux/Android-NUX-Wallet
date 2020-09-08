@@ -77,7 +77,6 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                             dompet.dompetID = jsonObject.getString("account");
                             dompet.saldo = jsonObject.getLong("balanceNQT");
                             dompet.isMe = false;
-                            uiProcess();
                             NuxCoin.getPublicKey(alamat, Priority.LOW, new TextCallback() {
                                 @Override
                                 public void onTextCallback(String string) {
@@ -90,6 +89,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                                 }
                             });
                         }
+                        uiProcess();
                     }catch (Exception e){
                         binding.txtBalance.setText("Wallet not registered");
                     }
@@ -124,18 +124,18 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void uiProcess(){
-        if(dompet.isMe){
+        if(dompet!=null && dompet.isMe){
             binding.btnBarcode.setText("Barcode");
             binding.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app, R.color.blue_500));
         }else{
-            if(dompet.id>0){
+            if(dompet!=null && dompet.id>0){
                 binding.btnBarcode.setVisibility(View.GONE);
             }else{
                 binding.btnBarcode.setText("Save");
             }
             binding.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.red_400));
         }
-        if(dompet.alamat.equals(dompet.nama)) {
+        if(dompet!=null && dompet.alamat.equals(dompet.nama)) {
             binding.txtWalletName.setVisibility(View.GONE);
         }else{
             binding.txtWalletName.setVisibility(View.VISIBLE);
@@ -146,7 +146,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
             else
                 binding.txtWalletName.setText("");
         }
-        if(dompet.catatan!=null)
+        if(dompet!=null && dompet.catatan!=null)
             binding.txtWalletNote.setText(dompet.catatan);
         else if(dompet.id>0)
             binding.txtWalletNote.setText("Add note?");
@@ -368,8 +368,8 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                             intent.putExtra("transaction",tx.transaction);
                             if((tx.recipientRS.equals(alamat))) {
                                 Utils.sendNotification(
-                                         tx.senderRS + " send you coin",
-                                        "Received " + tx.amountNQT + " NUX for " + tx.recipientRS,
+                                        ObjectBox.getNamaDompet(tx.senderRS) + " send you coin",
+                                        "Received " + tx.amountNQT + " NUX for " + ObjectBox.getNamaDompet(tx.recipientRS),
                                         intent,
                                         "transaction",
                                         "Transaction"
@@ -377,8 +377,8 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                                 );
                             }else{
                                 Utils.sendNotification(
-                                        "You sent a coin from "+tx.senderRS,
-                                        tx.amountNQT + " NUX for " + tx.recipientRS+ " has been sent",
+                                        "You sent a coin from "+ObjectBox.getNamaDompet(tx.senderRS),
+                                        tx.amountNQT + " NUX for " + ObjectBox.getNamaDompet(tx.recipientRS)+ " has been sent",
                                         intent,
                                         "transaction",
                                         "Transaction"

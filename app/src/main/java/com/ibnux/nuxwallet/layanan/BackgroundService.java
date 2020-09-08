@@ -85,8 +85,14 @@ public class BackgroundService extends Service {
             pos = 0;
             checkTransactions(data.alamat);
         }
-        sendNotification("Next update at "+nextUpdate(),
-                "Waiting transaction every "+Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)+" minute(s)");
+        stopNotification();
+        Intent intent = new Intent(this,BackgroundService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent);
+        } else {
+            startService(intent);
+        }
+        stopSelf();
     }
 
     public void checkTransactions(String alamat){
@@ -127,8 +133,8 @@ public class BackgroundService extends Service {
                                 intent.putExtra("transaction",tx.transaction);
                                 if((tx.recipientRS.equals(alamat))) {
                                     Utils.sendNotification(
-                                            tx.senderRS + " send you coin",
-                                            "Received " + tx.amountNQT + " NUX for " + tx.recipientRS,
+                                            ObjectBox.getNamaDompet(tx.senderRS) + " send you coin",
+                                            "Received " + tx.amountNQT + " NUX for " + ObjectBox.getNamaDompet(tx.recipientRS),
                                             intent,
                                             "transaction",
                                             "Transaction"
@@ -136,8 +142,8 @@ public class BackgroundService extends Service {
                                     );
                                 }else{
                                     Utils.sendNotification(
-                                            "You sent a coin from "+tx.senderRS,
-                                             tx.amountNQT + " NUX for " + tx.recipientRS+ " has been sent",
+                                            "You sent a coin from "+ObjectBox.getNamaDompet(tx.senderRS),
+                                             tx.amountNQT + " NUX for " + ObjectBox.getNamaDompet(tx.recipientRS)+ " has been sent",
                                             intent,
                                             "transaction",
                                             "Transaction"
