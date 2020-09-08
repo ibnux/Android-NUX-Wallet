@@ -15,6 +15,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.zxing.Result;
 import com.ibnux.nuxwallet.databinding.ActivityScanBinding;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -23,12 +24,12 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
-import me.dm7.barcodescanner.zbar.Result;
-import me.dm7.barcodescanner.zbar.ZBarScannerView;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class ScanActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler  {
+
+public class ScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler  {
     ActivityScanBinding binding;
-    private ZBarScannerView mScannerView;
+    private ZXingScannerView mScannerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,8 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         binding = ActivityScanBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        mScannerView = new ZBarScannerView(this);    // Programmatically initialize the scanner view
+        mScannerView = new ZXingScannerView(this);    // Programmatically initialize the scanner view
+
         Dexter.withContext(this)
                 .withPermission(Manifest.permission.CAMERA)
                 .withListener(new PermissionListener() {
@@ -65,11 +67,10 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         mScannerView.stopCamera();           // Stop camera on pause
     }
 
-
     @Override
     public void handleResult(Result rawResult) {
         Intent i = getIntent();
-        i.putExtra("result",rawResult.getContents());
+        i.putExtra("result",rawResult.getText());
         setResult(RESULT_OK,i);
         finish();
     }
