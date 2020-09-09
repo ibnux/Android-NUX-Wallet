@@ -28,6 +28,18 @@
 
         </com.google.android.material.tabs.TabLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutCari"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtCari"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listDompet"
             android:layout_width="match_parent"

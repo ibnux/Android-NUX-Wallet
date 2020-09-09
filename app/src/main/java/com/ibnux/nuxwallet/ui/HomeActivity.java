@@ -16,7 +16,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,7 +79,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         binding.listDompet.setHasFixedSize(true);
         binding.listDompet.setLayoutManager(new LinearLayoutManager(this));
         binding.listDompet.setAdapter(adapter);
-
+        binding.layoutCari.setVisibility(View.GONE);
         binding.txtServer.setOnClickListener(this);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
@@ -95,6 +97,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 .setContentOnUpdateAvailable("Update to the latest version available of Nux Wallet!")
                 .setGitHubUserAndRepo("ibnux", "Android-NUX-Wallet")
                 .init();
+
+        binding.txtCari.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.searchData(binding.txtCari.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     public void startBackgroundServices(){
@@ -300,6 +319,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_nav_search:
+                if(binding.layoutCari.getVisibility()==View.VISIBLE){
+                    binding.tabLayout.setVisibility(View.VISIBLE);
+                    binding.layoutCari.setVisibility(View.GONE);
+                    item.setIcon(android.R.drawable.ic_menu_search);
+                    adapter.reload();
+                }else{
+                    binding.tabLayout.setVisibility(View.GONE);
+                    binding.layoutCari.setVisibility(View.VISIBLE);
+                    binding.txtCari.setText("");
+                    binding.txtCari.requestFocus();
+                    item.setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+                }
+                return true;
             case R.id.menu_nav_changepin:
                 startActivityForResult(new Intent(this,PinActivity.class), 4269);
                 return true;

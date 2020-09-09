@@ -63,7 +63,7 @@ public class DompetSpinnerAdapter extends ArrayAdapter {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.item_card, parent, false);
+            view = inflater.inflate(R.layout.item_card_small, parent, false);
             holder = new ViewHolder();
             holder.txtWallet = view.findViewById(R.id.txtWallet);
             holder.txtBalance = view.findViewById(R.id.txtBalance);

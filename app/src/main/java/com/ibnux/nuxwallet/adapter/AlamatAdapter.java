@@ -17,17 +17,17 @@ import com.ibnux.nuxwallet.data.Dompet_;
 import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.utils.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AlamatAdapter extends ArrayAdapter<Dompet> {
-    List<Dompet> datas, tempItems, suggestions;
+    List<Dompet> datas;
     Context context;
     public AlamatAdapter(Context context){
         super(context, android.R.layout.select_dialog_item);
         Utils.log("AlamatAdapter");
         this.context = context;
         datas = ObjectBox.getDompet().query().equal(Dompet_.isMe,false).build().find();
+        addAll(datas);
     }
 
     @NonNull
@@ -43,22 +43,6 @@ public class AlamatAdapter extends ArrayAdapter<Dompet> {
         ((TextView)view.findViewById(android.R.id.text1)).setText((dompet.alamat.equals(dompet.nama))?dompet.alamat:dompet.nama+" "+dompet.alamat);
 
         return view;
-    }
-
-    @Nullable
-    @Override
-    public Dompet getItem(int position) {
-        return (datas!=null)?datas.get(position):null;
-    }
-
-    @Override
-    public int getCount() {
-        return (datas!=null)?datas.size():0;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
 
     @NonNull
@@ -78,34 +62,27 @@ public class AlamatAdapter extends ArrayAdapter<Dompet> {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             if (charSequence != null) {
-                suggestions.clear();
-                for (Dompet dompet : tempItems) {
+                clear();
+                Utils.log("FilterResults: "+charSequence.toString().toLowerCase());
+                for (Dompet dompet : datas) {
                     if (dompet.nama.toLowerCase().startsWith(charSequence.toString().toLowerCase())) {
-                        suggestions.add(dompet);
+                        Utils.log("FilterResults dompet: "+dompet.nama.toLowerCase());
+                        add(dompet);
                     } else if (dompet.alamat.toLowerCase().startsWith(charSequence.toString().toLowerCase())) {
-                        suggestions.add(dompet);
+                        add(dompet);
+                        Utils.log("FilterResults dompet: "+dompet.alamat.toLowerCase());
                     }
                 }
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = suggestions;
-                filterResults.count = suggestions.size();
-                return filterResults;
-            }else return new FilterResults();
+                return new FilterResults();
+            }else{
+                addAll(datas);
+                return new FilterResults();
+            }
         }
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            ArrayList<Dompet> tempValues = (ArrayList<Dompet>) filterResults.values;
-            if (filterResults != null && filterResults.count > 0) {
-                clear();
-                for (Dompet dompet : tempValues) {
-                    add(dompet);
-                }
-                notifyDataSetChanged();
-            } else {
-                clear();
-                notifyDataSetChanged();
-            }
+            notifyDataSetChanged();
         }
     };
 }

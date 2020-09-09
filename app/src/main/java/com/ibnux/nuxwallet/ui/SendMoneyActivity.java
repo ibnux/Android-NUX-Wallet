@@ -128,8 +128,10 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                     }else{
                         Utils.log("afterTextChanged dompet null");
                     }
+                    binding.txtPK.setText("");
                     chekIsActive();
                 }else{
+                    binding.txtPK.setText("");
                     Utils.log("afterTextChanged "+binding.txtAlamat.getText().toString().length());
                 }
             }

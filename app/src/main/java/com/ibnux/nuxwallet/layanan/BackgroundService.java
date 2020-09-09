@@ -80,19 +80,14 @@ public class BackgroundService extends Service {
             return;
         }
         Utils.log("BackgroundService getAddress");
-        List<Dompet> datas = ObjectBox.getDompet().query().equal(Dompet_.isMe,true).orderDesc(Dompet_.saldo).build().find();
+        List<Dompet> datas = ObjectBox.getDompet().query().equal(Dompet_.isMe,true).build().find();
         for (Dompet data: datas){
             pos = 0;
             checkTransactions(data.alamat);
         }
-        stopNotification();
-        Intent intent = new Intent(this,BackgroundService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent);
-        } else {
-            startService(intent);
-        }
-        stopSelf();
+        sendNotification("Next update at "+nextUpdate(),
+                "Waiting transaction every "+Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)+" minute(s)");
+        startCheck();
     }
 
     public void checkTransactions(String alamat){

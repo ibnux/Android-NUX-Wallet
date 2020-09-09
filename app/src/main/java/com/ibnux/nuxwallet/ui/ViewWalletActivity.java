@@ -10,6 +10,9 @@ package com.ibnux.nuxwallet.ui;
  \******************************************************************************/
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -106,6 +109,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
         binding.btnSend.setOnClickListener(this);
         binding.txtWalletName.setOnClickListener(this);
         binding.txtWalletNote.setOnClickListener(this);
+        binding.txtWallet.setOnClickListener(this);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(binding.listTransaksi);
@@ -115,14 +119,14 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
     public void uiProcess(){
         if(dompet!=null && dompet.isMe){
             binding.btnBarcode.setText("Barcode");
-            binding.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app, R.color.blue_500));
+            binding.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app, R.color.blue_800));
         }else{
             if(dompet!=null && dompet.id>0){
                 binding.btnBarcode.setVisibility(View.GONE);
             }else{
                 binding.btnBarcode.setText("Save");
             }
-            binding.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.red_400));
+            binding.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.green_800));
         }
         if(dompet!=null && dompet.alamat.equals(dompet.nama)) {
             binding.txtWalletName.setVisibility(View.GONE);
@@ -258,6 +262,11 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
                     builder.show();
                 }
             }
+        }else if(v==binding.txtWallet){
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText(getString(R.string.app_name), alamat);
+            clipboard.setPrimaryClip(clip);
+            Utils.showToast(alamat+" copied!",this);
         }else if(v==binding.btnSend){
             Intent i = new Intent(this, SendMoneyActivity.class);
             if(dompet.isMe) {
@@ -279,10 +288,11 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
             AlertDialog.Builder builder = new AlertDialog.Builder(ViewWalletActivity.this);
             builder.setTitle("Wallet Note?");
             final EditText input = new EditText(ViewWalletActivity.this);
-            input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+            input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
             input.setGravity(Gravity.CENTER_HORIZONTAL);
             input.setHint("Your notes");
             input.setText(dompet.catatan);
+            input.setLines(2);
             input.setSelectAllOnFocus(true);
             builder.setView(input);
             builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {

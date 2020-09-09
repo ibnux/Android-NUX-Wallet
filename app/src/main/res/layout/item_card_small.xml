@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.ViewWalletActivity">
-
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
@@ -75,6 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
+                    android:lines="1"
                     android:text="catatan catatan catatan catatan catatan catatan catatan catatan catatan catatan "
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                     android:textColor="@color/grey_10" />
@@ -100,48 +99,4 @@
 
     </androidx.cardview.widget.CardView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSend"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="0dp"
-            android:text="SEND COIN"
-            android:theme="@style/Button.Accent" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnBarcode"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="0dp"
-            android:text="BARCODE"
-            android:theme="@style/Button.Accent" />
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="true" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listTransaksi"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:itemCount="10"
-        tools:listitem="@layout/item_transaction">
-
-    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

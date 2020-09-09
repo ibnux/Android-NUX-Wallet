@@ -37,6 +37,7 @@ import java.util.List;
 public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHolder> {
     DompetCallback callback;
     private List<Dompet> datas;
+    boolean isMe = false;
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txtWallet,txtBalance,txtWalletName,txtWalletNote;
         LinearLayout layout;
@@ -54,11 +55,19 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
 
     public DompetAdapter(DompetCallback callback, boolean isMe){
         this.callback = callback;
+        this.isMe = isMe;
+        reload();
+    }
+    public void reload(){
         reload(isMe);
     }
 
     public void reload(boolean isMe){
-        datas = ObjectBox.getDompet().query().equal(Dompet_.isMe,isMe).orderDesc(Dompet_.saldo).build().find();
+        this.isMe = isMe;
+        if(isMe)
+            datas = ObjectBox.getDompet().query().equal(Dompet_.isMe,isMe).orderDesc(Dompet_.saldo).build().find();
+        else
+            datas = ObjectBox.getDompet().query().equal(Dompet_.isMe,isMe).order(Dompet_.nama).build().find();
         if(datas==null || datas.isEmpty()){
             if(isMe){
                 notifyDataSetChanged();
@@ -84,8 +93,9 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new DompetAdapter.MyViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_card, parent, false));
+                    .inflate(R.layout.item_card_small, parent, false));
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
@@ -114,9 +124,9 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
         });
 
         if(dompet.isMe){
-            holder.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.blue_500));
+            holder.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.blue_800));
         }else{
-            holder.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.red_400));
+            holder.card.setCardBackgroundColor(ContextCompat.getColor(Aplikasi.app,R.color.green_800));
         }
 
         NuxCoin.getAccount(dompet.alamat, Priority.LOW, new JsonCallback() {
@@ -160,5 +170,21 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
         void onDompetClicked(Dompet dompet);
     }
 
+    public void searchData(String search){
+        if(search.isEmpty()){
+            reload();
+        }else {
+            datas = ObjectBox.getDompet().query()
+                    .contains(Dompet_.nama,search)
+                    .or()
+                    .contains(Dompet_.catatan,search)
+                    .or()
+                    .contains(Dompet_.alamat,search)
+                    .and()
+                    .equal(Dompet_.isMe,isMe)
+                    .order(Dompet_.nama).build().find();
+            notifyDataSetChanged();
+        }
+    }
 
 }

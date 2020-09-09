@@ -390,7 +390,7 @@ public class Utils {
             builder.setContentIntent(pi);
         }
 
-        notificationManager.notify((int)(System.currentTimeMillis()/1000L), builder.build());
+        notificationManager.notify((int)(System.currentTimeMillis()), builder.build());
 
     }
 
