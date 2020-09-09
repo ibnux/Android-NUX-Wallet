@@ -203,64 +203,45 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if(v==binding.btnBarcode){
-            if(dompet.isMe()) {
+            if(dompet !=null && dompet.isMe()) {
                 Intent i = new Intent(this, QRCodeActivity.class);
                 i.putExtra("alamat", alamat);
                 startActivity(i);
             }else{
-                if(binding.btnBarcode.getText().equals("Delete")){
-                    //Ask Name
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ViewWalletActivity.this);
-                    builder.setTitle("Delete Wallet?");
-                    builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if(ObjectBox.getDompet().remove(dompet)){
-                                Utils.showToast("Wallet Deleted", ViewWalletActivity.this);
-                                finish();
-                            }else{
-                                Utils.showToast("Wallet not deleted", ViewWalletActivity.this);
-                            }
+                //Ask Name
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewWalletActivity.this);
+                builder.setTitle("Wallet Name?");
+                final EditText input = new EditText(ViewWalletActivity.this);
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+                input.setGravity(Gravity.CENTER_HORIZONTAL);
+                input.setHint("Optional");
+                input.setText(dompet.nama);
+                input.setSelectAllOnFocus(true);
+                builder.setView(input);
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dompet.nama = input.getText().toString();
+                        if (ObjectBox.addDompet(dompet) > 0) {
+                            Utils.showToast("Wallet Saved", ViewWalletActivity.this);
+                            uiProcess();
+                        } else {
+                            Utils.showToast("Wallet not Saved", ViewWalletActivity.this);
                         }
-                    });
-                    builder.setNegativeButton("Cancel", null);
-                    builder.show();
-                }else {
-                    //Ask Name
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ViewWalletActivity.this);
-                    builder.setTitle("Wallet Name?");
-                    final EditText input = new EditText(ViewWalletActivity.this);
-                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-                    input.setGravity(Gravity.CENTER_HORIZONTAL);
-                    input.setHint("Optional");
-                    input.setText(dompet.nama);
-                    input.setSelectAllOnFocus(true);
-                    builder.setView(input);
-                    builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dompet.nama = input.getText().toString();
-                            if (ObjectBox.addDompet(dompet) > 0) {
-                                Utils.showToast("Wallet Saved", ViewWalletActivity.this);
-                                uiProcess();
-                            } else {
-                                Utils.showToast("Wallet not Saved", ViewWalletActivity.this);
-                            }
+                    }
+                });
+                builder.setNegativeButton("No Name", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (ObjectBox.addDompet(dompet) > 0) {
+                            Utils.showToast("Wallet Saved", ViewWalletActivity.this);
+                            uiProcess();
+                        } else {
+                            Utils.showToast("Wallet not Saved", ViewWalletActivity.this);
                         }
-                    });
-                    builder.setNegativeButton("No Name", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (ObjectBox.addDompet(dompet) > 0) {
-                                Utils.showToast("Wallet Saved", ViewWalletActivity.this);
-                                uiProcess();
-                            } else {
-                                Utils.showToast("Wallet not Saved", ViewWalletActivity.this);
-                            }
-                        }
-                    });
-                    builder.show();
-                }
+                    }
+                });
+                builder.show();
             }
         }else if(v==binding.txtWallet){
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
