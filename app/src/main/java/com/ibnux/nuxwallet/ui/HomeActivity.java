@@ -336,6 +336,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_nav_changepin:
                 startActivityForResult(new Intent(this,PinActivity.class), 4269);
                 return true;
+            case R.id.menu_nav_airdrop:
+                startActivity(new Intent(this,AirdropActivity.class));
+                return true;
             case R.id.menu_nav_txListener:
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
                 builder.setTitle("Interval Check Transaction (Minutes)");

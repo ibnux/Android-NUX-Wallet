@@ -27,6 +27,9 @@
         android:id="@+id/menu_nav_txListener"
         android:title="Transaction Listener" />
     <item
+        android:id="@+id/menu_nav_airdrop"
+        android:title="Send Air Drop" />
+    <item
         android:id="@+id/menu_nav_faq"
         android:title="FAQ" />
 

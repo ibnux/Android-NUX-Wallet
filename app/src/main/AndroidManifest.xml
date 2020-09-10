@@ -18,6 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.AirdropActivity"></activity>
+
         <receiver
             android:name=".layanan.BootReceiver"
             android:enabled="true"
@@ -27,8 +29,7 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".layanan.BackgroundService" />
+        <service android:name=".layanan.BackgroundService" />
 
         <activity
             android:name=".ui.OfflineSigningActivity"

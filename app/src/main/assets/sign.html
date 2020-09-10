@@ -172,7 +172,7 @@
                 $("#nxtbridge-passphrase").val(unescape(result[1]));
                 $("#nxtbridge-nuxtime").val(result[2]);
                 checkTX();
-                setTimeout(signTX(), 1000);
+                signTX();
             }
         } else {
             Android.finish("failed", "No Param");
