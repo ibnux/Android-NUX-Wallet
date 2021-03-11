@@ -23,6 +23,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.databinding.ActivityWalletGeneratorBinding;
@@ -36,7 +37,7 @@ public class WalletGeneratorActivity extends AppCompatActivity implements Advanc
         super.onCreate(savedInstanceState);
         binding = ActivityWalletGeneratorBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setTitle("Tambah Dompet baru");
+        setTitle(R.string.add_new_wallet);
         String secret = "";
         Intent i = getIntent();
         if(i.hasExtra("data")){
@@ -117,13 +118,13 @@ public class WalletGeneratorActivity extends AppCompatActivity implements Advanc
                 dompet.dompetID = accountid;
                 //Ask Name
                 AlertDialog.Builder builder = new AlertDialog.Builder(WalletGeneratorActivity.this);
-                builder.setTitle("Wallet Name?");
+                builder.setTitle(R.string.ask_wallet_name);
                 final EditText input = new EditText(WalletGeneratorActivity.this);
                 input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_WORDS);
                 input.setGravity(Gravity.CENTER_HORIZONTAL);
-                input.setHint("Optional");
+                input.setHint(R.string.optional);
                 builder.setView(input);
-                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dompet.nama = input.getText().toString();
@@ -132,7 +133,7 @@ public class WalletGeneratorActivity extends AppCompatActivity implements Advanc
                         finish();
                     }
                 });
-                builder.setNegativeButton("No Name", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(R.string.wallet_no_name, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ObjectBox.addDompet(dompet);

@@ -86,16 +86,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         itemTouchHelper.attachToRecyclerView(binding.listDompet);
 
         binding.tabLayout.addOnTabSelectedListener(this);
-
-        startActivityForResult(new Intent(this,PinActivity.class), 4268);
-        startBackgroundServices();
-
+        int txtime = Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener);
+        if(txtime>0) {
+            startActivityForResult(new Intent(this, PinActivity.class), 4268);
+            startBackgroundServices();
+        }
         new AppUpdater(this)
                 .setDisplay(Display.NOTIFICATION)
                 .setUpdateFrom(UpdateFrom.GITHUB)
-                .setTitleOnUpdateAvailable("Update available")
-                .setContentOnUpdateAvailable("Update to the latest version available of Nux Wallet!")
-                .setGitHubUserAndRepo("ibnux", "Android-NUX-Wallet")
+                .setTitleOnUpdateAvailable(R.string.update_title)
+                .setContentOnUpdateAvailable(R.string.update_message)
+                .setGitHubUserAndRepo(getString(R.string.update_github_user), getString(R.string.update_github_repo))
                 .init();
 
         binding.txtCari.addTextChangedListener(new TextWatcher() {
@@ -177,10 +178,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     Aplikasi.setPin(null);
                     startActivityForResult(new Intent(this, PinActivity.class), 4268);
                 } else {
-                    Utils.showToast("PIN Not change", this);
+                    Utils.showToast(R.string.pin_not_change, this);
                 }
             } else {
-                Utils.showToast("PIN Not change", this);
+                Utils.showToast(R.string.pin_not_change, this);
             }
 
         }else if(requestCode==4270){
@@ -188,20 +189,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 if (data.hasExtra("SUKSES")) {
                     backupAll();
                 } else {
-                    Utils.showToast("PIN Not change", this);
+                    Utils.showToast(R.string.pin_not_change, this);
                 }
             } else {
-                Utils.showToast("PIN Not change", this);
+                Utils.showToast(R.string.pin_not_change, this);
             }
         }else if(requestCode==4271){
             if(resultCode==RESULT_OK) {
                 if (data.hasExtra("SUKSES")) {
                     restoreAll();
                 } else {
-                    Utils.showToast("PIN Not change", this);
+                    Utils.showToast(R.string.pin_not_change, this);
                 }
             } else {
-                Utils.showToast("PIN Not change", this);
+                Utils.showToast(R.string.pin_not_change, this);
             }
         }
 
@@ -277,13 +278,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                             adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
                         }
                     })
-                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             new AlertDialog.Builder(HomeActivity.this)
                                     .setIcon(R.mipmap.ic_launcher)
-                                    .setTitle("Are You sure?")
+                                    .setTitle(R.string.ask_are_you_sure)
                                     .setMessage(deskripsi)
-                                    .setPositiveButton("Sure", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             ObjectBox.getTransaksi().query().equal(Transaksi_.senderRS,dompet.alamat).build().remove();
@@ -292,7 +293,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                                             adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
                                         }
                                     })
-                                    .setNegativeButton("Nope", new DialogInterface.OnClickListener() {
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
@@ -301,7 +302,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                                     .show();
                         }
                     })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
@@ -341,15 +342,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
             case R.id.menu_nav_txListener:
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-                builder.setTitle("Interval Check Transaction (Minutes)");
+                builder.setTitle(R.string.dialog_tx_interval_title);
                 final EditText input = new EditText(this);
                 input.setInputType(InputType.TYPE_CLASS_PHONE|InputType.TYPE_CLASS_NUMBER);
                 input.setGravity(Gravity.CENTER_HORIZONTAL);
-                input.setHint("value in minutes, 0 to disable interval");
+                input.setHint(R.string.dialog_tx_interval_hint);
                 builder.setView(input);
                 input.setText(Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)+"");
                 input.setSelectAllOnFocus(true);
-                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String hasil = input.getText().toString();;
@@ -369,15 +370,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 });
-                builder.setNegativeButton("Cancel",null);
+                builder.setNegativeButton(R.string.cancel,null);
                 builder.show();
                 return true;
             case R.id.menu_nav_backup:
                 new AlertDialog.Builder(HomeActivity.this)
                         .setIcon(R.mipmap.ic_launcher)
-                        .setTitle("Backup All Wallet")
-                        .setMessage("Wallet will be encrypted with your pin, if you forgot your PIN, you will lost your wallet")
-                        .setPositiveButton("Sure", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.dialog_backup_wallet_title)
+                        .setMessage(R.string.dialog_backup_wallet_message)
+                        .setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Dexter.withContext(HomeActivity.this)
@@ -392,16 +393,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                                 }).check();
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
 
                 return true;
             case R.id.menu_nav_restore:
                 new AlertDialog.Builder(HomeActivity.this)
                         .setIcon(R.mipmap.ic_launcher)
-                        .setTitle("Restore All Wallet")
-                        .setMessage("Wallet encrypted with your pin, when you backup, if you forgot your PIN, you will lost your wallet")
-                        .setPositiveButton("Sure", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.dialog_restore_wallet_title)
+                        .setMessage(R.string.dialog_restore_wallet_message)
+                        .setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Dexter.withContext(HomeActivity.this)
@@ -416,16 +417,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                                 }).check();
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
                 return true;
             case R.id.menu_nav_update:
                 new AppUpdater(this)
                         .setDisplay(Display.DIALOG)
                         .setUpdateFrom(UpdateFrom.GITHUB)
-                        .setTitleOnUpdateAvailable("Update available")
-                        .setContentOnUpdateAvailable("Update to the latest version available of Nux Wallet!")
-                        .setGitHubUserAndRepo("ibnux", "Android-NUX-Wallet")
+                        .setTitleOnUpdateAvailable(R.string.update_title)
+                        .setContentOnUpdateAvailable(R.string.update_message)
+                        .setGitHubUserAndRepo(getString(R.string.update_github_user), getString(R.string.update_github_repo))
                         .showAppUpdated(true)
                         .init();
                 return true;
@@ -454,8 +455,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         for(int n=0;n<jml;n++){
             done += (Utils.saveToFile(dpts.get(n),pin,this))?1:0;
         }
-        Utils.showToast("finished "+done+" wallet saved\n"+Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS).toString() + File.separator + Constants.folderName,this);
+        Utils.showToast(getString(R.string.backup_finished,done, Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS).toString() + File.separator + Constants.folderName),this);
     }
 
     public void restoreAll(){
@@ -464,12 +465,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 Environment.DIRECTORY_DOCUMENTS).toString() + File.separator + Constants.folderName;
         File file = new File(foldernux);
         if (!file.exists()) {
-            Utils.showToast("Folder not found!\n\n"+foldernux,this);
+            Utils.showToast(getString(R.string.folder_not_found,foldernux),this);
             Utils.vibrate();
         }else{
             for (String fil: file.list()){
                 try {
-                    if(fil.endsWith(".nux")) {
+                    if(fil.endsWith("."+Constants.currency.toLowerCase())) {
                         String hasil = Utils.getStringFromFile(new File(foldernux, fil));
                         try {
                             Utils.log(hasil);
@@ -480,15 +481,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                             Utils.log(dompet.alamat);
                             Utils.log(ObjectBox.addDompet(dompet)+"");;
                         } catch (Exception e) {
-                            Toast.makeText(this, "Failed import file\n\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.failed_import_file, e.getMessage()), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }catch (Exception e){
-                    Utils.showToast("Failed to import!\n\n"+foldernux,this);
+                    Utils.showToast(getString(R.string.failed_import,foldernux),this);
                     Utils.vibrate();
                 }
             }
-            Utils.showToast("finished import wallet",this);
+            Utils.showToast(R.string.success_import_wallet,this);
             adapter.reload(binding.tabLayout.getSelectedTabPosition()==0);
         }
     }

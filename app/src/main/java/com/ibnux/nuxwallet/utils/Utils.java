@@ -240,9 +240,9 @@ public class Utils {
 
     public static void log(Object txt){
         if(!BuildConfig.DEBUG) return;
-        Log.d("NUX","-----------------------");
-        Log.d("NUX",txt+"");
-        Log.d("NUX","-----------------------");
+        Log.d(Constants.currency,"-----------------------");
+        Log.d(Constants.currency,txt+"");
+        Log.d(Constants.currency,"-----------------------");
     }
 
     public static String nuxFormat(long myNumber){
@@ -293,6 +293,12 @@ public class Utils {
         t.show();
     }
 
+    public static void showToast(int resid, Context cx){
+        Toast t =Toast.makeText(cx,resid,Toast.LENGTH_LONG);
+        t.setGravity(Gravity.CENTER,0,0);
+        t.show();
+    }
+
     public static void vibrate(){
         Vibrator v = (Vibrator) Aplikasi.app.getSystemService(Context.VIBRATOR_SERVICE);
 // Vibrate for 500 milliseconds
@@ -310,7 +316,7 @@ public class Utils {
         final ProgressBar progressBar = new ProgressBar(cx);
         progressBar.setIndeterminate(true);
         builder.setView(progressBar);
-        builder.setNegativeButton("Cancel",null);
+        builder.setNegativeButton(cx.getString(R.string.cancel),null);
         builder.setCancelable(false);
         return builder;
     }
@@ -334,14 +340,14 @@ public class Utils {
     }
 
     public static boolean saveToFile(Dompet dompet, String pin,Context cx){
-        String filename = dompet.alamat.replace("-","_") + ".nux";
+        String filename = dompet.alamat.replace("-","_") + "."+Constants.currency.toLowerCase();
         Gson gson = new Gson();
         OutputStream fos;
         String json = gson.toJson(dompet);
         try {
             json = AESCrypt.encrypt(pin, json);
         }catch (Exception e){
-            Toast.makeText(cx, "Failed to save file\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(cx, cx.getString(R.string.failed_save_file,e.getMessage()), Toast.LENGTH_SHORT).show();
             return false;
         }
         try{
@@ -362,7 +368,7 @@ public class Utils {
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(cx, "Failed to save file\n\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(cx, cx.getString(R.string.failed_save_file,e.getMessage()), Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ibnux.nuxwallet.Aplikasi;
+import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.databinding.ActivityPinBinding;
 import com.ibnux.nuxwallet.utils.Utils;
 
@@ -31,10 +32,10 @@ public class PinActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         binding = ActivityPinBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setTitle("PIN CODE");
+        setTitle(R.string.pin_code_title);
         String pin = Aplikasi.getPin();
         if (pin == null) {
-            binding.txtInfo.setText("Create New PIN");
+            binding.txtInfo.setText(R.string.pin_create_new);
             isNew = true;
         }
         binding.button.setOnClickListener(this);
@@ -45,7 +46,7 @@ public class PinActivity extends AppCompatActivity implements View.OnClickListen
         if(isNew){
             if(pinnew==null){
                 pinnew = binding.inputPin.getText().toString();
-                binding.txtInfo.setText("Repeat New PIN");
+                binding.txtInfo.setText(R.string.pin_repeat_new);
                 binding.inputPin.setText("");
                 Utils.vibrate();
             }else{
@@ -57,8 +58,8 @@ public class PinActivity extends AppCompatActivity implements View.OnClickListen
                     finish();
                 }else{
                     Utils.vibrate();
-                    Utils.showToast("PIN DIFFERENT, Please repeat",this);
-                    binding.txtInfo.setText("Create New PIN");
+                    Utils.showToast(R.string.pin_different_new,this);
+                    binding.txtInfo.setText(R.string.pin_create_new);
                     binding.inputPin.setText("");
                     pinnew = null;
                 }
@@ -71,7 +72,7 @@ public class PinActivity extends AppCompatActivity implements View.OnClickListen
                 finish();
             }else{
                 Utils.vibrate();
-                Utils.showToast("WRONG PIN",this);
+                Utils.showToast(R.string.pin_wrong,this);
                 binding.inputPin.setText("");
                 pinnew = null;
             }

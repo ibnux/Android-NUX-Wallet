@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.ibnux.nuxwallet.Aplikasi;
+import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.adapter.ServerAdapter;
 import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.data.Server;
@@ -57,14 +58,14 @@ public class PeersActivity extends AppCompatActivity implements ServerAdapter.Se
     public void onClick(View v) {
         if(v==binding.fabAddPeer){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Add peer URL?");
+            builder.setTitle(R.string.add_peer);
             final EditText input = new EditText(this);
             input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT);
-            input.setHint("http://coin.ibnux.net:42689");
+            input.setHint(R.string.peer_hint);
             input.setText(Aplikasi.sp.getString("cachepeer",""));
             input.setSelectAllOnFocus(true);
             builder.setView(input);
-            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String url = input.getText().toString();
@@ -73,7 +74,7 @@ public class PeersActivity extends AppCompatActivity implements ServerAdapter.Se
                             url = url.substring(0, url.length() - 1);
                         }
                         if(!url.startsWith("http")){
-                            Utils.showToast("Must start with http:// or https://, not added",PeersActivity.this);
+                            Utils.showToast(R.string.add_peer_error_nohttp,PeersActivity.this);
                             return;
                         }
                         Aplikasi.sp.edit().putString("cachepeer",url).apply();
@@ -85,19 +86,19 @@ public class PeersActivity extends AppCompatActivity implements ServerAdapter.Se
                                     ObjectBox.addServer(urlf);
                                     adapter.reload();
                                 }else{
-                                    Utils.showToast("Failed to connect to Peer, not added",PeersActivity.this);
+                                    Utils.showToast(R.string.add_peer_error_failed1,PeersActivity.this);
                                 }
                             }
 
                             @Override
                             public void onErrorCallback(int errorCode, String errorMessage) {
-                                Utils.showToast("Failed to connect to Peer, not added\n"+errorMessage,PeersActivity.this);
+                                Utils.showToast(getString(R.string.add_peer_error_failed2,errorMessage),PeersActivity.this);
                             }
                         });
                     }
                 }
             });
-            builder.setNegativeButton("Cancel",null);
+            builder.setNegativeButton(R.string.cancel,null);
 //            builder.setNeutralButton("Load Peers", new DialogInterface.OnClickListener() {
 //                @Override
 //                public void onClick(DialogInterface dialog, int which) {
@@ -152,14 +153,14 @@ public class PeersActivity extends AppCompatActivity implements ServerAdapter.Se
     @Override
     public void onServerClicked(Server server) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Change Server URL?");
+        builder.setTitle(R.string.change_peer);
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT);
-        input.setHint("http://coin.ibnux.net:1234");
+        input.setHint(R.string.peer_hint);
         input.setText(server.url);
         input.setSelectAllOnFocus(true);
         builder.setView(input);
-        builder.setPositiveButton("Save changes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String url = input.getText().toString();
@@ -173,7 +174,7 @@ public class PeersActivity extends AppCompatActivity implements ServerAdapter.Se
                 }
             }
         });
-        builder.setNegativeButton("Set as default server", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.peer_set_default, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ObjectBox.setServer(server.url);
@@ -181,7 +182,7 @@ public class PeersActivity extends AppCompatActivity implements ServerAdapter.Se
                 finish();
             }
         });
-        builder.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ObjectBox.getBoxServer().remove(server);
@@ -216,7 +217,7 @@ public class PeersActivity extends AppCompatActivity implements ServerAdapter.Se
             }catch (Exception e){
                 return e.getMessage();
             }
-            return "Success "+total+" peers added";
+            return getString(R.string.peer_success_added, total);
         }
 
         @Override

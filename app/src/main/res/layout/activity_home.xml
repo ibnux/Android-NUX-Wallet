@@ -11,80 +11,83 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="My Wallet" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Others" />
-
-        </com.google.android.material.tabs.TabLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutCari"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtCari"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Search" />
+                android:background="@color/deep_purple_400"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@+id/txtServer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/_2sdp"
+                    android:text="coin.ibnux.net"
+                    android:textAlignment="textStart"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:textColor="#d7e8ef"
+                    android:textSize="@dimen/_9ssp"
+                    android:paddingEnd="@dimen/_2sdp"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutCari"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtCari"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/search"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listDompet"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:itemCount="10"
-            tools:listitem="@layout/item_card" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/deep_purple_400"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txtServer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/listDompet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:paddingStart="@dimen/_2sdp"
-                android:text="coin.ibnux.net"
-                android:textAlignment="textStart"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                android:textColor="#d7e8ef"
-                android:textSize="@dimen/_9ssp" />
+                tools:itemCount="10"
+                tools:listitem="@layout/item_card"/>
 
-        </LinearLayout>
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabIndicatorGravity="top"
+                >
+
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/my_wallet"
+                    android:textAlignment="textStart"/>
+
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address_book"
+                    android:textAlignment="textEnd"/>
+
+        </com.google.android.material.tabs.TabLayout>
 
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddDompet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginRight="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_4sdp"
-        android:clickable="true"
-        android:focusable="true"
-        app:backgroundTint="#EC407A"
-        app:fabSize="auto"
-        app:srcCompat="@drawable/ic_action_add"
-        app:useCompatPadding="false" />
+            android:id="@+id/fabAddDompet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="#EC407A"
+            app:fabSize="auto"
+            app:srcCompat="@drawable/ic_action_add"
+            app:useCompatPadding="false"/>
 
 
 </FrameLayout>

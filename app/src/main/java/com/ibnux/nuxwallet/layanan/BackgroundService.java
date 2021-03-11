@@ -53,8 +53,8 @@ public class BackgroundService extends Service {
         if (notificationManager == null)
             notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        sendNotification("Next update at "+nextUpdate(),
-                "Waiting transaction every "+Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)+" minute(s)");
+        sendNotification(getString(R.string.service_notification_title,nextUpdate()),
+                getString(R.string.service_notification_message,Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)));
         startCheck();
     }
 
@@ -85,8 +85,8 @@ public class BackgroundService extends Service {
             pos = 0;
             checkTransactions(data.alamat);
         }
-        sendNotification("Next update at "+nextUpdate(),
-                "Waiting transaction every "+Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)+" minute(s)");
+        sendNotification(getString(R.string.service_notification_title,nextUpdate()),
+                getString(R.string.service_notification_message,Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener)));
         startCheck();
     }
 
@@ -115,7 +115,7 @@ public class BackgroundService extends Service {
                             Utils.log(transactions.getJSONObject(n).toString());
                             JSONObject json = transactions.getJSONObject(n);
                             Transaksi tx = new Gson().fromJson(json.toString(),Transaksi.class);
-                            sendNotification(alamat, "Checking "+tx.transaction);
+                            sendNotification(alamat, getString(R.string.service_notification_checking,tx.transaction));
                             if(ObjectBox.getTransaksi().query().equal(Transaksi_.transaction,tx.transaction).build().findFirst()==null) {
                                 tx.timestampInsert = System.currentTimeMillis();
                                 if (json.has("attachment")) {
@@ -128,8 +128,8 @@ public class BackgroundService extends Service {
                                 intent.putExtra("transaction",tx.transaction);
                                 if((tx.recipientRS.equals(alamat))) {
                                     Utils.sendNotification(
-                                            ObjectBox.getNamaDompet(tx.senderRS) + " send you coin",
-                                            "Received " + tx.amountNQT + " NUX for " + ObjectBox.getNamaDompet(tx.recipientRS),
+                                            getString(R.string.service_notification_received_title,ObjectBox.getNamaDompet(tx.senderRS)),
+                                            getString(R.string.service_notification_received_message, tx.amountNQT, ObjectBox.getNamaDompet(tx.recipientRS)),
                                             intent,
                                             "transaction",
                                             "Transaction"
@@ -137,8 +137,8 @@ public class BackgroundService extends Service {
                                     );
                                 }else{
                                     Utils.sendNotification(
-                                            "You sent a coin from "+ObjectBox.getNamaDompet(tx.senderRS),
-                                             tx.amountNQT + " NUX for " + ObjectBox.getNamaDompet(tx.recipientRS)+ " has been sent",
+                                            getString(R.string.service_notification_sending_title,ObjectBox.getNamaDompet(tx.senderRS)),
+                                             getString(R.string.service_notification_sending_message,tx.amountNQT, ObjectBox.getNamaDompet(tx.recipientRS)),
                                             intent,
                                             "transaction",
                                             "Transaction"
@@ -230,11 +230,11 @@ public class BackgroundService extends Service {
                 .setSmallIcon(R.drawable.ic_notification)
                 .setLargeIcon(BitmapFactory.decodeResource(Aplikasi.app.getResources(),R.mipmap.ic_launcher))
                 .setContentTitle((title==null)?Aplikasi.app.getString(R.string.app_name):title)
-                .setContentText((description==null)?"Waiting for incoming payment":description)
+                .setContentText((description==null)? getString(R.string.service_notification_waiting) :description)
                 .setOngoing(true)
                 .setContentIntent(PendingIntent.getActivity(this,0,
                         new Intent(this, HomeActivity.class),PendingIntent.FLAG_CANCEL_CURRENT))
-                .addAction(R.drawable.ic_send,"SEND COIN",
+                .addAction(R.drawable.ic_send,getString(R.string.service_notification_button_send),
                         PendingIntent.getActivity(this,0, intent
                                 ,PendingIntent.FLAG_CANCEL_CURRENT))
                 .setPriority(NotificationCompat.PRIORITY_LOW);

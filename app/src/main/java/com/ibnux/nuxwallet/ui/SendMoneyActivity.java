@@ -42,18 +42,19 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
     boolean isSending = false;
     String transaction;
     AlamatAdapter alamatAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySendMoneyBinding.inflate(getLayoutInflater());
-        setTitle("Send NUX");
+        setTitle(R.string.send_coin);
         setContentView(binding.getRoot());
 
         adapter = new DompetSpinnerAdapter(this, R.layout.item_dompet);
         binding.spinnerWallet.setAdapter(adapter);
 
         if(adapter.getCount()==0){
-            Utils.showToast("You don't have any Wallet", this);
+            Utils.showToast(R.string.wallet_dont_have, this);
             finish();
         }
 
@@ -146,7 +147,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 isDoneChekFee = false;
-                binding.btnSend.setText("Calculate Fee");
+                binding.btnSend.setText(R.string.calculate_fee);
             }
 
             @Override
@@ -160,19 +161,19 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 isDoneChekFee = false;
-                binding.btnSend.setText("Calculate Fee");
+                binding.btnSend.setText(R.string.calculate_fee);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 isDoneChekFee = false;
-                binding.btnSend.setText("Calculate Fee");
+                binding.btnSend.setText(R.string.calculate_fee);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 isDoneChekFee = false;
-                binding.btnSend.setText("Calculate Fee");
+                binding.btnSend.setText(R.string.calculate_fee);
             }
         });
     }
@@ -184,7 +185,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                 Utils.log("cekFee: "+string);
                 binding.txtFee.setText(String.valueOf(string));
                 isDoneChekFee = true;
-                binding.btnSend.setText("Send Now");
+                binding.btnSend.setText(R.string.send_now);
                 binding.layoutStatus.setVisibility(View.GONE);
             }
 
@@ -227,18 +228,18 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
             startActivityForResult(new Intent(this, ScanActivity.class), 2346);
         }else if(v==binding.btnSend){
             if(binding.txtAlamat.getText().length()!=24){
-                binding.txtAlamat.setError("Invalid");
+                binding.txtAlamat.setError(getString(R.string.invalid));
                 binding.txtAlamat.requestFocus();
                 return;
             }
             if(binding.txtValue.getText().length()==0){
-                binding.txtValue.setError("Invalid");
+                binding.txtValue.setError(getString(R.string.invalid));
                 binding.txtValue.requestFocus();
                 return;
             }
-            if(binding.btnSend.getText().toString().toLowerCase().equals("calculate fee")){
+            if(!isDoneChekFee){
                 binding.layoutStatus.setVisibility(View.VISIBLE);
-                binding.txtStatus.setText("Checking Fee...");
+                binding.txtStatus.setText(R.string.checking_fee);
                 cekFee();
             }else{
                 startActivityForResult(new Intent(this,PinActivity.class), 4268);
@@ -259,7 +260,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void signingTX(String unsignedTransactionBytes, String secretPhrase){
-        binding.txtStatus.setText("Offline Signing transaction");
+        binding.txtStatus.setText(R.string.title_offline_transaction);
         Intent intent = new Intent(Aplikasi.app, OfflineSigningActivity.class);
         intent.putExtra("utb",unsignedTransactionBytes);
         intent.putExtra("secret",secretPhrase);
@@ -273,7 +274,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
             if(resultCode==RESULT_OK) {
                 if (data.hasExtra("SUKSES")) {
                     binding.layoutStatus.setVisibility(View.VISIBLE);
-                    binding.txtStatus.setText("Sending Money...");
+                    binding.txtStatus.setText(R.string.sending_coin);
                     isSending = true;
                     if(binding.offlineSigning.isChecked()) {
                         NuxCoin.sendCoin(dompet, binding.txtAlamat.getText().toString(), binding.txtValue.getText().toString(),
@@ -286,7 +287,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                                             } else {
                                                 isSending = false;
                                                 binding.layoutStatus.setVisibility(View.GONE);
-                                                Utils.showToast("Sending Coin Failed!!", SendMoneyActivity.this);
+                                                Utils.showToast(R.string.sending_coin_failed, SendMoneyActivity.this);
                                             }
                                         } catch (Exception e) {
                                             isSending = false;
@@ -315,10 +316,10 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                                     binding.layoutStatus.setVisibility(View.GONE);
                                     try{
                                         if(jsonObject.has("SENDCOIN") && jsonObject.getString("SENDCOIN").equals("SUCCESS")){
-                                            Utils.showToast("Sending Coin Success!!\nIt will Show after network finished forging", SendMoneyActivity.this);
+                                            Utils.showToast(R.string.sending_coin_success, SendMoneyActivity.this);
                                             finish();
                                         }else{
-                                            Utils.showToast("Sending Coin Failed!!", SendMoneyActivity.this);
+                                            Utils.showToast(R.string.sending_coin_failed, SendMoneyActivity.this);
                                         }
                                     }catch (Exception e){
                                         Utils.showToast(e.getMessage(), SendMoneyActivity.this);
@@ -359,7 +360,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                             binding.txtPK.setText(json.getString("public_key"));
                         }catch (Exception e){
                             e.printStackTrace();
-                            Utils.showToast("Unknown QRCode",this);
+                            Utils.showToast(R.string.unknown_qrcode,this);
                         }
                     }else if(dt.startsWith("APK:")){
                         dt = dt.substring(4);
@@ -381,7 +382,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                             binding.txtPK.setText(json.getString("public_key"));
                         }catch (Exception e){
                             e.printStackTrace();
-                            Utils.showToast("Unknown QRCode",this);
+                            Utils.showToast(R.string.unknown_qrcode,this);
                         }
                     }else if(dt.startsWith("APK:")){
                         dt = dt.substring(4);
@@ -402,10 +403,10 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                             binding.layoutStatus.setVisibility(View.GONE);
                             try{
                                 if(jsonObject.has("SENDCOIN") && jsonObject.getString("SENDCOIN").equals("SUCCESS")){
-                                    Utils.showToast("Sending Coin Success!!\nIt will Show after network finished forging", SendMoneyActivity.this);
+                                    Utils.showToast(R.string.sending_coin_success, SendMoneyActivity.this);
                                     finish();
                                 }else{
-                                    Utils.showToast("Sending Coin Failed!!", SendMoneyActivity.this);
+                                    Utils.showToast(R.string.sending_coin_failed, SendMoneyActivity.this);
                                 }
                             }catch (Exception e){
                                 Utils.showToast(e.getMessage(), SendMoneyActivity.this);
@@ -424,7 +425,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
                         }
                     });
                 else
-                    Utils.showToast("Failed to sign transaction\ntry use online signing",this);
+                    Utils.showToast(R.string.failed_signing_offline,this);
             }
 
         }

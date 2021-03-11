@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidnetworking.common.Priority;
 import com.ibnux.nuxwallet.Aplikasi;
+import com.ibnux.nuxwallet.Constants;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.data.Dompet_;
@@ -73,14 +74,14 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
                 notifyDataSetChanged();
                 return;
             }
-            String alamat = "NUX-TNHJ-LAC5-7DGL-HR7Y5";
+            String alamat = Constants.currency + Aplikasi.app.getString(R.string.first_wallet_address);
             if(ObjectBox.getDompet(alamat)==null) {
                 Dompet dompet = new Dompet();
-                dompet.nama = "iBNuX";
-                dompet.publicKey = "0f04b0abc5f2d2518cc7f56ef5225968901bbddadf0531a9c13645457d477860";
+                dompet.nama = Aplikasi.app.getString(R.string.first_wallet_name);
+                dompet.publicKey = Aplikasi.app.getString(R.string.first_wallet_public_key);
                 dompet.alamat = alamat;
                 dompet.isMe = false;
-                dompet.catatan = "Creator of this wallet :)";
+                dompet.catatan = Aplikasi.app.getString(R.string.first_wallet_note);
                 ObjectBox.addDompet(dompet);
                 reload(isMe);
             }else
