@@ -91,9 +91,9 @@ public class TransaksiAirdropAdapter extends RecyclerView.Adapter<TransaksiAirdr
             holder.txtWallet.setTag(tx.recipientRS);
         }
         if(Aplikasi.unixtime!=0L) {
-            holder.txtTgl.setText(Utils.toDate(tx.timestamp, "d"));
-            holder.txtThn.setText(Utils.toDate(tx.timestamp, "m")+"/"+Utils.toDate(tx.timestamp, "y"));
-            holder.txtJam.setText(Utils.toDate(tx.timestamp, "H")+":"+Utils.toDate(tx.timestamp, "m"));
+            holder.txtTgl.setText(Utils.toDate(tx.timestampInsert, "d"));
+            holder.txtThn.setText(Utils.toDate(tx.timestampInsert, "m")+"/"+Utils.toDate(tx.timestampInsert, "y"));
+            holder.txtJam.setText(Utils.toDate(tx.timestampInsert, "H")+":"+Utils.toDate(tx.timestampInsert, "m"));
         }else{
             holder.cardTgl.setVisibility(View.GONE);
         }

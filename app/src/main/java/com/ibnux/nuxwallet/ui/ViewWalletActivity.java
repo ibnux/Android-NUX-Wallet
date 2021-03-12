@@ -57,7 +57,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         binding = ActivityViewWalletBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setTitle(R.string.coin_name);
+        setTitle(R.string.app_name);
         Intent intent = getIntent();
         if(!intent.hasExtra("alamat")) finish();
         alamat = intent.getStringExtra("alamat");
@@ -267,7 +267,7 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
             if(dompet.id==0) return;
             //Ask Name
             AlertDialog.Builder builder = new AlertDialog.Builder(ViewWalletActivity.this);
-            builder.setTitle(R.string.ask_wallet_name);
+            builder.setTitle(R.string.ask_wallet_note);
             final EditText input = new EditText(ViewWalletActivity.this);
             input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
             input.setGravity(Gravity.CENTER_HORIZONTAL);

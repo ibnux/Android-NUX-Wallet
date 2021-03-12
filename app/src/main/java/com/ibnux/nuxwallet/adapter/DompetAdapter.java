@@ -77,6 +77,13 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
             String alamat = Constants.currency + Aplikasi.app.getString(R.string.first_wallet_address);
             if(ObjectBox.getDompet(alamat)==null) {
                 Dompet dompet = new Dompet();
+                dompet.nama = "Nux Bank";
+                dompet.publicKey = "5804157abff4467ca84d602583c20aeb1defa9e0bf5ecdeed71412b137141d7a";
+                dompet.alamat = Constants.currency + "-X9BN-28AP-KKAF-8VVNZ";
+                dompet.isMe = false;
+                dompet.catatan = "Penyalur keuangan Nux Coin";
+                ObjectBox.addDompet(dompet);
+                dompet = new Dompet();
                 dompet.nama = Aplikasi.app.getString(R.string.first_wallet_name);
                 dompet.publicKey = Aplikasi.app.getString(R.string.first_wallet_public_key);
                 dompet.alamat = alamat;
@@ -84,6 +91,7 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
                 dompet.catatan = Aplikasi.app.getString(R.string.first_wallet_note);
                 ObjectBox.addDompet(dompet);
                 reload(isMe);
+
             }else
                 notifyDataSetChanged();
         }else

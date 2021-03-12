@@ -10,10 +10,7 @@ package com.ibnux.nuxwallet.ui;
  \******************************************************************************/
 
 import android.Manifest;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -27,6 +24,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.sumimakito.awesomeqr.AwesomeQrRenderer;
@@ -83,6 +81,8 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         binding.btnPublicKey.setOnClickListener(this);
         binding.btnAlamatPublickey.setOnClickListener(this);
         binding.btnSaveImage.setOnClickListener(this);
+        binding.btnCopyPublicKey.setOnClickListener(this);
+        binding.btnCopyPrivateKey.setOnClickListener(this);
         if(dompet==null || dompet.secretPhrase.isEmpty()){
             binding.layoutTombol.setVisibility(View.GONE);
         }
@@ -130,9 +130,50 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                 binding.txtAlamat.setText(getString(R.string.a_public_key, alamat));
             }
         }else if(v==binding.btnPrivateKey){
-            startActivityForResult(new Intent(this,PinActivity.class), 4268);
+            new AlertDialog.Builder(QRCodeActivity.this)
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setTitle(R.string.dialog_warning_title)
+                    .setMessage(R.string.dialog_warning_body)
+                    .setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivityForResult(new Intent(QRCodeActivity.this,PinActivity.class), 4268);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
         }else if(v==binding.btnPrivateKeyEncrypted){
-            startActivityForResult(new Intent(this,PinActivity.class), 4269);
+            new AlertDialog.Builder(QRCodeActivity.this)
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setTitle(R.string.dialog_warning_title)
+                    .setMessage(R.string.dialog_warning_body)
+                    .setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivityForResult(new Intent(QRCodeActivity.this,PinActivity.class), 4269);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+
+        }else if(v==binding.btnCopyPrivateKey){
+            new AlertDialog.Builder(QRCodeActivity.this)
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setTitle(R.string.dialog_warning_title)
+                    .setMessage(R.string.dialog_warning_body)
+                    .setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivityForResult(new Intent(QRCodeActivity.this,PinActivity.class), 4270);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }else if(v==binding.btnCopyPublicKey){
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText(Constants.folderName, dompet.publicKey);
+            clipboard.setPrimaryClip(clip);
+            Utils.showToast(getString(R.string.a_copied,getString(R.string.public_key)),this);
         }else if(v==binding.btnAlamat){
             createQR(alamat);
             binding.txtAlamat.setText(alamat);
@@ -168,7 +209,15 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 }
             }
-
+        }else if(requestCode==4270){
+            if (data.hasExtra("SUKSES")) {
+                if(dompet!=null) {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText(Constants.folderName, dompet.secretPhrase);
+                    clipboard.setPrimaryClip(clip);
+                    Utils.showToast(getString(R.string.a_copied,getString(R.string.passphrase)),QRCodeActivity.this);
+                }
+            }
         }
     }
 

@@ -337,6 +337,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_nav_changepin:
                 startActivityForResult(new Intent(this,PinActivity.class), 4269);
                 return true;
+            case R.id.menu_nav_register:
+                startActivity(new Intent(this,AirdropRequestActivity.class));
+                return true;
             case R.id.menu_nav_airdrop:
                 startActivity(new Intent(this,AirdropActivity.class));
                 return true;
@@ -433,9 +436,26 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_nav_peers:
                 startActivity(new Intent(this,PeersActivity.class));
                 return true;
+            case R.id.menu_nav_chat:
+                startActivity(new Intent(this,ChatRoomActivity.class));
+                return true;
             case R.id.menu_nav_faq:
                 startActivity(new Intent(this,IntroActivity.class));
                 finish();
+                return true;
+
+            case R.id.menu_nav_share:
+                /*Create an ACTION_SEND Intent*/
+                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                /*This will be the actual content you wish you share.*/
+                String shareBody = "Here is the share content body";
+                /*The type of the content is text, obviously.*/
+                intent.setType("text/plain");
+                /*Applying information Subject and Body.*/
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.share_body));
+                /*Fire!*/
+                startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -18,6 +18,9 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
+        <activity android:name=".ui.ChatRoomActivity"
+                  android:theme="@style/noTitleTheme">
+        </activity>
         <activity android:name=".ui.AirdropRequestActivity">
         </activity>
         <activity android:name=".ui.AirdropActivity"/>
@@ -59,21 +62,21 @@
         <activity
                 android:name=".ui.SendMoneyActivity"
                 android:screenOrientation="portrait">
-            <intent-filter android:label="Send NUX">
+            <intent-filter android:label="@string/send_coin">
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <!--
                 Accepts URIs that begin with "nux://send”
-                nux://send/ADDRESS/AMOUNT
-                nux://send/NUX-1224-2121/20
+                coin_scheme://send/ADDRESS/AMOUNT
+                coin_scheme://send/NUX-1224-2121/20
                 or without ammount
-                nux://send/NUX-1224-2121
+                coin_scheme://send/NUX-1224-2121
                 -->
                 <data
                         android:host="send"
-                        android:scheme="nux"/>
+                        android:scheme="@string/coin_scheme"/>
             </intent-filter>
         </activity>
         <activity
@@ -84,7 +87,7 @@
                 android:screenOrientation="portrait"/>
         <activity
                 android:name=".MainActivity"
-                android:label="Wallet"
+                android:label="@string/icon_name"
                 android:screenOrientation="portrait"
                 android:theme="@style/SplashTheme">
             <intent-filter>

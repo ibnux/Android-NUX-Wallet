@@ -70,12 +70,12 @@ public class NuxCoin {
                 });
     }
 
-    public static void requestAirdop(Dompet forDompet, String noHP, String otp, Priority priority, TextCallback callback){
+    public static void requestAirdop(Dompet forDompet, String noHP, String otp, TextCallback callback){
         Utils.log("requestAirdop: "+forDompet.alamat);
         String server = ObjectBox.getServer();
         Utils.log("requestAirdop "+ Constants.airdropServer+"/?hp="+noHP+"&wallet="+forDompet.alamat+"&pk="+forDompet.publicKey+"&otp="+otp);
         AndroidNetworking.get(Constants.airdropServer+"/?hp="+noHP+"&wallet="+forDompet.alamat+"&pk="+forDompet.publicKey+"&otp="+otp)
-                .setPriority(priority)
+                .setPriority(Priority.HIGH)
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override

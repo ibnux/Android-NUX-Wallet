@@ -19,24 +19,32 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                    android:text="Generate QR Code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView2"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnAlamat"
+                        android:id="@+id/btnPrivateKeyEncrypted"
                         style="@style/Button.Accent"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:padding="0dp"
-                        android:text="@string/address"
+                        android:text="@string/encrypted_passphrase"
+                        android:textColor="@color/red_100"
                         android:textSize="@dimen/_10ssp"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btnPrivateKey"
                         style="@style/Button.Accent"
+                        android:textColor="@color/red_100"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
@@ -52,6 +60,16 @@
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnAlamat"
+                        style="@style/Button.Accent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:padding="0dp"
+                        android:text="@string/address"
+                        android:textSize="@dimen/_10ssp"/>
+
+                <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btnPublicKey"
                         style="@style/Button.Accent"
                         android:layout_width="0dp"
@@ -61,15 +79,6 @@
                         android:text="@string/public_key"
                         android:textSize="@dimen/_10ssp"/>
 
-                <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnPrivateKeyEncrypted"
-                        style="@style/Button.Accent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:padding="0dp"
-                        android:text="@string/encrypted_passphrase"
-                        android:textSize="@dimen/_10ssp"/>
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton
@@ -137,6 +146,28 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/copy_address"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnCopyPublicKey"
+                    style="@style/Button.Accent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/copy_public_key"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnCopyPrivateKey"
+                    style="@style/Button.Accent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/red_100"
+                    android:text="@string/copy_private_key"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

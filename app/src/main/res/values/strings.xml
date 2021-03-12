@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">NUX Wallet</string>
+    <string name="icon_name">Wallet</string>
     <string name="coin_name">NUX Coin</string>
+    <string name="coin_scheme" translatable="false">sendnux</string>
     <string name="app_intro_title_1">Apa itu cryptocurrency?</string>
     <string name="app_intro_description_1">Cryptocurrency (mata uang crypto) adalah sebuah mata uang digital atau virtual yang dirancang sebagai alat tukar. Cryptocurrency menggunakan sistem kriptografi untuk mengamankan dan memverifikasi setiap transaksi. Semua transaksi disimpan di BlockchainCryptocurrency (mata uang crypto) adalah sebuah mata uang digital atau virtual yang dirancang sebagai alat tukar. Cryptocurrency menggunakan sistem kriptografi untuk mengamankan dan memverifikasi setiap transaksi. Semua transaksi disimpan di Blockchain</string>
     <string name="app_intro_title_2">Apa itu BlockChain?</string>
@@ -10,7 +12,7 @@
     <string name="app_intro_title_4">Apa itu Public key?</string>
     <string name="app_intro_description_4">public key merupakan kunci kriptografi yang bisa anda bagikan ke orang lain, digunakan untuk enkripsi data digital, dan bisa dibuka dengan Private key</string>
     <string name="app_intro_title_5">Apa itu Private key?</string>
-    <string name="app_intro_description_5">Private key merupakan kunci kriptografi yang rahasia, hanya anda yang boleh tahu, tidak boleh dibagikan, digunakan untuk membuka data hasil enkripsi dari Public key yang anda bagikan</string>
+    <string name="app_intro_description_5">Private key merupakan kunci kriptografi yang rahasia, hanya anda yang boleh tahu, tidak boleh dibagikan, digunakan untuk menandatangani transaksi secara digital dan mengenkripsi data</string>
     <string name="app_intro_title_6">Apa itu Passphrase?</string>
     <string name="app_intro_description_6">Passphrase pada Cryptocurrency disini merupakan Private key, dan tidak boleh anda bagikan ke orang lain, RAHASIA, atau uang anda di dompet cryptocurrency bisa dicuri</string>
     <string name="app_intro_title_7">Apa itu Biaya transfer (Fee)?</string>
@@ -19,8 +21,8 @@
     <string name="app_intro_description_8">Nux Coin merupakan Cryptocurrency yang dibuat oleh iBNuX dari source code Cryptocurrency NXT</string>
     <string name="app_intro_title_9">Apakah Nux Coin bernilai?</string>
     <string name="app_intro_description_9">Nux Coin bisa bernilai, bisa tidak, tergantung kepercayaan penggunanya, dan apakah sering digunakan sehari hari, saat ini Nux Coin hanya untuk belajar Cryptocurrency</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_intro_title_10">Apakah Airdrop itu?</string>
+    <string name="app_intro_description_10">Untuk Cryptocurrency yang coinnya sudah dibuat, biasanya akan dibagikan ke pengguna secara cuma-cuma, agar bisa digunakan langsung untuk transaksi, sebagai stimulus awal. Disini kamu bisa gunakan menu Request Airdrop jika ingin saldo cuma-cuma, ajak juga temanmu untuk belajar CryptoCurrency</string>
 
     <string name="first_wallet_address" translatable="false">-TNHJ-LAC5-7DGL-HR7Y5</string>
     <string name="first_wallet_name" translatable="false">iBNuX</string>
@@ -38,6 +40,9 @@
     <string name="service_notification_received_message">"Received %1$s NUX for %2$s</string>
     <string name="service_notification_sending_title">You sent a coin from %1$s</string>
     <string name="service_notification_sending_message">"%1$s NUX for %2$s has been sent</string>
+
+    <string name="chat">Chat</string>
+    <string name="chat_url" translatable="false">https://tlk.io/nuxcoin</string>
 
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
@@ -73,7 +78,7 @@
     <string name="tx_listener">Transaction Listener</string>
     <string name="faq">FAQ</string>
     <string name="check_for_update">Check for update</string>
-    <string name="register">Request Balance</string>
+    <string name="register">Request Airdrop</string>
 
     <string name="error_decrypting">Failed to decrypt passphrase\nIs PIN valid?\n\n</string>
     <string name="unknown_qrcode">Unknown QRCode</string>
@@ -132,7 +137,7 @@
     <string name="sending_coin_success">Sending Coin Success!!\nIt will Show after network finished forging</string>
     <string name="sending_coin_success_get_tx">Sending Coin Success!!\nGetting transaction detail…</string>
     <string name="sending_coin_success_no_tx">Sending COIN SUCCESS, but get Transaction failed</string>
-    <string name="failed_get_tx">Failed to get transacation</string>
+    <string name="failed_get_tx">Failed to get transaction</string>
 
     <string name="getting_balance">Getting balance…</string>
     <string name="account_not_registered">Account not registered, need balance to register</string>
@@ -167,11 +172,18 @@
     <string name="failed_import_file">Failed import file\n\n%1$s</string>
     <string name="failed_import">Failed to import\n\n%1$s</string>
     <string name="success_import_wallet">finished import wallet</string>
-    <string name="send_message">Message (Optional)\nIncrease Fee\nMessage is public</string>
+    <string name="send_message">Message (Optional)\nIncrease Fee\nMessage is public\nMore message more Fee</string>
     <string name="send_airdrop">Send Airdrop</string>
     <string name="my_wallet">My Wallet</string>
     <string name="address_book">Address Book</string>
     <string name="recipient_field_hint">NUX-ADDRESS-RECIPIENTS</string>
     <string name="recipient_public_key">PublicKey recipient (Optional)</string>
-    <string name="test">test</string>
+    <string name="share_subject">Yuk belajar CryptoCurrency menggunakan Nux Coin</string>
+    <string name="share_using">Bagikan menggunakan</string>
+    <string name="share_body">Yuk belajar CryptoCurrency menggunakan Nux Coin di https://coin.ibnux.net</string>
+    <string name="copy_public_key">Copy Public Key</string>
+    <string name="copy_private_key">Copy Private Key</string>
+
+    <string name="dialog_warning_title">WARNING!!</string>
+    <string name="dialog_warning_body">Private key is private, don\'t share to anyone, Copying just for Backup, and backup in secure place, write it down in paper or anything</string>
 </resources>

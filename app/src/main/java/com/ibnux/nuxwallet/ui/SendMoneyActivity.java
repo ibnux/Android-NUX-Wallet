@@ -47,8 +47,8 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySendMoneyBinding.inflate(getLayoutInflater());
-        setTitle(R.string.send_coin);
         setContentView(binding.getRoot());
+        setTitle(R.string.send_coin);
 
         adapter = new DompetSpinnerAdapter(this, R.layout.item_dompet);
         binding.spinnerWallet.setAdapter(adapter);
@@ -60,7 +60,7 @@ public class SendMoneyActivity extends AppCompatActivity implements View.OnClick
 
         Intent i = getIntent();
         if(i.getData()!=null) {
-            //dari url
+            //TODO dari url
         }else if(i.hasExtra("from")){
             from = i.getStringExtra("from");
             binding.spinnerWallet.setSelection(adapter.getPosition(from));
