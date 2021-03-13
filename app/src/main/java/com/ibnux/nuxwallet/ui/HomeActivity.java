@@ -469,12 +469,6 @@ public class HomeActivity extends AppCompatActivity implements
             case R.id.menu_nav_peers:
                 startActivity(new Intent(this,PeersActivity.class));
                 return true;
-            case R.id.menu_nav_chat:
-                Intent iweb = new Intent(this, WebViewActivity.class);
-                iweb.putExtra("title", getString(R.string.chat));
-                iweb.putExtra("url",getString(R.string.chat_url));
-                startActivity(iweb);
-                return true;
             case R.id.menu_nav_faq:
                 startActivity(new Intent(this,IntroActivity.class));
                 finish();

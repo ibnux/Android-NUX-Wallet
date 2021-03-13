@@ -42,7 +42,6 @@
     <string name="service_notification_sending_message">"%1$s NUX for %2$s has been sent</string>
 
     <string name="chat">Chat</string>
-    <string name="chat_url" translatable="false">https://tlk.io/nuxcoin</string>
 
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>

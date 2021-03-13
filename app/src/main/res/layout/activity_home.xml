@@ -103,7 +103,7 @@
 
     <fragment
             android:id="@+id/navigation_drawer"
-            android:layout_width="@dimen/_240sdp"
+            android:layout_width="@dimen/_300sdp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             class="com.ibnux.nuxwallet.ui.NavigationDrawerFragment"
