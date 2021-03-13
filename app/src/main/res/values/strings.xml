@@ -191,6 +191,6 @@
     <string name="dialog_share_referral_title">Simulasi Referral Link</string>
     <string name="dialog_share_referral_body">Dapatkan tambahan coin dengan mengajak teman kamu menggunakan Nux Coin.\nReferral: %1$s</string>
     <string name="dialog_share_referral_text">Yuk belajar Cryptocurrency dengan Nux Coin, unduh di: %1$s</string>
-    <string name="dialog_share_referral_url">https://airdrop.ibnux.org/?wallet=%1$s</string>
+    <string name="dialog_share_referral_url" translatable="false">https://airdrop.ibnux.net/?wallet=%1$s</string>
     <string name="dialog_share_warning">Hanya untuk dompet sendiri, buka dompet anda</string>
 </resources>
