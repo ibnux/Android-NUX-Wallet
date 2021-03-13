@@ -106,7 +106,7 @@ public class NavigationDrawerFragment extends Fragment implements NavCallback {
         String navTemp = Aplikasi.sp.getString("navigasi","[]");
         long navTime = Aplikasi.sp.getLong("navigasi_time",0L);
         Utils.log("navTime: "+navTime);
-        if(System.currentTimeMillis()-navTime<0){
+        if(System.currentTimeMillis()-navTime<36000){
             Utils.log("navigasi cache");
             try{
                 JsonArray json = new JsonParser().parse(navTemp).getAsJsonArray();
