@@ -21,5 +21,5 @@ public class Constants {
 
 
     //Minutes
-    public static final int defaultTxTimeListener = 60;
+    public static final int defaultTxTimeListener = 0;
 }

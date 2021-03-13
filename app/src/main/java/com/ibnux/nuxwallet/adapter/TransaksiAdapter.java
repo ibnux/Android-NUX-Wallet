@@ -115,7 +115,7 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.MyVi
         if(Aplikasi.unixtime!=0L) {
             holder.cardTgl.setVisibility(View.VISIBLE);
             Utils.log("UnixTime "+Aplikasi.unixtime);
-            long time = tx.timestampInsert;
+            long time = Aplikasi.unixtime + (tx.timestamp*1000L);
             Utils.log("BlockTime "+time);
             holder.txtTgl.setText(Utils.toDate(time, "d"));
             holder.txtThn.setText(Utils.toDate(time, "m")+"/"+Utils.toDate(time, "y"));

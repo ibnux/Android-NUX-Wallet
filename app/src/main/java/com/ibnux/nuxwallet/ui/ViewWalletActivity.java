@@ -9,6 +9,7 @@ package com.ibnux.nuxwallet.ui;
  * ANY IMPLIED WARRANTY.                                                      *
  \******************************************************************************/
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -18,6 +19,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -42,8 +45,15 @@ import com.ibnux.nuxwallet.utils.JsonCallback;
 import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class ViewWalletActivity extends AppCompatActivity implements View.OnClickListener, TransaksiAdapter.TransaksiCallback,JsonCallback {
     ActivityViewWalletBinding binding;
@@ -416,6 +426,55 @@ public class ViewWalletActivity extends AppCompatActivity implements View.OnClic
             Intent intent = new Intent(this, ViewWalletActivity.class);
             intent.putExtra("alamat", alamat);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.wallet_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_nav_referral:
+                if(dompet.isMe) {
+                    new androidx.appcompat.app.AlertDialog.Builder(ViewWalletActivity.this)
+                            .setIcon(R.mipmap.ic_launcher)
+                            .setTitle(R.string.dialog_share_referral_title)
+                            .setMessage(
+                                    getString(
+                                            R.string.dialog_share_referral_body,
+                                            getString(
+                                                    R.string.dialog_share_referral_url,
+                                                    dompet.alamat
+                                            )
+                                    )
+                            )
+                            .setPositiveButton(R.string.share, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                                    intent.setType("text/plain");
+                                    intent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
+                                    intent.putExtra(android.content.Intent.EXTRA_TEXT, getString(
+                                            R.string.dialog_share_referral_text,
+                                            getString(
+                                                    R.string.dialog_share_referral_url,
+                                                    dompet.alamat
+                                            )
+                                    ));
+                                    startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                }else{
+                    Utils.showToast(R.string.dialog_share_warning,this);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

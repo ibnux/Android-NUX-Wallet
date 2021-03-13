@@ -111,7 +111,6 @@ public class BackgroundService extends Service {
                     if(jml>0) {
                         int ada = 0;
                         for (int n = 0; n < jml; n++) {
-                            //TODO delete log
                             Utils.log(transactions.getJSONObject(n).toString());
                             JSONObject json = transactions.getJSONObject(n);
                             Transaksi tx = new Gson().fromJson(json.toString(),Transaksi.class);

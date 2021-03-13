@@ -245,6 +245,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
         if(Aplikasi.unixtime==0L){
             NuxCoin.getTime(null);
+        }else{
+            Utils.log(Aplikasi.unixtime);
         }
     }
 

@@ -157,7 +157,7 @@
     <string name="update_github_repo">Android-NUX-Wallet</string>
 
     <string name="dialog_tx_interval_title">Interval periksa transaksi (dalam menit)</string>
-    <string name="dialog_tx_interval_hint">dalam menit, 0 untuk mematikan cek otomatis</string>
+    <string name="dialog_tx_interval_hint">0 untuk matikan cek otomatis</string>
     <string name="dialog_backup_wallet_title">Backup Semua Dompet</string>
     <string name="dialog_backup_wallet_message">Dompet akan di enkripsi dengan PIN aplikasi, jika lupa PIN, maka tidak dapat di-restore</string>
     <string name="dialog_restore_wallet_title">Restore Semua Dompet</string>
@@ -178,7 +178,14 @@
     <string name="share_body">Yuk belajar CryptoCurrency menggunakan Nux Coin di https://coin.ibnux.net</string>
     <string name="copy_public_key">Copy Public Key</string>
     <string name="copy_private_key">Copy Private Key</string>
+    <string name="warning_forgot_pin">Data akan hilang jika lupa PIN</string>
 
     <string name="dialog_warning_title">WARNING!!</string>
     <string name="dialog_warning_body">Private key bersifat rahasia, jangan dibagikan ke siapapun, di-copy hanya untuk di-backup, simpan di tempat aman, tulis di kertas dan sembunyikan, atau lainnya</string>
+
+    <string name="dialog_share_referral_title">Simulasi Referral Link</string>
+    <string name="dialog_share_referral_body">Dapatkan tambahan coin dengan mengajak teman kamu menggunakan Nux Coin.\nReferral: %1$s</string>
+    <string name="dialog_share_referral_text">Yuk belajar Cryptocurrency dengan Nux Coin, unduh di: %1$s</string>
+    <string name="dialog_share_referral_url">https://airdrop.ibnux.org/?wallet=%1$s</string>
+    <string name="dialog_share_warning">Hanya untuk dompet sendiri, buka dompet anda</string>
 </resources>
