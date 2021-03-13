@@ -24,7 +24,6 @@ public class WebViewActivity extends AppCompatActivity implements AdvancedWebVie
         mWebView.setListener(this, this);
         mWebView.setMixedContentAllowed(false);
         Intent intent = getIntent();
-        setTitle(intent.getStringExtra("title"));
         swipe.post(new Runnable() {
             @Override
             public void run() {
