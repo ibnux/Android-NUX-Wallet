@@ -24,10 +24,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
 import com.google.gson.Gson;
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.BuildConfig;
@@ -37,15 +35,7 @@ import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.kripto.Curve25519;
 import com.scottyab.aescrypt.AESCrypt;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;

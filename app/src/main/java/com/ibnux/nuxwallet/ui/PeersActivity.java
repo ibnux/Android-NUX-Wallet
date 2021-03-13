@@ -16,10 +16,8 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.adapter.ServerAdapter;
@@ -29,7 +27,6 @@ import com.ibnux.nuxwallet.databinding.ActivityPeersBinding;
 import com.ibnux.nuxwallet.utils.LongCallback;
 import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 

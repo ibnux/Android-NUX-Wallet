@@ -10,7 +10,6 @@ package com.ibnux.nuxwallet.utils;
  \******************************************************************************/
 
 import android.widget.TextView;
-
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
@@ -23,7 +22,6 @@ import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.data.Transaksi;
-
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -71,9 +69,6 @@ public class NuxCoin {
     }
 
     public static void requestAirdop(Dompet forDompet, String noHP, String otp, TextCallback callback){
-        Utils.log("requestAirdop: "+forDompet.alamat);
-        String server = ObjectBox.getServer();
-        Utils.log("requestAirdop "+ Constants.airdropServer+"/?hp="+noHP+"&wallet="+forDompet.alamat+"&pk="+forDompet.publicKey+"&otp="+otp);
         AndroidNetworking.get(Constants.airdropServer+"/?hp="+noHP+"&wallet="+forDompet.alamat+"&pk="+forDompet.publicKey+"&otp="+otp)
                 .setPriority(Priority.HIGH)
                 .build()
@@ -488,6 +483,23 @@ public class NuxCoin {
                         if(callback!=null){
                             callback.onErrorCallback(error.getErrorCode(), error.getErrorBody());
                         }
+                    }
+                });
+    }
+
+    public static void getFromUrl(String url,TextCallback callback){
+        AndroidNetworking.get(url)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        callback.onTextCallback(response);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        callback.onErrorCallback(anError.getErrorCode(),anError.getMessage());
                     }
                 });
     }

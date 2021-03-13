@@ -25,14 +25,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.github.javiersantos.appupdater.AppUpdater;
 import com.github.javiersantos.appupdater.enums.Display;
 import com.github.javiersantos.appupdater.enums.UpdateFrom;
@@ -63,9 +63,13 @@ import com.scottyab.aescrypt.AESCrypt;
 import java.io.File;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener, DompetAdapter.DompetCallback,TabLayout.OnTabSelectedListener {
+public class HomeActivity extends AppCompatActivity implements
+        View.OnClickListener, DompetAdapter.DompetCallback,
+        TabLayout.OnTabSelectedListener, NavigationDrawerFragment.NavigationDrawerCallbacks {
     ActivityHomeBinding binding;
     DompetAdapter adapter;
+    private Toolbar toolbar;
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,10 +89,25 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(binding.listDompet);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // This will display an Up icon (<-), we will replace it with hamburger later
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
         binding.tabLayout.addOnTabSelectedListener(this);
         int txtime = Aplikasi.sp.getInt("defaultTxTimeListener", Constants.defaultTxTimeListener);
         if(txtime>0) {
-            startActivityForResult(new Intent(this, PinActivity.class), 4268);
             startBackgroundServices();
         }
         new AppUpdater(this)
@@ -115,6 +134,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
+        startActivityForResult(new Intent(this, PinActivity.class), 4268);
     }
 
     public void startBackgroundServices(){
@@ -315,6 +336,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     };
 
     @Override
+    public void onNavigationDrawerItemSelected(int position) {
+
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelectedTitle(String title) {
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home_menu,menu);
         return super.onCreateOptionsMenu(menu);
@@ -439,7 +470,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this,PeersActivity.class));
                 return true;
             case R.id.menu_nav_chat:
-                startActivity(new Intent(this,ChatRoomActivity.class));
+                Intent iweb = new Intent(this, WebViewActivity.class);
+                iweb.putExtra("title", getString(R.string.chat));
+                iweb.putExtra("url",getString(R.string.chat_url));
+                startActivity(iweb);
                 return true;
             case R.id.menu_nav_faq:
                 startActivity(new Intent(this,IntroActivity.class));

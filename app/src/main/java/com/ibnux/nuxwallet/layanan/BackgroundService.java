@@ -10,10 +10,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.StrictMode;
-
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.Priority;
@@ -21,16 +19,11 @@ import com.google.gson.Gson;
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.Constants;
 import com.ibnux.nuxwallet.R;
-import com.ibnux.nuxwallet.data.Dompet;
-import com.ibnux.nuxwallet.data.Dompet_;
-import com.ibnux.nuxwallet.data.ObjectBox;
-import com.ibnux.nuxwallet.data.Transaksi;
-import com.ibnux.nuxwallet.data.Transaksi_;
+import com.ibnux.nuxwallet.data.*;
 import com.ibnux.nuxwallet.ui.HomeActivity;
 import com.ibnux.nuxwallet.ui.SendMoneyActivity;
 import com.ibnux.nuxwallet.ui.ViewWalletActivity;
 import com.ibnux.nuxwallet.utils.Utils;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 

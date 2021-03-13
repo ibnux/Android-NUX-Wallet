@@ -2,9 +2,7 @@ package com.ibnux.nuxwallet.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import com.github.appintro.AppIntro;
 import com.github.appintro.AppIntroFragment;
 import com.ibnux.nuxwallet.Aplikasi;

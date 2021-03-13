@@ -193,4 +193,6 @@
     <string name="dialog_share_referral_text">Yuk belajar Cryptocurrency dengan Nux Coin, unduh di: %1$s</string>
     <string name="dialog_share_referral_url" translatable="false">https://airdrop.ibnux.net/?wallet=%1$s</string>
     <string name="dialog_share_warning">Hanya untuk dompet sendiri, buka dompet anda</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>

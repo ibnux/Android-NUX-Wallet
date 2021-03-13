@@ -18,7 +18,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".ui.ChatRoomActivity"
+        <activity android:name=".ui.WebViewActivity"
                   android:theme="@style/noTitleTheme">
         </activity>
         <activity android:name=".ui.AirdropRequestActivity">

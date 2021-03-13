@@ -15,10 +15,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.adapter.AlamatAdapter;
@@ -30,7 +28,6 @@ import com.ibnux.nuxwallet.utils.JsonCallback;
 import com.ibnux.nuxwallet.utils.LongCallback;
 import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
-
 import org.json.JSONObject;
 
 public class SendMoneyActivity extends AppCompatActivity implements View.OnClickListener {

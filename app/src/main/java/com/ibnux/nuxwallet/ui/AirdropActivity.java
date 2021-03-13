@@ -14,12 +14,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.Constants;
 import com.ibnux.nuxwallet.R;
@@ -33,7 +31,6 @@ import com.ibnux.nuxwallet.databinding.ActivityAirdropBinding;
 import com.ibnux.nuxwallet.utils.JsonCallback;
 import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
-
 import org.json.JSONObject;
 
 import java.util.List;

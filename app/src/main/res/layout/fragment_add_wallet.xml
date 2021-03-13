@@ -22,7 +22,7 @@
             android:layout_height="@dimen/_48sdp"
             android:gravity="center"
             android:textSize="@dimen/_12ssp"
-            android:text="Create or Input PassPhrase"
+            android:text="@string/create_wallet"
             android:theme="@style/Button.Primary"/>
 
     <androidx.appcompat.widget.AppCompatButton

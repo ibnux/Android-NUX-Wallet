@@ -4,31 +4,32 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.utils.Utils;
 import im.delight.android.webview.AdvancedWebView;
 
-public class ChatRoomActivity extends AppCompatActivity implements AdvancedWebView.Listener {
+public class WebViewActivity extends AppCompatActivity implements AdvancedWebView.Listener {
     private AdvancedWebView mWebView;
     SwipeRefreshLayout swipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_room);
-        setTitle(R.string.chat);
+        setContentView(R.layout.activity_webview);
         mWebView = findViewById(R.id.webview);
         swipe = findViewById(R.id.swipe);
         mWebView.setListener(this, this);
         mWebView.setMixedContentAllowed(false);
+        Intent intent = getIntent();
+        setTitle(intent.getStringExtra("title"));
         swipe.post(new Runnable() {
             @Override
             public void run() {
                 swipe.setRefreshing(true);
-                mWebView.loadUrl(getString(R.string.chat_url));
+                mWebView.loadUrl(intent.getStringExtra("url"));
             }
         });
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

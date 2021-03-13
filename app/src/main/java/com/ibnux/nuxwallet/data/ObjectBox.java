@@ -1,10 +1,8 @@
 package com.ibnux.nuxwallet.data;
 
 import android.content.Context;
-
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.Constants;
-
 import io.objectbox.Box;
 import io.objectbox.BoxStore;
 

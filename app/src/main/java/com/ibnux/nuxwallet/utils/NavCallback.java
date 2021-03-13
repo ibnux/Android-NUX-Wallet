@@ -1,4 +1,6 @@
-package com.ibnux.nuxwallet;
+package com.ibnux.nuxwallet.utils;
+
+import com.ibnux.nuxwallet.data.Navigasi;
 
 /******************************************************************************\
  * GNU GENERAL PUBLIC LICENSE                                                 *
@@ -9,18 +11,6 @@ package com.ibnux.nuxwallet;
  * ANY IMPLIED WARRANTY.                                                      *
  \******************************************************************************/
 
-public class Constants {
-    public static final int limitGetTX = 5;
-
-    // still you need to edit files in assets folder
-    public static final String currency = "NUX";
-    public static final String defaultServer = "https://coin.ibnux.net";
-    public static final String airdropServer = "https://airdrop.ibnux.net/";
-    public static final String navigasiServer = "https://airdrop.ibnux.net/pages/";
-    public static final String folderName = "CoinNux";
-    public static final int default_fee = 500;
-
-
-    //Minutes
-    public static final int defaultTxTimeListener = 0;
+public interface NavCallback {
+    public void onNavCallback(Navigasi navigasi);
 }

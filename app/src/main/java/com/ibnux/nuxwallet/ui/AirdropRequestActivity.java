@@ -1,10 +1,9 @@
 package com.ibnux.nuxwallet.ui;
 
-import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.adapter.DompetSpinnerAdapter;

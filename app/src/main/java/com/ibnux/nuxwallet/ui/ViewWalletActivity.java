@@ -9,13 +9,8 @@ package com.ibnux.nuxwallet.ui;
  * ANY IMPLIED WARRANTY.                                                      *
  \******************************************************************************/
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Gravity;
@@ -23,13 +18,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.androidnetworking.common.Priority;
 import com.google.gson.Gson;
 import com.ibnux.nuxwallet.Aplikasi;
@@ -44,16 +37,8 @@ import com.ibnux.nuxwallet.databinding.ActivityViewWalletBinding;
 import com.ibnux.nuxwallet.utils.JsonCallback;
 import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
-
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.List;
 
 public class ViewWalletActivity extends AppCompatActivity implements View.OnClickListener, TransaksiAdapter.TransaksiCallback,JsonCallback {
     ActivityViewWalletBinding binding;

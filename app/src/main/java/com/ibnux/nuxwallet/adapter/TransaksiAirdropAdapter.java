@@ -14,12 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.ibnux.nuxwallet.Aplikasi;
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.data.ObjectBox;

@@ -22,11 +22,9 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.github.sumimakito.awesomeqr.AwesomeQrRenderer;
 import com.github.sumimakito.awesomeqr.option.RenderOption;
 import com.github.sumimakito.awesomeqr.option.color.Color;
@@ -44,7 +42,6 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.scottyab.aescrypt.AESCrypt;
-
 import org.json.JSONObject;
 
 import java.io.File;

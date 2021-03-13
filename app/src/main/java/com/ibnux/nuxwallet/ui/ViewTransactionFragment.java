@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.ibnux.nuxwallet.R;
@@ -16,7 +15,6 @@ import com.ibnux.nuxwallet.data.Transaksi_;
 import com.ibnux.nuxwallet.utils.JsonCallback;
 import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
-
 import org.json.JSONObject;
 
 import java.util.Iterator;

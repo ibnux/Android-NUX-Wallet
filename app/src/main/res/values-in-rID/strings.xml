@@ -61,7 +61,7 @@
     <string name="scan_qrcode">Scan QRcode</string>
     <string name="create_wallet">Buat dompet atau ketik PassPhrase</string>
     <string name="add_wallet_address">Tambah buku kontak</string>
-    <string name="add_wallet_title">Tambah DOmpet</string>
+    <string name="add_wallet_title">Tambah Dompet</string>
     <string name="payment_title">Pembayaran</string>
     <string name="scan_wallet">Scan QR Wallet</string>
     <string name="use_wallet_address">Gunakan alamat dompet</string>
@@ -187,4 +187,6 @@
     <string name="dialog_share_referral_body">Dapatkan tambahan coin dengan mengajak teman kamu menggunakan Nux Coin.\nReferral: %1$s</string>
     <string name="dialog_share_referral_text">Yuk belajar Cryptocurrency dengan Nux Coin, unduh di: %1$s</string>
     <string name="dialog_share_warning">Hanya untuk dompet sendiri, buka dompet anda</string>
+    <string name="open">Buka</string>
+    <string name="close">Tutup</string>
 </resources>

@@ -20,14 +20,11 @@ import android.text.InputType;
 import android.view.Gravity;
 import android.webkit.JavascriptInterface;
 import android.widget.EditText;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.ibnux.nuxwallet.R;
 import com.ibnux.nuxwallet.data.Dompet;
 import com.ibnux.nuxwallet.data.ObjectBox;
 import com.ibnux.nuxwallet.databinding.ActivityWalletGeneratorBinding;
-
 import im.delight.android.webview.AdvancedWebView;
 
 public class WalletGeneratorActivity extends AppCompatActivity implements AdvancedWebView.Listener {

@@ -10,11 +10,7 @@ package com.ibnux.nuxwallet.ui;
  \******************************************************************************/
 
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Gravity;
@@ -23,10 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.androidnetworking.common.Priority;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.ibnux.nuxwallet.Aplikasi;
@@ -38,7 +32,6 @@ import com.ibnux.nuxwallet.utils.JsonCallback;
 import com.ibnux.nuxwallet.utils.NuxCoin;
 import com.ibnux.nuxwallet.utils.Utils;
 import com.scottyab.aescrypt.AESCrypt;
-
 import org.json.JSONObject;
 
 import static android.app.Activity.RESULT_OK;
