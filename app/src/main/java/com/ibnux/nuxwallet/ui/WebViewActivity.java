@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.ibnux.nuxwallet.R;
@@ -114,4 +115,11 @@ public class WebViewActivity extends AppCompatActivity implements AdvancedWebVie
         }
     }
 
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyLongPress(keyCode, event);
+    }
 }
