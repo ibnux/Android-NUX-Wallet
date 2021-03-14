@@ -212,7 +212,7 @@ public class BackgroundService extends Service {
         Utils.log("BGServicesSendNotification");
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(Aplikasi.app);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_UNSPECIFIED;
             NotificationChannel channel = new NotificationChannel("TxListener", "Transaction Listener", importance);
             notificationManager.createNotificationChannel(channel);
         }
@@ -229,7 +229,7 @@ public class BackgroundService extends Service {
                 .addAction(R.drawable.ic_send,getString(R.string.service_notification_button_send),
                         PendingIntent.getActivity(this,0, intent
                                 ,PendingIntent.FLAG_CANCEL_CURRENT))
-                .setPriority(NotificationCompat.PRIORITY_LOW);
+                .setPriority(NotificationCompat.PRIORITY_MIN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForeground(42689,builder.build());
         }else {
