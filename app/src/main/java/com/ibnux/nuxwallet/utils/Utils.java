@@ -236,18 +236,20 @@ public class Utils {
     }
 
     public static String nuxFormat(long myNumber){
+        log("nuxFormat: "+myNumber);
         DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
         NumberFormat formatter = new DecimalFormat("#,###");
         String strNumber = String.valueOf(myNumber);
         String result = "";
         result = formatter.format(myNumber);
+        log("nuxFormat Result: "+result);
         return result;
     }
 
     // d m y h i s full
     public static String toDate(long milliSeconds, String format)
     {
-        log("toDate "+milliSeconds+" "+format);
+//        log("toDate "+milliSeconds+" "+format);
         TimeZone timeZone = TimeZone.getTimeZone("UTC");
         Calendar cal = Calendar.getInstance(timeZone);
         cal.setTimeInMillis(milliSeconds);
@@ -260,9 +262,10 @@ public class Utils {
             case "Y" : hasil = String.valueOf(cal.get(Calendar.YEAR)); break;
             case "h" : hasil = String.valueOf(cal.get(Calendar.HOUR)); break;
             case "H" : hasil = String.valueOf(cal.get(Calendar.HOUR_OF_DAY)); break;
-            case "i" : hasil = String.valueOf(cal.get(Calendar.MINUTE)); break;
+            case "H:i" : hasil = String.format("%02d:%02d", cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE)); break;
+            case "i" : hasil = String.format("%02d", cal.get(Calendar.MINUTE)); break;
             default: hasil = cal.get(Calendar.DAY_OF_MONTH)+"/"+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.YEAR)+" "
-                    +cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE);
+                    +String.format("%02d:%02d",cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE));
         }
         if(hasil.length()==1)
             return "0"+hasil;

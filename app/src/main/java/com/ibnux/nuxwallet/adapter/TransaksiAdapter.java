@@ -112,12 +112,15 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.MyVi
         });
         if(Aplikasi.unixtime!=0L) {
             holder.cardTgl.setVisibility(View.VISIBLE);
+            Utils.log("Wallet "+tx.block);
             Utils.log("UnixTime "+Aplikasi.unixtime);
-            long time = Aplikasi.unixtime + (tx.timestamp*1000L);
+            Utils.log("blockTimestamp "+tx.blockTimestamp);
+            long time = Aplikasi.unixtime + (tx.blockTimestamp*1000L);
             Utils.log("BlockTime "+time);
+            Utils.log("toDate "+Utils.toDate(time, "All"));
             holder.txtTgl.setText(Utils.toDate(time, "d"));
             holder.txtThn.setText(Utils.toDate(time, "m")+"/"+Utils.toDate(time, "y"));
-            holder.txtJam.setText(Utils.toDate(time, "H")+":"+Utils.toDate(time, "m"));
+            holder.txtJam.setText(Utils.toDate(time, "H:i"));
         }else{
             holder.cardTgl.setVisibility(View.GONE);
         }

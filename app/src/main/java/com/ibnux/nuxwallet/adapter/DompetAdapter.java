@@ -140,11 +140,17 @@ public class DompetAdapter extends RecyclerView.Adapter<DompetAdapter.MyViewHold
             public void onJsonCallback(JSONObject jsonObject) {
                 try{
                     if(jsonObject.has("balanceNQT")){
-                        if(dompet.saldo!=jsonObject.getLong("balanceNQT")) {
-                            dompet.saldo = jsonObject.getLong("balanceNQT");
+                        long saldo = Long.parseUnsignedLong(jsonObject.getString("balanceNQT"));
+                        Utils.log("Online to unsignedlong "+saldo);
+                        if(dompet.saldo!=saldo) {
+                            dompet.saldo = saldo;
+                            Utils.log(dompet.alamat+" online balanceNQT : ");
                             holder.txtBalance.setText(Utils.nuxFormat(dompet.saldo));
                             notifyDataSetChanged();
                             ObjectBox.addDompet(dompet);
+                        }else{
+                            Utils.log(dompet.alamat+" offline balanceNQT : "+dompet.saldo);
+                            holder.txtBalance.setText(Utils.nuxFormat(dompet.saldo));
                         }
                     }else if(jsonObject.has("errorCode") && jsonObject.getInt("errorCode")==5){
                         holder.txtBalance.setText("Wallet not registered");
