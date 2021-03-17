@@ -376,7 +376,6 @@ public class Utils {
         }
 
 
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(Aplikasi.app, channel_id)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setLargeIcon(BitmapFactory.decodeResource(Aplikasi.app.getResources(),R.mipmap.ic_launcher))

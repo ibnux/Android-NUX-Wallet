@@ -17,9 +17,9 @@ import io.objectbox.annotation.Unique;
 public class Transaksi {
     @Id
     public long id;
-    @Unique
     public String block;
     public boolean isRead = false;
+    @Unique
     public String transaction;
     public String senderRS;
     public String recipientRS;
